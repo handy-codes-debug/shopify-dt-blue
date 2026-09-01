@@ -11,38 +11,139 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "settings": {}
+      "settings": {
+        "eyebrow": "New season, new build",
+        "heading": "Build it right the <em>first</em> time.",
+        "subheading": "Compatibility-checked parts, real-time stock, and a 30-day price match on everything we carry.",
+        "button_label_1": "Shop the sale",
+        "button_link_1": "",
+        "button_label_2": "Browse all products",
+        "button_link_2": "",
+        "featured_product": ""
+      }
     },
     "trust_bar": {
       "type": "trust-bar",
       "blocks": {
-        "b1": { "type": "item", "settings": { "abbr": "FS", "title": "Free shipping over $75", "text": "Tracked, 2–4 business days" } },
-        "b2": { "type": "item", "settings": { "abbr": "CC", "title": "Compatibility checked", "text": "Verified before it ships" } },
-        "b3": { "type": "item", "settings": { "abbr": "30", "title": "30-day returns", "text": "No restocking fee" } },
-        "b4": { "type": "item", "settings": { "abbr": "B2B", "title": "Business accounts", "text": "Net terms and volume pricing" } }
+        "b1": {
+          "type": "item",
+          "settings": {
+            "abbr": "FS",
+            "title": "Free shipping over $75",
+            "text": "Tracked, 2–4 business days"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "abbr": "CC",
+            "title": "Compatibility checked",
+            "text": "Verified before it ships"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "abbr": "30",
+            "title": "30-day returns",
+            "text": "No restocking fee"
+          }
+        },
+        "b4": {
+          "type": "item",
+          "settings": {
+            "abbr": "B2B",
+            "title": "Business accounts",
+            "text": "Net terms and volume pricing"
+          }
+        }
       },
-      "block_order": ["b1", "b2", "b3", "b4"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
       "settings": {}
     },
     "category_grid": {
       "type": "category-grid",
       "blocks": {
-        "c1": { "type": "category", "settings": {} },
-        "c2": { "type": "category", "settings": {} },
-        "c3": { "type": "category", "settings": {} },
-        "c4": { "type": "category", "settings": {} }
+        "c1": {
+          "type": "category",
+          "settings": {
+            "collection": "desktop-graphics-cards",
+            "title": "",
+            "label": ""
+          }
+        },
+        "c2": {
+          "type": "category",
+          "settings": {
+            "collection": "memory-cards",
+            "title": "",
+            "label": ""
+          }
+        },
+        "c3": {
+          "type": "category",
+          "settings": {
+            "collection": "computer-cases",
+            "title": "",
+            "label": ""
+          }
+        },
+        "c4": {
+          "type": "category",
+          "settings": {
+            "collection": "intel-motherboards",
+            "title": "",
+            "label": ""
+          }
+        }
       },
-      "block_order": ["c1", "c2", "c3", "c4"],
-      "settings": {}
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "eyebrow": "Shop by category",
+        "heading": "Browse the catalog",
+        "link_label": "View full catalog",
+        "link_url": "",
+        "columns": 4
+      }
     },
     "featured_collection": {
       "type": "featured-collection",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Best sellers",
+        "heading": "Popular right now",
+        "collection": "vendor-western-digital",
+        "products_to_show": 4,
+        "columns": 4,
+        "link_label": "See all",
+        "link_url": "",
+        "surface_alt": true
+      }
     },
     "promo_banner": {
       "type": "promo-banner",
-      "settings": {}
+      "settings": {
+        "heading": "Not sure what fits together?",
+        "text": "Tell us your build and we'll check socket, clearance, and power draw before it ships.",
+        "button_label": "Get in touch",
+        "button_link": ""
+      }
     }
   },
-  "order": ["hero", "trust_bar", "category_grid", "featured_collection", "promo_banner"]
+  "order": [
+    "hero",
+    "trust_bar",
+    "category_grid",
+    "featured_collection",
+    "promo_banner"
+  ]
 }
