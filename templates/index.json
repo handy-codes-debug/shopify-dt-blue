@@ -19,7 +19,7 @@
         "button_link_1": "",
         "button_label_2": "Browse all products",
         "button_link_2": "",
-        "featured_product": ""
+        "featured_product": "01-ssc-0602-gateway-anti-malware-intrusion-prevention-and-application-control-for-tz300-1-year"
       }
     },
     "trust_bar": {
@@ -69,11 +69,43 @@
     "category_grid": {
       "type": "category-grid",
       "blocks": {
+        "category_7Varjj": {
+          "type": "category",
+          "settings": {
+            "collection": "cooling-heating",
+            "title": "Cooling",
+            "label": ""
+          }
+        },
+        "category_RBDK3X": {
+          "type": "category",
+          "settings": {
+            "collection": "intel-desktop-processors",
+            "title": "Processors",
+            "label": ""
+          }
+        },
+        "category_NWqCXw": {
+          "type": "category",
+          "settings": {
+            "collection": "power-supply",
+            "title": "Power Supplies",
+            "label": ""
+          }
+        },
+        "category_WMyqED": {
+          "type": "category",
+          "settings": {
+            "collection": "network-storage",
+            "title": "Storage",
+            "label": ""
+          }
+        },
         "c1": {
           "type": "category",
           "settings": {
             "collection": "desktop-graphics-cards",
-            "title": "",
+            "title": "Graphics Cards",
             "label": ""
           }
         },
@@ -81,7 +113,7 @@
           "type": "category",
           "settings": {
             "collection": "memory-cards",
-            "title": "",
+            "title": "Memory",
             "label": ""
           }
         },
@@ -89,7 +121,7 @@
           "type": "category",
           "settings": {
             "collection": "computer-cases",
-            "title": "",
+            "title": "Cases",
             "label": ""
           }
         },
@@ -97,12 +129,16 @@
           "type": "category",
           "settings": {
             "collection": "intel-motherboards",
-            "title": "",
+            "title": "Motherboards",
             "label": ""
           }
         }
       },
       "block_order": [
+        "category_7Varjj",
+        "category_RBDK3X",
+        "category_NWqCXw",
+        "category_WMyqED",
         "c1",
         "c2",
         "c3",
