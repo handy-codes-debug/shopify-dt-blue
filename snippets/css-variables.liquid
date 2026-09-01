@@ -5,14 +5,49 @@
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
+  {% # Heading and accent (monospace) faces %}
+  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+  {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.type_accent_font | font_face: font_display: 'swap' }}
+
   :root {
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
+
+    --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading--style: {{ settings.type_heading_font.style }};
+    --font-heading--weight: {{ settings.type_heading_font.weight }};
+
+    --font-accent--family: {{ settings.type_accent_font.family }}, {{ settings.type_accent_font.fallback_families }};
+    --font-accent--style: {{ settings.type_accent_font.style }};
+    --font-accent--weight: {{ settings.type_accent_font.weight }};
+
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
+
     --color-background: {{ settings.background_color }};
     --color-foreground: {{ settings.foreground_color }};
+    --color-foreground-soft: {{ settings.foreground_soft_color }};
+    --color-foreground-faint: {{ settings.foreground_faint_color }};
+    --color-surface-alt: {{ settings.surface_alt_color }};
+    --color-border: {{ settings.border_color }};
+    --color-border-strong: {{ settings.border_strong_color }};
+
+    --color-accent: {{ settings.accent_color }};
+    --color-accent-soft: {{ settings.accent_soft_color }};
+    --color-accent-contrast: {{ settings.accent_contrast_color }};
+    --color-dark-surface: {{ settings.dark_surface_color }};
+    --color-dark-surface-soft: {{ settings.dark_surface_soft_color }};
+
+    --color-success: {{ settings.success_color }};
+    --color-success-soft: {{ settings.success_soft_color }};
+    --color-warning: {{ settings.warning_color }};
+    --color-warning-soft: {{ settings.warning_soft_color }};
+    --color-error: {{ settings.error_color }};
+    --color-error-soft: {{ settings.error_soft_color }};
+
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --style-shadow: 0 1px 2px rgba(22, 35, 63, 0.06), 0 8px 24px -12px rgba(22, 35, 63, 0.14);
   }
 {% endstyle %}

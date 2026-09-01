@@ -74,8 +74,31 @@ p:empty {
 /** Theme styles below */
 body {
   font-family: var(--font-primary--family);
+  font-style: var(--font-primary--style);
+  font-weight: var(--font-primary--weight);
   background-color: var(--color-background);
   color: var(--color-foreground);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading--family);
+  font-style: var(--font-heading--style);
+  font-weight: var(--font-heading--weight);
+  letter-spacing: -0.01em;
+}
+
+/* Small uppercase eyebrow / label text, e.g. section kickers and badges. */
+.accent-text {
+  font-family: var(--font-accent--family);
+  font-style: var(--font-accent--style);
+  font-weight: var(--font-accent--weight);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 /** Section layout utilities */

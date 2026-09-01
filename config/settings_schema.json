@@ -17,8 +17,20 @@
       {
         "type": "font_picker",
         "id": "type_primary_font",
-        "default": "work_sans_n4",
+        "default": "inter_n4",
         "label": "t:general.primary"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "default": "space_grotesk_n7",
+        "label": "t:labels.heading_font"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_accent_font",
+        "default": "ibm_plex_mono_n4",
+        "label": "t:labels.accent_font"
       }
     ]
   },
@@ -65,8 +77,112 @@
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#1B2430",
         "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "foreground_soft_color",
+        "default": "#55637A",
+        "label": "t:labels.foreground_soft"
+      },
+      {
+        "type": "color",
+        "id": "foreground_faint_color",
+        "default": "#8894A6",
+        "label": "t:labels.foreground_faint"
+      },
+      {
+        "type": "color",
+        "id": "surface_alt_color",
+        "default": "#F3F5F9",
+        "label": "t:labels.surface_alt"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "default": "#E1E5EC",
+        "label": "t:labels.border"
+      },
+      {
+        "type": "color",
+        "id": "border_strong_color",
+        "default": "#C7CEDA",
+        "label": "t:labels.border_strong"
+      },
+      {
+        "type": "header",
+        "content": "t:labels.accent"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#2D7FF9",
+        "label": "t:labels.accent"
+      },
+      {
+        "type": "color",
+        "id": "accent_soft_color",
+        "default": "#E8F0FE",
+        "label": "t:labels.accent_soft"
+      },
+      {
+        "type": "color",
+        "id": "accent_contrast_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.accent_contrast"
+      },
+      {
+        "type": "color",
+        "id": "dark_surface_color",
+        "default": "#16233F",
+        "label": "t:labels.dark_surface"
+      },
+      {
+        "type": "color",
+        "id": "dark_surface_soft_color",
+        "default": "#223255",
+        "label": "t:labels.dark_surface_soft"
+      },
+      {
+        "type": "header",
+        "content": "t:labels.status_colors"
+      },
+      {
+        "type": "color",
+        "id": "success_color",
+        "default": "#1B9A56",
+        "label": "t:labels.success"
+      },
+      {
+        "type": "color",
+        "id": "success_soft_color",
+        "default": "#E4F7EC",
+        "label": "t:labels.success_soft"
+      },
+      {
+        "type": "color",
+        "id": "warning_color",
+        "default": "#B9740A",
+        "label": "t:labels.warning"
+      },
+      {
+        "type": "color",
+        "id": "warning_soft_color",
+        "default": "#FBF0DD",
+        "label": "t:labels.warning_soft"
+      },
+      {
+        "type": "color",
+        "id": "error_color",
+        "default": "#D8434B",
+        "label": "t:labels.error"
+      },
+      {
+        "type": "color",
+        "id": "error_soft_color",
+        "default": "#FBE7E8",
+        "label": "t:labels.error_soft"
       },
       {
         "type": "range",
