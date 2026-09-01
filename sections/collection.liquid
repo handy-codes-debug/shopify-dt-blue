@@ -1,47 +1,130 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
+  Collection template: paginated grid of product cards.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<div class="section-pad">
+  <header class="coll-head">
+    <span class="eyebrow">{{ 'collections.title' | t }}</span>
+    <h1>{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="coll-head__desc rte">{{ collection.description }}</div>
+    {%- endif -%}
+  </header>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    <div class="coll-toolbar">
+      <span class="coll-toolbar__count">{{ 'sections.collection.count' | t: count: collection.products_count }}</span>
+
+      {%- if section.settings.show_sort -%}
+        <form method="get" class="coll-toolbar__sort">
+          <label for="SortBy">{{ 'sections.collection.sort_by' | t }}</label>
+          <select name="sort_by" id="SortBy" onchange="this.form.submit()">
+            {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == current_sort %}selected="selected"{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+        </form>
+      {%- endif -%}
+    </div>
+
+    {%- if collection.products.size > 0 -%}
+      <div class="fc-grid" style="--fc-cols: {{ section.settings.columns }}">
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
       </div>
-    {% endfor %}
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination">{{ paginate | default_pagination }}</div>
+      {%- endif -%}
+    {%- else -%}
+      <p>{{ 'sections.collection.empty' | t }}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
 </div>
 
 {% stylesheet %}
-  .collection-products {
+  .coll-head__desc {
+    margin-top: 10px;
+    max-width: 60ch;
+    color: var(--color-foreground-soft);
+  }
+  .coll-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-block: 14px;
+    margin-bottom: 18px;
+    border-block: 1px solid var(--color-border);
+    font-size: 0.85rem;
+  }
+  .coll-toolbar__count {
+    color: var(--color-foreground-soft);
+    font-family: var(--font-accent--family);
+  }
+  .coll-toolbar__sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .coll-toolbar__sort select {
+    padding: 7px 10px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--style-border-radius-inputs);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font: inherit;
+  }
+  .fc-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(var(--fc-cols, 4), 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 1000px) {
+    .fc-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 720px) {
+    .fc-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "t:labels.products_per_page",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "t:labels.columns",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "t:labels.show_sort",
+      "default": true
+    }
+  ]
 }
 {% endschema %}

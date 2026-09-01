@@ -1,0 +1,157 @@
+{% doc %}
+  Renders a product card: media with badge, vendor, title, spec chips, price and an add-to-cart action.
+
+  @param {object} product - The product to render.
+  @param {number} [low_stock_threshold] - Inventory at or below this shows a "low stock" state. Default 5.
+  @param {boolean} [show_vendor] - Show the product vendor above the title. Default true.
+{% enddoc %}
+
+{% liquid
+  assign threshold = low_stock_threshold | default: 5
+  assign variant = product.selected_or_first_available_variant
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  assign is_new = false
+  assign created_ts = product.created_at | date: '%s' | plus: 0
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign age = now_ts | minus: created_ts
+  if age < 2592000
+    assign is_new = true
+  endif
+
+  assign low_stock = false
+  if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= threshold
+    assign low_stock = true
+  endif
+%}
+
+<div class="pcard">
+  <a class="pcard__media" href="{{ product.url }}">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', widths: '200,300,400,600', sizes: '(max-width: 700px) 45vw, 260px', alt: product.featured_image.alt | default: product.title }}
+    {%- else -%}
+      <span class="pcard__placeholder">{{ product.title | slice: 0, 2 | upcase }}</span>
+    {%- endif -%}
+
+    {%- if product.available == false -%}
+      {%- comment -%} no badge, sold-out pill shown below {%- endcomment -%}
+    {%- elsif on_sale -%}
+      <span class="badge badge--sale">{{ 'products.sale' | t }}</span>
+    {%- elsif low_stock -%}
+      <span class="badge badge--low">{{ 'products.low_stock' | t }}</span>
+    {%- elsif is_new -%}
+      <span class="badge badge--new">{{ 'products.new' | t }}</span>
+    {%- endif -%}
+  </a>
+
+  <div class="pcard__body">
+    {%- if show_vendor != false and product.vendor != blank -%}
+      <span class="pcard__vendor">{{ product.vendor }}</span>
+    {%- endif -%}
+
+    <a class="pcard__title" href="{{ product.url }}">{{ product.title }}</a>
+
+    {%- if product.tags.size > 0 -%}
+      <div class="pcard__specs">
+        {%- for tag in product.tags limit: 2 -%}
+          {%- unless tag contains ':' -%}<span class="chip">{{ tag }}</span>{%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="pcard__footer">
+      <div class="pcard__price">
+        {% render 'price', product: product, show_from: true %}
+      </div>
+
+      {%- if product.available -%}
+        {%- form 'product', product, class: 'pcard__form' -%}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <button type="submit" class="btn btn--dark btn--sm">{{ 'products.add_to_cart' | t }}</button>
+        {%- endform -%}
+      {%- else -%}
+        <span class="stock-pill stock-pill--out">{{ 'products.sold_out' | t }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-lg);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .pcard:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--style-shadow);
+  }
+  .pcard__media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface-alt);
+    overflow: hidden;
+  }
+  .pcard__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+  .pcard__placeholder {
+    font-family: var(--font-accent--family);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-foreground-faint);
+  }
+  .pcard__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px 16px;
+    flex: 1;
+  }
+  .pcard__vendor {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-foreground-faint);
+  }
+  .pcard__title {
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.3;
+    color: var(--color-foreground);
+  }
+  .pcard__title:hover {
+    color: var(--color-accent);
+  }
+  .pcard__specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pcard__footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+  }
+  .pcard__form {
+    margin: 0;
+  }
+{% endstylesheet %}

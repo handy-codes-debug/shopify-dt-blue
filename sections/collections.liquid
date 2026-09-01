@@ -1,55 +1,95 @@
 {% comment %}
-  This section is used in the list-collections template to render a list of
-  collections.
+  List-collections template: a grid of collection cards.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<div class="section-pad">
+  <header class="coll-head">
+    <span class="eyebrow">{{ 'collections.title' | t }}</span>
+    <h1>{{ 'collections.title' | t }}</h1>
+  </header>
 
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
-      {% endif %}
-
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
-
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
-        {% endif %}
-      </div>
-    </a>
-  {% endfor %}
+  <div class="collist" style="--collist-cols: {{ section.settings.columns }}">
+    {%- for collection in collections -%}
+      <a class="collist-card" href="{{ collection.url }}">
+        <div class="collist-card__media">
+          {%- if collection.featured_image -%}
+            {{ collection.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,450,600,800', sizes: '(max-width: 700px) 45vw, 300px', alt: collection.title }}
+          {%- else -%}
+            <span class="collist-card__code">{{ collection.title | slice: 0, 3 | upcase }}</span>
+          {%- endif -%}
+        </div>
+        <div class="collist-card__body">
+          <span class="collist-card__name">{{ collection.title }}</span>
+          <span class="collist-card__count">{{ 'sections.category_grid.count' | t: count: collection.all_products_count }}</span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
 </div>
 
 {% stylesheet %}
-  .collections {
+  .collist {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
+    grid-template-columns: repeat(var(--collist-cols, 4), 1fr);
+    gap: 16px;
   }
-  .collections--compact {
-    --collection-card-size: 160px;
-  }
-  .collections--full {
-    --collection-card-size: 280px;
-  }
-  .collection-card {
+  .collist-card {
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .collist-card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--style-shadow);
+  }
+  .collist-card__media {
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .collist-card__media img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .collist-card__code {
+    font-family: var(--font-accent--family);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--color-foreground-faint);
+  }
+  .collist-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px 16px;
+  }
+  .collist-card__name {
+    font-weight: 600;
+    font-size: 0.94rem;
+  }
+  .collist-card__count {
+    color: var(--color-foreground-faint);
+    font-family: var(--font-accent--family);
+    font-size: 0.76rem;
+  }
+
+  @media (max-width: 900px) {
+    .collist {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 620px) {
+    .collist {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 {% endstylesheet %}
 
@@ -58,24 +98,13 @@
   "name": "t:general.collections_grid",
   "settings": [
     {
-      "type": "select",
-      "id": "grid_item_width",
-      "label": "t:labels.grid_item_width",
-      "options": [
-        { "value": "collections--compact", "label": "t:options.size.small" },
-        { "value": "collections--full", "label": "t:options.size.large" }
-      ],
-      "default": "collections--full"
-    },
-    {
       "type": "range",
-      "id": "grid_gap",
-      "label": "t:labels.grid_gap",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "default": 10
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "t:labels.columns",
+      "default": 4
     }
   ],
   "presets": [{ "name": "t:general.collections_grid" }]

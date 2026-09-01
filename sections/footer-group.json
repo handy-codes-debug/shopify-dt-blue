@@ -14,12 +14,35 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
+        "tagline": "Everything for your next build, shipped fast from regional warehouses.",
+        "disclaimer": "Taxes calculated at checkout.",
         "show_payment_icons": true
-      }
+      },
+      "blocks": {
+        "col-shop": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Shop",
+            "menu": ""
+          }
+        },
+        "col-support": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Support",
+            "menu": ""
+          }
+        },
+        "col-company": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Company",
+            "menu": ""
+          }
+        }
+      },
+      "block_order": ["col-shop", "col-support", "col-company"]
     }
   },
-  "order": [
-    "footer"
-  ]
+  "order": ["footer"]
 }

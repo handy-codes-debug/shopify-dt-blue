@@ -17,6 +17,7 @@
     "footer": "Footer",
     "group": "Group",
     "header": "Header",
+    "headings": "Headings",
     "layout": "Layout",
     "main": "Main",
     "page": "Page",
@@ -33,6 +34,24 @@
     "theme": "Theme",
     "typography": "Typography"
   },
+  "sections": {
+    "hero": {
+      "name": "Hero"
+    },
+    "trust_bar": {
+      "name": "Trust bar",
+      "block": "Promise"
+    },
+    "category_grid": {
+      "name": "Category grid"
+    },
+    "featured_collection": {
+      "name": "Featured collection"
+    },
+    "promo_banner": {
+      "name": "Promo banner"
+    }
+  },
   "labels": {
     "accent": "Accent",
     "accent_contrast": "Accent contrast",
@@ -42,32 +61,59 @@
     "background": "Background",
     "border": "Border",
     "border_strong": "Border (strong)",
+    "button_label_primary": "Primary button label",
+    "button_label_secondary": "Secondary button label",
+    "button_link_primary": "Primary button link",
+    "button_link_secondary": "Secondary button link",
+    "columns": "Columns",
+    "customer_account_menu": "Customer account menu",
     "dark_surface": "Dark surface",
     "dark_surface_soft": "Dark surface (soft)",
+    "disclaimer": "Disclaimer",
     "error": "Error",
     "error_soft": "Error (soft)",
+    "eyebrow": "Eyebrow",
+    "featured_product": "Featured product",
     "foreground": "Foreground",
     "foreground_faint": "Foreground (faint)",
     "foreground_soft": "Foreground (soft)",
-    "heading_font": "Headings",
-    "status_colors": "Status colors",
-    "success": "Success",
-    "success_soft": "Success (soft)",
-    "surface_alt": "Alternate surface",
-    "warning": "Warning",
-    "warning_soft": "Warning (soft)",
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
+    "heading": "Heading",
+    "heading_font": "Headings",
     "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
+    "link_label": "Link label",
+    "link_url": "Link",
+    "logo": "Logo",
+    "low_stock_threshold": "Low stock threshold",
     "menu": "Menu",
-    "customer_account_menu": "Customer account menu",
     "padding": "Padding",
     "page_margin": "Page margin",
     "page_width": "Page width",
+    "products_per_page": "Products per page",
+    "products_to_show": "Products to show",
     "show_payment_icons": "Show payment icons",
+    "show_search": "Show search bar",
+    "show_sort": "Show sort dropdown",
+    "status_colors": "Status colors",
+    "sticky_header": "Stick header to top on scroll",
+    "subheading": "Subheading",
+    "success": "Success",
+    "success_soft": "Success (soft)",
+    "surface_alt": "Alternate surface",
+    "tagline": "Tagline",
+    "text": "Text",
     "text_style": "Text style",
-    "text": "Text"
+    "tile_label": "Tile label",
+    "tinted_background": "Tinted background",
+    "utility_menu": "Utility bar menu",
+    "warning": "Warning",
+    "warning_soft": "Warning (soft)"
+  },
+  "info": {
+    "category_title": "Overrides the collection title shown on the card.",
+    "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."
   },
   "options": {
     "alignment": {
@@ -91,6 +137,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }

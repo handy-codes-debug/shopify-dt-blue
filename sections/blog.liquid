@@ -1,31 +1,110 @@
 {% comment %}
-  This section is used in the blog template to render the blog page listing all
-  articles within a blog.
+  Blog template: a list of article cards.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
 {% endcomment %}
 
-<h1>{{ blog.title }}</h1>
+<div class="section-pad blog">
+  <header class="blog__head">
+    <span class="eyebrow">{{ blog.title }}</span>
+    <h1>{{ blog.title }}</h1>
+  </header>
 
-{% paginate blog.articles by 5 %}
-  {% for article in blog.articles %}
-    <div>
-      {% if article.image %}
-        {{ article.image | image_url: width: 1000 | image_tag }}
-      {% endif %}
-      <h2>
-        {{ article.title | link_to: article.url }}
-      </h2>
-      {% assign date = article.published_at | time_tag: format: 'date' %}
-      <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-      <p>{{ article.excerpt }}</p>
+  {%- paginate blog.articles by 12 -%}
+    <div class="blog__grid">
+      {%- for article in blog.articles -%}
+        <a class="post-card" href="{{ article.url }}">
+          {%- if article.image -%}
+            <div class="post-card__media">
+              {{ article.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,450,600,800', sizes: '(max-width: 800px) 90vw, 360px', alt: article.title }}
+            </div>
+          {%- endif -%}
+          <div class="post-card__body">
+            {%- assign date = article.published_at | time_tag: format: 'date' -%}
+            <span class="post-card__meta">{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</span>
+            <span class="post-card__title">{{ article.title }}</span>
+            {%- if article.excerpt_or_content != blank -%}
+              <span class="post-card__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 24 }}</span>
+            {%- endif -%}
+          </div>
+        </a>
+      {%- endfor -%}
     </div>
-  {% endfor %}
 
-  {%- if paginate.pages > 1 -%}
-    {{- paginate | default_pagination -}}
-  {%- endif -%}
-{% endpaginate %}
+    {%- if paginate.pages > 1 -%}
+      <div class="pagination">{{ paginate | default_pagination }}</div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% stylesheet %}
+  .blog__head {
+    margin-bottom: 24px;
+  }
+  .blog__head h1 {
+    margin: 6px 0 0;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  }
+  .blog__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-lg);
+    overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .post-card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--style-shadow);
+  }
+  .post-card__media {
+    aspect-ratio: 16 / 9;
+    background: var(--color-surface-alt);
+  }
+  .post-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .post-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 18px 18px;
+  }
+  .post-card__meta {
+    font-family: var(--font-accent--family);
+    font-size: 0.72rem;
+    color: var(--color-foreground-faint);
+  }
+  .post-card__title {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+  .post-card__excerpt {
+    font-size: 0.86rem;
+    color: var(--color-foreground-soft);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .blog__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .blog__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

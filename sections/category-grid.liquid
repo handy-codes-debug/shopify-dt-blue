@@ -1,0 +1,169 @@
+{% comment %}
+  A grid of category cards, each linking to a collection with a live product count.
+{% endcomment %}
+
+<div class="section-pad">
+  {%- if section.settings.heading != blank or section.settings.eyebrow != blank -%}
+    <div class="block-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+      </div>
+      {%- if section.settings.link_label != blank -%}
+        <a class="link-arrow" href="{{ section.settings.link_url | default: routes.all_products_collection_url }}">{{ section.settings.link_label }} &rarr;</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="cat-grid" style="--cat-cols: {{ section.settings.columns }}">
+    {%- for block in section.blocks -%}
+      {%- assign collection = block.settings.collection -%}
+      {%- if collection != blank -%}
+        {%- if block.settings.label != blank -%}
+          {%- assign code = block.settings.label -%}
+        {%- else -%}
+          {%- assign code = collection.title | slice: 0, 3 | upcase -%}
+        {%- endif -%}
+        <a class="cat-card" href="{{ collection.url }}" {{ block.shopify_attributes }}>
+          <span class="cat-card__code">{{ code }}</span>
+          <span class="cat-card__name">{{ block.settings.title | default: collection.title }}</span>
+          <span class="cat-card__count">{{ 'sections.category_grid.count' | t: count: collection.all_products_count }}</span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cat-cols, 4), 1fr);
+    gap: 14px;
+  }
+  .cat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius);
+    transition: border-color 0.15s ease;
+  }
+  .cat-card:hover {
+    border-color: var(--color-accent);
+  }
+  .cat-card__code {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--style-radius-sm);
+    background: var(--color-dark-surface);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-accent--family);
+    font-weight: 700;
+    font-size: 0.82rem;
+  }
+  .cat-card__name {
+    font-weight: 600;
+    font-size: 0.94rem;
+  }
+  .cat-card__count {
+    color: var(--color-foreground-faint);
+    font-family: var(--font-accent--family);
+    font-size: 0.76rem;
+  }
+
+  @media (max-width: 900px) {
+    .cat-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .cat-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.category_grid.name",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Browse the catalog"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:labels.link_label",
+      "default": "View full catalog"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:labels.link_url"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "t:labels.columns",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "t:general.collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "t:general.collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.heading",
+          "info": "t:info.category_title"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:labels.tile_label",
+          "info": "t:info.tile_label"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "t:sections.category_grid.name",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

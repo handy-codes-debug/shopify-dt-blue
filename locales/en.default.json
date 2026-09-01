@@ -1,7 +1,7 @@
 {
   "404": {
     "title": "404",
-    "not_found": "Page not found.",
+    "not_found": "We couldn't find that page.",
     "back_to_shopping": "Back to shopping"
   },
   "blog": {
@@ -10,14 +10,18 @@
     "comment_form_body": "Comment",
     "comment_form_email": "Email",
     "comment_form_name": "Name",
-    "comment_form_submit": "Post",
+    "comment_form_submit": "Post comment",
     "comment_form_title": "Add a comment"
   },
   "cart": {
     "checkout": "Checkout",
+    "continue": "Continue shopping",
+    "empty": "Your cart is empty.",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "taxes_note": "Shipping and taxes calculated at checkout.",
     "title": "Cart",
-    "update": "Update",
-    "remove": "Remove"
+    "update": "Update cart"
   },
   "customers": {
     "login": {
@@ -42,11 +46,35 @@
     "password": "Password",
     "enter": "Enter"
   },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "from_price_html": "From {{ price }}",
+    "in_stock": "In stock",
+    "low_stock": "Low stock",
+    "new": "New",
+    "quantity": "Quantity",
+    "sale": "Sale",
+    "sold_out": "Sold out",
+    "variant": "Option"
+  },
   "search": {
     "title": "Search",
-    "placeholder": "Search articles, pages, or products",
+    "placeholder": "Search products",
     "submit": "Search",
-    "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "no_results_html": "No results found for “{{ terms }}”.",
+    "results_for_html": "{{ count }} results for “{{ terms }}”"
+  },
+  "sections": {
+    "category_grid": {
+      "count": "{{ count }} items"
+    },
+    "collection": {
+      "count": "{{ count }} products",
+      "empty": "No products in this collection yet.",
+      "sort_by": "Sort by"
+    },
+    "featured_collection": {
+      "empty": "Select a collection to show products here."
+    }
   }
 }

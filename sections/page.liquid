@@ -1,13 +1,37 @@
 {% comment %}
-  This section is used in the page template to render store pages like About us
-  or Contact us.
+  Page template: a standalone content page such as About or Contact.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
+<div class="section-pad page">
+  <h1 class="page__title">{{ page.title }}</h1>
+  <div class="page__body rte">{{ page.content }}</div>
+</div>
 
-{{ page.content }}
+{% stylesheet %}
+  .page {
+    max-width: 820px;
+    margin-inline: auto;
+  }
+  .page__title {
+    margin-bottom: 18px;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+  }
+  .page__body {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--color-foreground-soft);
+  }
+  .page__body :is(h2, h3, h4) {
+    color: var(--color-foreground);
+    margin-top: 1.6em;
+  }
+  .page__body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

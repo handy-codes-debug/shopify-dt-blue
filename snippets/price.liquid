@@ -1,0 +1,27 @@
+{% doc %}
+  Renders a price, showing a struck-through compare-at price when the item is on sale.
+
+  @param {object} product - A product or variant object with `price` / `compare_at_price`.
+  @param {boolean} [show_from] - Prefix with "From" when the product has multiple prices.
+{% enddoc %}
+
+{% liquid
+  assign item_price = product.price
+  assign compare_price = product.compare_at_price
+  assign on_sale = false
+  if compare_price and compare_price > item_price
+    assign on_sale = true
+  endif
+  assign price_money = item_price | money
+%}
+
+<span class="price{% if on_sale %} price--sale{% endif %}">
+  {%- if on_sale -%}
+    <span class="price__was">{{ compare_price | money }}</span>
+  {%- endif -%}
+  {%- if show_from and product.price_varies -%}
+    <span class="price__now">{{ 'products.from_price_html' | t: price: price_money }}</span>
+  {%- else -%}
+    <span class="price__now">{{ price_money }}</span>
+  {%- endif -%}
+</span>

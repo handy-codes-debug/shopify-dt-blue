@@ -9,12 +9,40 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "trust_bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "b1": { "type": "item", "settings": { "abbr": "FS", "title": "Free shipping over $75", "text": "Tracked, 2–4 business days" } },
+        "b2": { "type": "item", "settings": { "abbr": "CC", "title": "Compatibility checked", "text": "Verified before it ships" } },
+        "b3": { "type": "item", "settings": { "abbr": "30", "title": "30-day returns", "text": "No restocking fee" } },
+        "b4": { "type": "item", "settings": { "abbr": "B2B", "title": "Business accounts", "text": "Net terms and volume pricing" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"],
+      "settings": {}
+    },
+    "category_grid": {
+      "type": "category-grid",
+      "blocks": {
+        "c1": { "type": "category", "settings": {} },
+        "c2": { "type": "category", "settings": {} },
+        "c3": { "type": "category", "settings": {} },
+        "c4": { "type": "category", "settings": {} }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"],
+      "settings": {}
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {}
+    },
+    "promo_banner": {
+      "type": "promo-banner",
       "settings": {}
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["hero", "trust_bar", "category_grid", "featured_collection", "promo_banner"]
 }

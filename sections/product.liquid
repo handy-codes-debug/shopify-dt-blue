@@ -1,50 +1,223 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
+  Product template: media gallery, price, variant picker and add-to-cart form.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign low_stock_threshold = section.settings.low_stock_threshold
+%}
+
+<div class="section-pad pdp">
+  <div class="pdp__gallery">
+    {%- if product.featured_media -%}
+      <div class="pdp__main-media">
+        {{ product.featured_media | image_url: width: 1200 | image_tag: widths: '400,600,800,1000,1200', sizes: '(max-width: 900px) 92vw, 540px', alt: product.featured_media.alt | default: product.title, fetchpriority: 'high' }}
+      </div>
+    {%- endif -%}
+
+    {%- if product.media.size > 1 -%}
+      <div class="pdp__thumbs">
+        {%- for media in product.media limit: 8 -%}
+          {{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: media.alt | default: product.title, class: 'pdp__thumb' }}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="pdp__info">
+    {%- if product.vendor != blank -%}<span class="pdp__vendor">{{ product.vendor }}</span>{%- endif -%}
+    <h1 class="pdp__title">{{ product.title }}</h1>
+
+    <div class="pdp__price">
+      {% render 'price', product: current_variant %}
+      {%- if current_variant.available -%}
+        {%- assign qty = current_variant.inventory_quantity -%}
+        {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and qty > 0 and qty <= low_stock_threshold -%}
+          <span class="stock-pill stock-pill--low">{{ 'products.low_stock' | t }}</span>
+        {%- else -%}
+          <span class="stock-pill stock-pill--in">{{ 'products.in_stock' | t }}</span>
+        {%- endif -%}
+      {%- else -%}
+        <span class="stock-pill stock-pill--out">{{ 'products.sold_out' | t }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if product.tags.size > 0 -%}
+      <div class="pdp__chips">
+        {%- for tag in product.tags limit: 6 -%}
+          {%- unless tag contains ':' -%}<span class="chip">{{ tag }}</span>{%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- form 'product', product, class: 'pdp__form' -%}
+      {%- unless product.has_only_default_variant -%}
+        <label class="pdp__field">
+          <span>{{ 'products.variant' | t }}</span>
+          <select name="id">
+            {%- for variant in product.variants -%}
+              <option
+                value="{{ variant.id }}"
+                {% if variant == current_variant %}selected="selected"{% endif %}
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }} &mdash; {{ variant.price | money }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </label>
+      {%- else -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {%- endunless -%}
+
+      <label class="pdp__field pdp__field--qty">
+        <span>{{ 'products.quantity' | t }}</span>
+        <input type="number" name="quantity" value="1" min="1" inputmode="numeric">
+      </label>
+
+      <div class="pdp__actions">
+        <button type="submit" name="add" class="btn btn--dark btn--block"{% unless current_variant.available %} disabled{% endunless %}>
+          {%- if current_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+        </button>
+        {{ form | payment_button }}
+      </div>
+    {%- endform -%}
+
+    {%- if product.description != blank -%}
+      <div class="pdp__description rte">{{ product.description }}</div>
+    {%- endif -%}
+  </div>
 </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+{% stylesheet %}
+  .pdp {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 44px;
+    align-items: start;
+  }
+  .pdp__main-media {
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-lg);
+    overflow: hidden;
+    background: var(--color-surface-alt);
+  }
+  .pdp__main-media img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  .pdp__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .pdp__thumb {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-sm);
+    background: var(--color-surface-alt);
+  }
+  .pdp__vendor {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-foreground-faint);
+  }
+  .pdp__title {
+    margin: 6px 0 14px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  .pdp__price {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .pdp__price .price {
+    font-size: 1.5rem;
+  }
+  .pdp__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .pdp__form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-lg);
+    background: var(--color-background);
+  }
+  .pdp__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-foreground-soft);
+  }
+  .pdp__field select,
+  .pdp__field input {
+    padding: 10px 12px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--style-border-radius-inputs);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font: inherit;
+    font-weight: 400;
+  }
+  .pdp__field--qty input {
+    max-width: 100px;
+  }
+  .pdp__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pdp__actions .shopify-payment-button {
+    width: 100%;
+  }
+  .pdp__description {
+    margin-top: 24px;
+    line-height: 1.6;
+    color: var(--color-foreground-soft);
+  }
+  .pdp__description :is(h2, h3, h4) {
+    color: var(--color-foreground);
+  }
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
-
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</div>
+  @media (max-width: 900px) {
+    .pdp {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.product",
-  "settings": [],
+  "settings": [
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "min": 1,
+      "max": 25,
+      "step": 1,
+      "label": "t:labels.low_stock_threshold",
+      "default": 5
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

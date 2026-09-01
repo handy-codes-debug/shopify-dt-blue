@@ -1,59 +1,224 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{% comment %}
+  Storefront header: utility bar, logo, product search, account + cart, and the
+  primary category navigation.
+{% endcomment %}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+{% liquid
+  assign has_utility = false
+  if section.settings.utility_menu != blank and section.settings.utility_menu.links.size > 0
+    assign has_utility = true
+  endif
+%}
+
+<div class="site-header full-width{% if section.settings.sticky %} site-header--sticky{% endif %}">
+  {%- if has_utility -%}
+    <div class="util-bar">
+      <div class="page-container util-bar__row">
+        {%- for link in section.settings.utility_menu.links -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="header-main">
+    <div class="page-container header-main__row">
+      <a class="site-logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 600 | image_tag: widths: '120,240,360,480', style: 'width:auto;height:auto', alt: shop.name }}
+        {%- else -%}
+          {{ shop.name }}
+        {%- endif -%}
+      </a>
+
+      {%- if section.settings.show_search -%}
+        <form class="header-search" action="{{ routes.search_url }}" method="get" role="search">
+          <input type="hidden" name="type" value="product">
+          <input
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'search.placeholder' | t }}"
+            aria-label="{{ 'search.title' | t }}"
+          >
+          <button type="submit">{{ 'search.submit' | t }}</button>
+        </form>
+      {%- endif -%}
+
+      <div class="header-actions">
+        {%- if shop.customer_accounts_enabled -%}
+          <shopify-account class="header-actions__account" menu="{{ section.settings.customer_account_menu }}">
+            {{ 'icon-account.svg' | inline_asset_content }}
+          </shopify-account>
+        {%- endif -%}
+
+        <a class="cart-btn" href="{{ routes.cart_url }}">
+          {{ 'icon-cart.svg' | inline_asset_content }}
+          <span>{{ 'cart.title' | t }}</span>
+          <span class="cart-btn__count"{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
   </div>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
-  </div>
-</header>
+  {%- if section.settings.menu != blank and section.settings.menu.links.size > 0 -%}
+    <nav class="site-nav" aria-label="{{ section.settings.menu.title | default: 'Primary' }}">
+      <div class="page-container site-nav__row">
+        {%- for link in section.settings.menu.links -%}
+          <a
+            href="{{ link.url }}"
+            {% if link.current or link.child_active %}class="is-current" aria-current="page"{% endif %}
+          >{{ link.title }}</a>
+        {%- endfor -%}
+      </div>
+    </nav>
+  {%- endif -%}
+</div>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
+  .site-header {
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .site-header--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .util-bar {
+    background: var(--color-dark-surface);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+  }
+  .util-bar__row {
+    display: flex;
+    gap: 20px;
+    padding-block: 8px;
+    flex-wrap: wrap;
+  }
+  .util-bar a:hover {
+    color: #fff;
+  }
+
+  .header-main__row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 28px;
+    padding-block: 16px;
   }
-  header a {
-    position: relative;
-    text-decoration: none;
+  .site-logo img {
+    display: block;
+    max-height: 44px;
+    width: auto;
+  }
+
+  .header-search {
+    flex: 1;
+    display: flex;
+    max-width: 560px;
+  }
+  .header-search input {
+    flex: 1;
+    min-width: 0;
+    border: 1.5px solid var(--color-border-strong);
+    border-right: none;
+    border-radius: var(--style-radius-sm) 0 0 var(--style-radius-sm);
+    padding: 10px 14px;
+    background: var(--color-surface-alt);
     color: var(--color-foreground);
+    font-size: 0.92rem;
+  }
+  .header-search input::placeholder {
+    color: var(--color-foreground-faint);
+  }
+  .header-search button {
+    border: 1.5px solid var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    padding: 0 18px;
+    border-radius: 0 var(--style-radius-sm) var(--style-radius-sm) 0;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+  }
+
+  .header-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 18px;
+    margin-left: auto;
+    flex-shrink: 0;
   }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
+  .header-actions__account svg,
+  .header-actions svg {
+    width: 22px;
+    height: 22px;
   }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+  .cart-btn {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-dark-surface);
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: var(--style-radius-sm);
+    font-weight: 600;
+    font-size: 0.86rem;
+  }
+  .cart-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+  .cart-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .cart-btn__count {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+    border-radius: var(--style-radius-pill);
+    font-family: var(--font-accent--family);
+    font-size: 0.72rem;
+    padding: 1px 7px;
+  }
+  .cart-btn:hover .cart-btn__count {
+    background: #fff;
+    color: var(--color-accent);
+  }
+
+  .site-nav {
+    background: var(--color-dark-surface);
+    border-top: 1px solid var(--color-dark-surface-soft);
+  }
+  .site-nav__row {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+  }
+  .site-nav a {
+    padding: 12px 16px;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.87rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+  }
+  .site-nav a:hover,
+  .site-nav a.is-current {
+    color: #fff;
+    border-bottom-color: var(--color-accent);
+  }
+
+  @media (max-width: 900px) {
+    .header-search {
+      order: 3;
+      flex-basis: 100%;
+      max-width: none;
+    }
+    .header-main__row {
+      flex-wrap: wrap;
+    }
   }
 {% endstylesheet %}
 
@@ -62,15 +227,37 @@
   "name": "t:general.header",
   "settings": [
     {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:labels.logo"
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
     },
     {
       "type": "link_list",
+      "id": "utility_menu",
+      "label": "t:labels.utility_menu"
+    },
+    {
+      "type": "link_list",
       "id": "customer_account_menu",
       "label": "t:labels.customer_account_menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "t:labels.show_search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "t:labels.sticky_header",
+      "default": true
     }
   ]
 }
