@@ -8,43 +8,54 @@
   assign current_variant = product.selected_or_first_available_variant
   assign low_stock_threshold = section.settings.low_stock_threshold
   assign image_ratio = section.settings.image_ratio | default: '1 / 1'
+
+  assign variant_qty = current_variant.inventory_quantity
+  assign is_low_stock = false
+  if current_variant.available and current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and variant_qty > 0 and variant_qty <= low_stock_threshold
+    assign is_low_stock = true
+  endif
+
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
 %}
 
 <div class="section-pad pdp">
   <div class="pdp__gallery" id="Gallery-{{ section.id }}">
-    {%- if product.featured_image -%}
-      {%- assign featured = product.featured_image -%}
-      {%- assign main_alt = featured.alt | default: product.title -%}
-      <button
-        type="button"
-        class="pdp__main-media"
-        style="--pdp-ratio: {{ image_ratio }}"
-        data-pdp-zoom
-        data-zoom-src="{{ featured | image_url: width: 1800 }}"
-        aria-label="{{ 'products.view_full_image' | t }}"
-      >
-        {{ featured | image_url: width: 1200 | image_tag: widths: '400,600,800,1000,1200', sizes: '(max-width: 900px) 92vw, 540px', fetchpriority: 'high', class: 'pdp__main-img', alt: main_alt }}
-        <span class="pdp__zoom-hint" aria-hidden="true">＋</span>
-      </button>
-    {%- endif -%}
+    <div class="pdp__stage">
+      {%- if product.images.size > 1 -%}
+        <div class="pdp__thumbs" role="group" aria-label="{{ product.title }}">
+          {%- for image in product.images limit: 12 -%}
+            <button
+              type="button"
+              class="pdp__thumb{% if image.id == product.featured_image.id %} is-active{% endif %}"
+              aria-current="{% if image.id == product.featured_image.id %}true{% else %}false{% endif %}"
+              data-pdp-thumb
+              data-full-src="{{ image | image_url: width: 1400 }}"
+              data-zoom-src="{{ image | image_url: width: 2000 }}"
+              data-alt="{{ image.alt | default: product.title | escape }}"
+            >
+              <img src="{{ image | image_url: width: 160 }}" loading="lazy" alt="" width="72" height="72">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
 
-    {%- if product.images.size > 1 -%}
-      <div class="pdp__thumbs" role="group" aria-label="{{ product.title }}">
-        {%- for image in product.images limit: 10 -%}
-          <button
-            type="button"
-            class="pdp__thumb{% if image.id == product.featured_image.id %} is-active{% endif %}"
-            aria-current="{% if image.id == product.featured_image.id %}true{% else %}false{% endif %}"
-            data-pdp-thumb
-            data-full-src="{{ image | image_url: width: 1200 }}"
-            data-zoom-src="{{ image | image_url: width: 1800 }}"
-            data-alt="{{ image.alt | default: product.title | escape }}"
-          >
-            <img src="{{ image | image_url: width: 160 }}" loading="lazy" alt="" width="72" height="72">
-          </button>
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
+      {%- if product.featured_image -%}
+        {%- assign featured = product.featured_image -%}
+        {%- assign main_alt = featured.alt | default: product.title -%}
+        <button
+          type="button"
+          class="pdp__main-media"
+          style="--pdp-ratio: {{ image_ratio }}"
+          data-pdp-zoom
+          data-zoom-src="{{ featured | image_url: width: 2000 }}"
+          aria-label="{{ 'products.view_full_image' | t }}"
+        >
+          {{ featured | image_url: width: 1400 | image_tag: widths: '500,700,900,1100,1400', sizes: '(max-width: 900px) 92vw, 620px', fetchpriority: 'high', class: 'pdp__main-img', alt: main_alt }}
+          <span class="pdp__zoom-hint" aria-hidden="true">＋</span>
+        </button>
+      {%- endif -%}
+    </div>
 
     <dialog class="pdp__lightbox" data-pdp-lightbox scroll-lock>
       <button type="button" class="pdp__lightbox-close" data-pdp-lightbox-close aria-label="{{ 'products.close' | t }}">&times;</button>
@@ -58,27 +69,66 @@
     {%- if product.vendor != blank -%}<span class="pdp__vendor">{{ product.vendor }}</span>{%- endif -%}
     <h1 class="pdp__title">{{ product.title }}</h1>
 
-    <div class="pdp__price">
+    {%- if rating -%}
+      {%- assign rounded = rating.rating | round -%}
+      <div class="pdp__rating">
+        <span class="pdp__stars" aria-hidden="true">
+          {%- for i in (1..5) -%}{% if i <= rounded %}★{% else %}☆{% endif %}{%- endfor -%}
+        </span>
+        <span class="pdp__rating-num">{{ rating.rating }}</span>
+        {%- if rating_count -%}<span class="pdp__rating-count">({{ rating_count }})</span>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="pdp__price pdp__price--lead">
       {% render 'price', product: current_variant %}
-      {%- if current_variant.available -%}
-        {%- assign qty = current_variant.inventory_quantity -%}
-        {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and qty > 0 and qty <= low_stock_threshold -%}
-          <span class="stock-pill stock-pill--low">{{ 'products.low_stock' | t }}</span>
-        {%- else -%}
-          <span class="stock-pill stock-pill--in">{{ 'products.in_stock' | t }}</span>
-        {%- endif -%}
-      {%- else -%}
+      {%- if current_variant.available == false -%}
         <span class="stock-pill stock-pill--out">{{ 'products.sold_out' | t }}</span>
+      {%- elsif is_low_stock -%}
+        <span class="stock-pill stock-pill--low">{{ 'products.low_stock' | t }}</span>
+      {%- else -%}
+        <span class="stock-pill stock-pill--in">{{ 'products.in_stock' | t }}</span>
       {%- endif -%}
     </div>
 
+    <dl class="pdp__facts">
+      {%- if product.vendor != blank -%}
+        <div><dt>{{ 'products.brand' | t }}</dt><dd>{{ product.vendor }}</dd></div>
+      {%- endif -%}
+      {%- if product.type != blank -%}
+        <div><dt>{{ 'products.type' | t }}</dt><dd>{{ product.type }}</dd></div>
+      {%- endif -%}
+      {%- if current_variant.sku != blank -%}
+        <div><dt>{{ 'products.sku' | t }}</dt><dd>{{ current_variant.sku }}</dd></div>
+      {%- endif -%}
+      {%- unless product.has_only_default_variant -%}
+        <div><dt>{{ 'products.variant' | t }}</dt><dd>{{ current_variant.title }}</dd></div>
+      {%- endunless -%}
+    </dl>
+
     {%- if product.tags.size > 0 -%}
       <div class="pdp__chips">
-        {%- for tag in product.tags limit: 6 -%}
+        {%- for tag in product.tags limit: 8 -%}
           {%- unless tag contains ':' -%}<span class="chip">{{ tag }}</span>{%- endunless -%}
         {%- endfor -%}
       </div>
     {%- endif -%}
+  </div>
+
+  <div class="pdp__buybox">
+    <div class="pdp__price">
+      {% render 'price', product: current_variant %}
+    </div>
+
+    <p class="pdp__buybox-stock">
+      {%- if current_variant.available == false -%}
+        <span class="pdp__dot pdp__dot--out"></span>{{ 'products.sold_out' | t }}
+      {%- elsif is_low_stock -%}
+        <span class="pdp__dot pdp__dot--low"></span>{{ 'products.low_stock' | t }}
+      {%- else -%}
+        <span class="pdp__dot pdp__dot--in"></span>{{ 'products.in_stock' | t }}
+      {%- endif -%}
+    </p>
 
     {%- form 'product', product, class: 'pdp__form' -%}
       {%- unless product.has_only_default_variant -%}
@@ -112,6 +162,8 @@
         {{ form | payment_button }}
       </div>
     {%- endform -%}
+
+    <p class="pdp__buybox-meta">{{ 'products.ships_from_html' | t: shop: shop.name }}</p>
   </div>
 </div>
 
@@ -175,18 +227,33 @@
 {% stylesheet %}
   .pdp {
     display: grid;
-    grid-template-columns: minmax(0, 380px) 1fr;
-    gap: 48px;
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 300px) minmax(240px, 300px);
+    grid-template-areas: "gallery info buy";
+    gap: 32px;
     align-items: start;
   }
   .pdp__gallery {
+    grid-area: gallery;
     position: sticky;
     top: 90px;
+  }
+  .pdp__info {
+    grid-area: info;
+  }
+  .pdp__buybox {
+    grid-area: buy;
+  }
+
+  .pdp__stage {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
   }
   .pdp__main-media {
     display: block;
     position: relative;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     /* Fixed frame: the box keeps its size while you switch between photos. */
     aspect-ratio: var(--pdp-ratio, 1 / 1);
     padding: 0;
@@ -223,13 +290,13 @@
   }
   .pdp__thumbs {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px;
-    margin-top: 12px;
+    flex-shrink: 0;
   }
   .pdp__thumb {
-    width: 72px;
-    height: 72px;
+    width: 60px;
+    height: 60px;
     padding: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--style-radius-sm);
@@ -301,32 +368,103 @@
     color: var(--color-foreground-faint);
   }
   .pdp__title {
-    margin: 6px 0 14px;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 4px 0 10px;
+    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .pdp__rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: var(--color-foreground-soft);
+  }
+  .pdp__stars {
+    color: #E8A93C;
+    letter-spacing: 1px;
+  }
+  .pdp__rating-count {
+    color: var(--color-accent);
   }
   .pdp__price {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
   }
-  .pdp__price .price {
-    font-size: 1.5rem;
+  .pdp__price--lead {
+    margin: 12px 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+  }
+  .pdp__price--lead .price {
+    font-size: 1.6rem;
+  }
+  .pdp__facts {
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pdp__facts > div {
+    display: flex;
+    gap: 8px;
+    font-size: 0.84rem;
+  }
+  .pdp__facts dt {
+    flex-shrink: 0;
+    width: 84px;
+    color: var(--color-foreground-faint);
+  }
+  .pdp__facts dd {
+    margin: 0;
+    color: var(--color-foreground);
   }
   .pdp__chips {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 20px;
+    margin-top: 14px;
   }
-  .pdp__form {
+
+  .pdp__buybox {
+    position: sticky;
+    top: 90px;
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 20px;
+    padding: 18px;
     border: 1px solid var(--color-border);
     border-radius: var(--style-radius-lg);
     background: var(--color-background);
+    box-shadow: var(--style-shadow);
+  }
+  .pdp__buybox .price {
+    font-size: 1.5rem;
+  }
+  .pdp__buybox-stock {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .pdp__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--style-radius-pill);
+    flex-shrink: 0;
+  }
+  .pdp__dot--in { background: var(--color-success); }
+  .pdp__dot--low { background: var(--color-warning); }
+  .pdp__dot--out { background: var(--color-error); }
+
+  .pdp__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
   .pdp__field {
     display: flex;
@@ -357,15 +495,44 @@
   .pdp__actions .shopify-payment-button {
     width: 100%;
   }
+  .pdp__buybox-meta {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--color-foreground-faint);
+  }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
+    .pdp {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+      grid-template-areas:
+        "gallery info"
+        "gallery buy";
+    }
+  }
+  @media (max-width: 760px) {
     .pdp {
       grid-template-columns: 1fr;
-      gap: 28px;
+      grid-template-areas:
+        "gallery"
+        "info"
+        "buy";
+      gap: 24px;
+    }
+    .pdp__gallery,
+    .pdp__buybox {
+      position: static;
     }
     .pdp__gallery {
-      position: static;
-      max-width: 420px;
+      max-width: 520px;
+      margin-inline: auto;
+    }
+    .pdp__stage {
+      flex-direction: column-reverse;
+    }
+    .pdp__thumbs {
+      flex-direction: row;
+      overflow-x: auto;
+      width: 100%;
     }
   }
 {% endstylesheet %}
