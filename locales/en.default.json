@@ -65,7 +65,6 @@
     "new": "New",
     "quantity": "Quantity",
     "sale": "Sale",
-    "ships_from_html": "Ships from and sold by {{ shop }}.",
     "sku": "SKU",
     "sold_out": "Sold out",
     "type": "Category",

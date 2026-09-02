@@ -162,8 +162,6 @@
         {{ form | payment_button }}
       </div>
     {%- endform -%}
-
-    <p class="pdp__buybox-meta">{{ 'products.ships_from_html' | t: shop: shop.name }}</p>
   </div>
 </div>
 
@@ -494,11 +492,6 @@
   }
   .pdp__actions .shopify-payment-button {
     width: 100%;
-  }
-  .pdp__buybox-meta {
-    margin: 0;
-    font-size: 0.78rem;
-    color: var(--color-foreground-faint);
   }
 
   @media (max-width: 1100px) {
