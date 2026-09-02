@@ -1,5 +1,5 @@
 {% comment %}
-  Search template: search field, filter sidebar, and a grid of results.
+  Search template: centered search hero, filter sidebar, and a grid of results.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
 {% endcomment %}
@@ -13,92 +13,134 @@
   assign search_clear = routes.search_url | append: '?q=' | append: encoded_terms | append: '&type=product'
 -%}
 
-<div class="section-pad search-page">
-  <h1 class="search-page__title">{{ 'search.title' | t }}</h1>
+<div class="search-hero full-width surface-alt">
+  <div class="page-container">
+    <h1 class="search-hero__title">{{ 'search.heading' | t }}</h1>
 
-  <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
-    <input type="hidden" name="type" value="product">
-    <input
-      type="search"
-      name="q"
-      value="{{ search.terms | escape }}"
-      placeholder="{{ 'search.placeholder' | t }}"
-      aria-label="{{ 'search.title' | t }}"
-    >
-    <button type="submit" class="btn btn--primary">{{ 'search.submit' | t }}</button>
-  </form>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-hero__form">
+      <input type="hidden" name="type" value="product">
+      <input
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'search.placeholder' | t }}"
+        aria-label="{{ 'search.title' | t }}"
+      >
+      <button type="submit" aria-label="{{ 'search.submit' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </form>
 
-  {%- if search.performed -%}
-    {%- if search.results_count == 0 -%}
-      <p class="search-page__meta">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
-    {%- else -%}
-      <p class="search-page__meta">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
-
-      <div class="coll-layout{% unless has_facets %} coll-layout--nofilter{% endunless %}">
-        {%- if has_facets -%}
-          <aside class="coll-layout__side">
-            {% render 'facets', results: search, clear_url: search_clear %}
-          </aside>
+    {%- if search.performed -%}
+      <p class="search-hero__meta">
+        {%- if search.results_count == 0 -%}
+          {{ 'search.no_results_html' | t: terms: search.terms }}
+        {%- else -%}
+          {{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}
         {%- endif -%}
-
-        <div class="coll-layout__main">
-          {%- paginate search.results by 24 -%}
-            <div class="search-results">
-              {%- for result in search.results -%}
-                {%- if result.object_type == 'product' -%}
-                  {% render 'product-card', product: result %}
-                {%- else -%}
-                  {%- assign featured_image = result.featured_image | default: result.image -%}
-                  <a class="search-result" href="{{ result.url }}">
-                    {%- if featured_image -%}
-                      <div class="search-result__media">
-                        {{ featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: result.title }}
-                      </div>
-                    {%- endif -%}
-                    <div class="search-result__body">
-                      <span class="search-result__kind">{{ result.object_type }}</span>
-                      <span class="search-result__title">{{ result.title }}</span>
-                    </div>
-                  </a>
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-
-            {%- if paginate.pages > 1 -%}
-              <div class="pagination-nav">{{ paginate | default_pagination }}</div>
-            {%- endif -%}
-          {%- endpaginate -%}
-        </div>
-      </div>
+      </p>
     {%- endif -%}
-  {%- endif -%}
+  </div>
 </div>
 
+{%- if search.performed and search.results_count > 0 -%}
+  <div class="section-pad">
+    <div class="coll-layout{% unless has_facets %} coll-layout--nofilter{% endunless %}">
+      {%- if has_facets -%}
+        <aside class="coll-layout__side">
+          {% render 'facets', results: search, clear_url: search_clear %}
+        </aside>
+      {%- endif -%}
+
+      <div class="coll-layout__main">
+        {%- paginate search.results by 24 -%}
+          <div class="search-results">
+            {%- for result in search.results -%}
+              {%- if result.object_type == 'product' -%}
+                {% render 'product-card', product: result %}
+              {%- else -%}
+                {%- assign featured_image = result.featured_image | default: result.image -%}
+                <a class="search-result" href="{{ result.url }}">
+                  {%- if featured_image -%}
+                    <div class="search-result__media">
+                      {{ featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: result.title }}
+                    </div>
+                  {%- endif -%}
+                  <div class="search-result__body">
+                    <span class="search-result__kind">{{ result.object_type }}</span>
+                    <span class="search-result__title">{{ result.title }}</span>
+                  </div>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="pagination-nav">{{ paginate | default_pagination }}</div>
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
 {% stylesheet %}
-  .search-page__title {
-    margin-bottom: 18px;
+  .search-hero {
+    padding-block: clamp(32px, 6vw, 64px);
+    text-align: center;
+  }
+  .search-hero__title {
+    margin: 0 0 22px;
     font-size: clamp(1.6rem, 3.5vw, 2.2rem);
   }
-  .search-page__form {
-    display: flex;
-    gap: 10px;
-    max-width: 620px;
-    margin-bottom: 18px;
+  .search-hero__form {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
   }
-  .search-page__form input[type="search"] {
-    flex: 1;
-    min-width: 0;
-    padding: 11px 14px;
+  .search-hero__form input[type="search"] {
+    width: 100%;
+    padding: 14px 50px 14px 18px;
     border: 1.5px solid var(--color-border-strong);
-    border-radius: var(--style-border-radius-inputs);
+    border-radius: var(--style-radius-sm);
     background: var(--color-background);
     color: var(--color-foreground);
     font: inherit;
+    font-size: 1rem;
   }
-  .search-page__meta {
-    margin-bottom: 20px;
+  .search-hero__form input::placeholder {
+    color: var(--color-foreground-faint);
+  }
+  .search-hero__form button {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: none;
+    color: var(--color-foreground-soft);
+    cursor: pointer;
+  }
+  .search-hero__form button:hover {
+    color: var(--color-accent);
+  }
+  .search-hero__form svg {
+    width: 20px;
+    height: 20px;
+  }
+  .search-hero__meta {
+    margin: 22px 0 0;
     color: var(--color-foreground-soft);
   }
+
   .search-results {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
