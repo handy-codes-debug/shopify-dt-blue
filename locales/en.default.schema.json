@@ -61,7 +61,7 @@
       "name": "Promo banner"
     },
     "product_description": {
-      "name": "Product details"
+      "name": "Product info tabs"
     },
     "product_recommendations": {
       "name": "Product recommendations"
@@ -73,6 +73,7 @@
     "accent_font": "Accent (monospace)",
     "accent_soft": "Accent (soft)",
     "alignment": "Alignment",
+    "attribute_label": "Attribute tab label",
     "background": "Background",
     "border": "Border",
     "border_strong": "Border (strong)",
@@ -84,6 +85,7 @@
     "customer_account_menu": "Customer account menu",
     "dark_surface": "Dark surface",
     "dark_surface_soft": "Dark surface (soft)",
+    "description_label": "Description tab label",
     "image_ratio": "Main image shape",
     "disclaimer": "Disclaimer",
     "error": "Error",
@@ -104,15 +106,18 @@
     "logo": "Logo",
     "low_stock_threshold": "Low stock threshold",
     "menu": "Menu",
+    "metafield_namespace": "Metafield namespace",
     "padding": "Padding",
     "page_margin": "Page margin",
     "page_width": "Page width",
     "products_per_page": "Products per page",
     "products_to_show": "Products to show",
     "recommendation_intent": "Recommendation type",
+    "show_description_tab": "Show description tab",
     "show_payment_icons": "Show payment icons",
     "show_search": "Show search bar",
     "show_sort": "Show sort dropdown",
+    "specification_label": "Specification tab label",
     "status_colors": "Status colors",
     "sticky_header": "Stick header to top on scroll",
     "subheading": "Subheading",
@@ -130,6 +135,7 @@
   },
   "info": {
     "category_title": "Overrides the collection title shown on the card.",
+    "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
     "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."
   },
   "options": {

@@ -1,39 +1,202 @@
 {% comment %}
-  Full-width product details block shown below the product buy area.
-  Reads the current template's `product` object.
+  Tabbed product info shown below the buy area: metafield-driven Attribute and
+  Specification tabs plus the product Description. Each tab renders only when it
+  has content. Reads the current template's `product` object.
 {% endcomment %}
 
-{%- if product.description != blank -%}
+{% liquid
+  assign ns = section.settings.metafield_namespace | default: 'custom'
+  assign attr_value = product.metafields[ns].attribute_tab.value
+  assign spec_value = product.metafields[ns].specification_tab.value
+
+  assign has_attr = false
+  if attr_value != blank
+    assign has_attr = true
+  endif
+
+  assign has_spec = false
+  if spec_value != blank
+    assign has_spec = true
+  endif
+
+  assign has_desc = false
+  if section.settings.show_description and product.description != blank
+    assign has_desc = true
+  endif
+
+  assign tab_count = 0
+  if has_attr
+    assign tab_count = tab_count | plus: 1
+  endif
+  if has_spec
+    assign tab_count = tab_count | plus: 1
+  endif
+  if has_desc
+    assign tab_count = tab_count | plus: 1
+  endif
+
+  assign active = ''
+  if has_attr
+    assign active = 'attr'
+  elsif has_spec
+    assign active = 'spec'
+  elsif has_desc
+    assign active = 'desc'
+  endif
+%}
+
+{%- if tab_count > 0 -%}
+  {%- assign sid = section.id -%}
   <div class="section-pad{% if section.settings.tinted %} surface-alt full-width{% endif %}">
-    <div class="{% if section.settings.tinted %}page-container{% endif %} pdesc">
+    <div class="{% if section.settings.tinted %}page-container{% endif %} ptabs" id="ProdTabs-{{ sid }}" data-ptabs>
       {%- if section.settings.heading != blank -%}
-        <h2 class="pdesc__heading">{{ section.settings.heading }}</h2>
+        <h2 class="ptabs__heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
-      <div class="pdesc__body rte">{{ product.description }}</div>
+
+      <div class="ptabs__list" role="tablist" aria-label="{{ section.settings.heading | default: product.title }}">
+        {%- if has_attr -%}
+          <button type="button" class="ptabs__tab" id="tab-attr-{{ sid }}" role="tab" aria-controls="panel-attr-{{ sid }}" aria-selected="{% if active == 'attr' %}true{% else %}false{% endif %}" tabindex="{% if active == 'attr' %}0{% else %}-1{% endif %}">
+            {{ section.settings.attribute_label | default: 'Attribute' }}
+          </button>
+        {%- endif -%}
+        {%- if has_spec -%}
+          <button type="button" class="ptabs__tab" id="tab-spec-{{ sid }}" role="tab" aria-controls="panel-spec-{{ sid }}" aria-selected="{% if active == 'spec' %}true{% else %}false{% endif %}" tabindex="{% if active == 'spec' %}0{% else %}-1{% endif %}">
+            {{ section.settings.specification_label | default: 'Specification' }}
+          </button>
+        {%- endif -%}
+        {%- if has_desc -%}
+          <button type="button" class="ptabs__tab" id="tab-desc-{{ sid }}" role="tab" aria-controls="panel-desc-{{ sid }}" aria-selected="{% if active == 'desc' %}true{% else %}false{% endif %}" tabindex="{% if active == 'desc' %}0{% else %}-1{% endif %}">
+            {{ section.settings.description_label | default: 'Description' }}
+          </button>
+        {%- endif -%}
+      </div>
+
+      {%- if has_attr -%}
+        <div class="ptabs__panel rte" id="panel-attr-{{ sid }}" role="tabpanel" aria-labelledby="tab-attr-{{ sid }}"{% unless active == 'attr' %} hidden{% endunless %}>
+          {{ attr_value | newline_to_br }}
+        </div>
+      {%- endif -%}
+      {%- if has_spec -%}
+        <div class="ptabs__panel rte" id="panel-spec-{{ sid }}" role="tabpanel" aria-labelledby="tab-spec-{{ sid }}"{% unless active == 'spec' %} hidden{% endunless %}>
+          {{ spec_value | newline_to_br }}
+        </div>
+      {%- endif -%}
+      {%- if has_desc -%}
+        <div class="ptabs__panel rte" id="panel-desc-{{ sid }}" role="tabpanel" aria-labelledby="tab-desc-{{ sid }}"{% unless active == 'desc' %} hidden{% endunless %}>
+          {{ product.description }}
+        </div>
+      {%- endif -%}
     </div>
   </div>
+
+  {%- if tab_count > 1 -%}
+    <script>
+      (function () {
+        var root = document.getElementById('ProdTabs-{{ sid }}');
+        if (!root) return;
+        var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+        var panels = Array.prototype.slice.call(root.querySelectorAll('[role="tabpanel"]'));
+        if (!tabs.length) return;
+
+        function activate(tab) {
+          tabs.forEach(function (t) {
+            var selected = t === tab;
+            t.setAttribute('aria-selected', selected ? 'true' : 'false');
+            t.tabIndex = selected ? 0 : -1;
+          });
+          panels.forEach(function (p) {
+            p.hidden = p.getAttribute('aria-labelledby') !== tab.id;
+          });
+        }
+
+        tabs.forEach(function (tab, i) {
+          tab.addEventListener('click', function () { activate(tab); });
+          tab.addEventListener('keydown', function (event) {
+            var next = i;
+            if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (i + 1) % tabs.length;
+            else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (i - 1 + tabs.length) % tabs.length;
+            else if (event.key === 'Home') next = 0;
+            else if (event.key === 'End') next = tabs.length - 1;
+            else return;
+            event.preventDefault();
+            tabs[next].focus();
+            activate(tabs[next]);
+          });
+        });
+      })();
+    </script>
+  {%- endif -%}
 {%- endif -%}
 
 {% stylesheet %}
-  .pdesc {
-    max-width: 760px;
+  .ptabs {
+    max-width: 900px;
   }
-  .pdesc__heading {
+  .ptabs__heading {
     margin: 0 0 16px;
     font-size: clamp(1.2rem, 2.4vw, 1.5rem);
   }
-  .pdesc__body {
+  .ptabs__list {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+  }
+  .ptabs__tab {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    padding: 12px 16px;
+    font-family: var(--font-accent--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-foreground-faint);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .ptabs__tab:hover {
+    color: var(--color-foreground);
+  }
+  .ptabs__tab[aria-selected="true"] {
+    color: var(--color-foreground);
+    border-bottom-color: var(--color-accent);
+  }
+  .ptabs__panel {
+    padding-top: 22px;
     line-height: 1.7;
     color: var(--color-foreground-soft);
   }
-  .pdesc__body :is(h2, h3, h4) {
+  .ptabs__panel[hidden] {
+    display: none;
+  }
+  .ptabs__panel :is(h2, h3, h4) {
     color: var(--color-foreground);
     margin-top: 1.6em;
   }
-  .pdesc__body :is(ul, ol) {
+  .ptabs__panel :is(ul, ol) {
     padding-left: 1.2em;
   }
-  .pdesc__body img {
+  .ptabs__panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block: 1em;
+    font-size: 0.9rem;
+  }
+  .ptabs__panel :is(th, td) {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    text-align: left;
+  }
+  .ptabs__panel th {
+    background: var(--color-surface-alt);
+    color: var(--color-foreground);
+    font-weight: 600;
+  }
+  .ptabs__panel img {
     border-radius: var(--style-radius);
     margin-block: 1em;
   }
@@ -46,8 +209,38 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "t:labels.heading",
-      "default": "Product details"
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "text",
+      "id": "metafield_namespace",
+      "label": "t:labels.metafield_namespace",
+      "info": "t:info.metafield_namespace",
+      "default": "custom"
+    },
+    {
+      "type": "text",
+      "id": "attribute_label",
+      "label": "t:labels.attribute_label",
+      "default": "Attribute"
+    },
+    {
+      "type": "text",
+      "id": "specification_label",
+      "label": "t:labels.specification_label",
+      "default": "Specification"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "t:labels.show_description_tab",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "description_label",
+      "label": "t:labels.description_label",
+      "default": "Description"
     },
     {
       "type": "checkbox",
