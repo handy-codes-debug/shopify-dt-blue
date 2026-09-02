@@ -78,6 +78,7 @@
     "customer_account_menu": "Customer account menu",
     "dark_surface": "Dark surface",
     "dark_surface_soft": "Dark surface (soft)",
+    "image_ratio": "Main image shape",
     "disclaimer": "Disclaimer",
     "error": "Error",
     "error_soft": "Error (soft)",
@@ -137,6 +138,11 @@
     "page_width": {
       "narrow": "Narrow",
       "wide": "Wide"
+    },
+    "ratio": {
+      "square": "Square (1:1)",
+      "landscape": "Landscape (4:3)",
+      "portrait": "Portrait (3:4)"
     },
     "size": {
       "large": "Large",

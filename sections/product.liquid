@@ -7,6 +7,7 @@
 {% liquid
   assign current_variant = product.selected_or_first_available_variant
   assign low_stock_threshold = section.settings.low_stock_threshold
+  assign image_ratio = section.settings.image_ratio | default: '1 / 1'
 %}
 
 <div class="section-pad pdp">
@@ -17,6 +18,7 @@
       <button
         type="button"
         class="pdp__main-media"
+        style="--pdp-ratio: {{ image_ratio }}"
         data-pdp-zoom
         data-zoom-src="{{ featured | image_url: width: 1800 }}"
         aria-label="{{ 'products.view_full_image' | t }}"
@@ -44,7 +46,7 @@
       </div>
     {%- endif -%}
 
-    <dialog class="pdp__lightbox" data-pdp-lightbox>
+    <dialog class="pdp__lightbox" data-pdp-lightbox scroll-lock>
       <button type="button" class="pdp__lightbox-close" data-pdp-lightbox-close aria-label="{{ 'products.close' | t }}">&times;</button>
       {%- comment -%} theme-check-disable ImgWidthAndHeight, RemoteAsset {%- endcomment -%}
       <img data-pdp-lightbox-img alt="" width="1200" height="900">
@@ -185,6 +187,8 @@
     display: block;
     position: relative;
     width: 100%;
+    /* Fixed frame: the box keeps its size while you switch between photos. */
+    aspect-ratio: var(--pdp-ratio, 1 / 1);
     padding: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--style-radius-lg);
@@ -195,7 +199,7 @@
   .pdp__main-media img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: contain;
   }
   .pdp__zoom-hint {
@@ -247,6 +251,12 @@
     box-shadow: 0 0 0 1px var(--color-accent);
   }
   .pdp__lightbox {
+    /* Pin to the viewport and auto-margin so the photo sits dead centre. */
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
     max-width: min(92vw, 1100px);
     max-height: 90vh;
     padding: 0;
@@ -255,12 +265,16 @@
     background: var(--color-background);
     overflow: hidden;
   }
+  .pdp__lightbox:not([open]) {
+    display: none;
+  }
   .pdp__lightbox::backdrop {
     background: rgba(11, 18, 32, 0.72);
   }
   .pdp__lightbox img {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     height: auto;
     max-height: 90vh;
     object-fit: contain;
@@ -364,6 +378,17 @@
 {
   "name": "t:general.product",
   "settings": [
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "1 / 1", "label": "t:options.ratio.square" },
+        { "value": "4 / 3", "label": "t:options.ratio.landscape" },
+        { "value": "3 / 4", "label": "t:options.ratio.portrait" }
+      ],
+      "default": "1 / 1"
+    },
     {
       "type": "range",
       "id": "low_stock_threshold",
