@@ -32,7 +32,7 @@
     </div>
 
     {%- if paginate.pages > 1 -%}
-      {{ paginate | default_pagination }}
+      <div class="pagination-nav">{{ paginate | default_pagination }}</div>
     {%- endif -%}
   {%- endpaginate -%}
 </div>

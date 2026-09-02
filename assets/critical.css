@@ -581,32 +581,32 @@ a:hover {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
 }
 
-/* Pagination row shared by listing templates. Styles the markup that
-   Shopify's `default_pagination` filter outputs (.page / .prev / .next /
-   .deco spans). */
-.pagination {
+/* Pagination row shared by listing templates. Styles whatever Shopify's
+   `default_pagination` filter outputs inside our .pagination-nav wrapper —
+   the inner wrapper (if any) is flattened with display: contents so the
+   .page / .prev / .next / .deco items lay out directly. */
+.pagination-nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  width: fit-content;
-  max-width: 100%;
-  margin: 36px auto 8px;
+  margin: 36px 0 8px;
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
-.pagination > * {
-  flex: 0 0 auto;
+.pagination-nav .pagination {
+  display: contents;
 }
 
-.pagination .page,
-.pagination .prev,
-.pagination .next,
-.pagination .deco {
+.pagination-nav .page,
+.pagination-nav .prev,
+.pagination-nav .next,
+.pagination-nav .deco {
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -618,18 +618,18 @@ a:hover {
   color: var(--color-foreground);
 }
 
-.pagination .page,
-.pagination .prev,
-.pagination .next {
+.pagination-nav .page,
+.pagination-nav .prev,
+.pagination-nav .next {
   padding-inline: 8px;
   transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
 }
 
-.pagination :is(.page, .prev, .next):has(a) {
+.pagination-nav :is(.page, .prev, .next):has(a) {
   padding: 0;
 }
 
-.pagination :is(.page, .prev, .next) > a {
+.pagination-nav :is(.page, .prev, .next) > a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -640,20 +640,20 @@ a:hover {
   text-decoration: none;
 }
 
-.pagination :is(.page, .prev, .next):hover:has(a) {
+.pagination-nav :is(.page, .prev, .next):hover:has(a) {
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
-.pagination .page.current,
-.pagination .deco {
+.pagination-nav .page.current,
+.pagination-nav .deco {
   background: var(--color-dark-surface);
   border-color: var(--color-dark-surface);
   color: #fff;
 }
 
-.pagination .prev:not(:has(a)),
-.pagination .next:not(:has(a)) {
+.pagination-nav .prev:not(:has(a)),
+.pagination-nav .next:not(:has(a)) {
   color: var(--color-foreground-faint);
   background: var(--color-surface-alt);
 }
