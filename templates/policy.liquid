@@ -1,6 +1,7 @@
 {% comment %}
-  Policy template: renders a store policy page (refund, shipping, privacy,
-  terms of service, subscription). Content comes from Settings > Policies.
+  Store policy pages (refund, shipping, privacy, terms of service,
+  subscription). Policy pages support a Liquid template only, and expose the
+  content through the `page_title` / `page_content` variables.
 {% endcomment %}
 
 {% # theme-check-disable UndefinedObject %}
@@ -14,10 +15,11 @@
 </div>
 {% # theme-check-enable UndefinedObject %}
 
-{% stylesheet %}
+<style>
   .policy-page {
     padding-top: clamp(56px, 9vw, 128px);
     padding-bottom: clamp(40px, 7vw, 80px);
+    padding-inline: clamp(20px, 5vw, 48px);
   }
   .policy-page__inner {
     max-width: 820px;
@@ -75,11 +77,4 @@
   .policy-page__body :is(strong, b) {
     color: var(--color-foreground);
   }
-{% endstylesheet %}
-
-{% schema %}
-{
-  "name": "Policy",
-  "settings": []
-}
-{% endschema %}
+</style>
