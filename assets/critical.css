@@ -241,13 +241,16 @@ a:hover {
 }
 
 .rte table {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
   font-size: 0.94em;
 }
 
 .rte :is(th, td) {
-  padding: 8px 12px;
+  padding: 11px 14px;
   border: 1px solid var(--color-border);
   text-align: left;
   vertical-align: top;
@@ -256,6 +259,22 @@ a:hover {
 .rte th {
   background: var(--color-surface-alt);
   font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.rte thead th {
+  background: var(--color-dark-surface);
+  color: #fff;
+  border-color: var(--color-dark-surface);
+}
+
+.rte td :is(ul, ol) {
+  margin: 0.5em 0;
+  padding-left: 1.2em;
+}
+
+.rte td :is(ul, ol):first-child {
+  margin-top: 0;
 }
 
 /* Vertical rhythm for stacked sections. */
