@@ -10,20 +10,46 @@
 %}
 
 <div class="section-pad pdp">
-  <div class="pdp__gallery">
-    {%- if product.featured_media -%}
-      <div class="pdp__main-media">
-        {{ product.featured_media | image_url: width: 1200 | image_tag: widths: '400,600,800,1000,1200', sizes: '(max-width: 900px) 92vw, 540px', alt: product.featured_media.alt | default: product.title, fetchpriority: 'high' }}
-      </div>
+  <div class="pdp__gallery" id="Gallery-{{ section.id }}">
+    {%- if product.featured_image -%}
+      {%- assign featured = product.featured_image -%}
+      {%- assign main_alt = featured.alt | default: product.title -%}
+      <button
+        type="button"
+        class="pdp__main-media"
+        data-pdp-zoom
+        data-zoom-src="{{ featured | image_url: width: 1800 }}"
+        aria-label="{{ 'products.view_full_image' | t }}"
+      >
+        {{ featured | image_url: width: 1200 | image_tag: widths: '400,600,800,1000,1200', sizes: '(max-width: 900px) 92vw, 540px', fetchpriority: 'high', class: 'pdp__main-img', alt: main_alt }}
+        <span class="pdp__zoom-hint" aria-hidden="true">＋</span>
+      </button>
     {%- endif -%}
 
-    {%- if product.media.size > 1 -%}
-      <div class="pdp__thumbs">
-        {%- for media in product.media limit: 8 -%}
-          {{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: media.alt | default: product.title, class: 'pdp__thumb' }}
+    {%- if product.images.size > 1 -%}
+      <div class="pdp__thumbs" role="group" aria-label="{{ product.title }}">
+        {%- for image in product.images limit: 10 -%}
+          <button
+            type="button"
+            class="pdp__thumb{% if image.id == product.featured_image.id %} is-active{% endif %}"
+            aria-current="{% if image.id == product.featured_image.id %}true{% else %}false{% endif %}"
+            data-pdp-thumb
+            data-full-src="{{ image | image_url: width: 1200 }}"
+            data-zoom-src="{{ image | image_url: width: 1800 }}"
+            data-alt="{{ image.alt | default: product.title | escape }}"
+          >
+            <img src="{{ image | image_url: width: 160 }}" loading="lazy" alt="" width="72" height="72">
+          </button>
         {%- endfor -%}
       </div>
     {%- endif -%}
+
+    <dialog class="pdp__lightbox" data-pdp-lightbox>
+      <button type="button" class="pdp__lightbox-close" data-pdp-lightbox-close aria-label="{{ 'products.close' | t }}">&times;</button>
+      {%- comment -%} theme-check-disable ImgWidthAndHeight, RemoteAsset {%- endcomment -%}
+      <img data-pdp-lightbox-img alt="" width="1200" height="900">
+      {%- comment -%} theme-check-enable ImgWidthAndHeight, RemoteAsset {%- endcomment -%}
+    </dialog>
   </div>
 
   <div class="pdp__info">
@@ -91,6 +117,63 @@
   </div>
 </div>
 
+<script>
+  (function () {
+    var gallery = document.getElementById('Gallery-{{ section.id }}');
+    if (!gallery) return;
+
+    var mainBtn = gallery.querySelector('[data-pdp-zoom]');
+    var mainImg = mainBtn ? mainBtn.querySelector('img') : null;
+    var thumbs = gallery.querySelectorAll('[data-pdp-thumb]');
+    var lightbox = gallery.querySelector('[data-pdp-lightbox]');
+    var lightboxImg = lightbox ? lightbox.querySelector('img') : null;
+    var lightboxClose = gallery.querySelector('[data-pdp-lightbox-close]');
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        if (!mainImg) return;
+        mainImg.setAttribute('src', thumb.getAttribute('data-full-src'));
+        mainImg.removeAttribute('srcset');
+        mainImg.setAttribute('alt', thumb.getAttribute('data-alt') || '');
+        if (mainBtn) mainBtn.setAttribute('data-zoom-src', thumb.getAttribute('data-zoom-src'));
+
+        thumbs.forEach(function (t) {
+          t.classList.toggle('is-active', t === thumb);
+          t.setAttribute('aria-current', t === thumb ? 'true' : 'false');
+        });
+      });
+    });
+
+    function openLightbox() {
+      if (!lightbox || !lightboxImg || !mainBtn) return;
+      lightboxImg.setAttribute('src', mainBtn.getAttribute('data-zoom-src') || (mainImg && mainImg.currentSrc) || '');
+      lightboxImg.setAttribute('alt', (mainImg && mainImg.getAttribute('alt')) || '');
+      if (typeof lightbox.showModal === 'function') {
+        lightbox.showModal();
+      } else {
+        lightbox.setAttribute('open', '');
+      }
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      if (typeof lightbox.close === 'function') {
+        lightbox.close();
+      } else {
+        lightbox.removeAttribute('open');
+      }
+    }
+
+    if (mainBtn) mainBtn.addEventListener('click', openLightbox);
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightbox) {
+      lightbox.addEventListener('click', function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+    }
+  })();
+</script>
+
 {% stylesheet %}
   .pdp {
     display: grid;
@@ -99,15 +182,40 @@
     align-items: start;
   }
   .pdp__main-media {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--style-radius-lg);
     overflow: hidden;
     background: var(--color-surface-alt);
+    cursor: zoom-in;
   }
   .pdp__main-media img {
+    display: block;
     width: 100%;
     height: auto;
     object-fit: contain;
+  }
+  .pdp__zoom-hint {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--style-radius-pill);
+    background: var(--color-dark-surface);
+    color: #fff;
+    font-size: 1.1rem;
+    line-height: 1;
+    opacity: 0.85;
+  }
+  .pdp__main-media:hover .pdp__zoom-hint {
+    opacity: 1;
   }
   .pdp__thumbs {
     display: flex;
@@ -118,10 +226,58 @@
   .pdp__thumb {
     width: 72px;
     height: 72px;
-    object-fit: cover;
+    padding: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--style-radius-sm);
     background: var(--color-surface-alt);
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+  .pdp__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pdp__thumb:hover {
+    border-color: var(--color-border-strong);
+  }
+  .pdp__thumb.is-active {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+  .pdp__lightbox {
+    max-width: min(92vw, 1100px);
+    max-height: 90vh;
+    padding: 0;
+    border: none;
+    border-radius: var(--style-radius-lg);
+    background: var(--color-background);
+    overflow: hidden;
+  }
+  .pdp__lightbox::backdrop {
+    background: rgba(11, 18, 32, 0.72);
+  }
+  .pdp__lightbox img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+  .pdp__lightbox-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--style-radius-pill);
+    background: var(--color-dark-surface);
+    color: #fff;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
   }
   .pdp__vendor {
     font-size: 0.72rem;
