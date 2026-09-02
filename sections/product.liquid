@@ -71,13 +71,13 @@
 
     {%- if rating -%}
       {%- assign rounded = rating.rating | round -%}
-      <div class="pdp__rating">
+      <a class="pdp__rating" href="#reviews">
         <span class="pdp__stars" aria-hidden="true">
           {%- for i in (1..5) -%}{% if i <= rounded %}★{% else %}☆{% endif %}{%- endfor -%}
         </span>
         <span class="pdp__rating-num">{{ rating.rating }}</span>
         {%- if rating_count -%}<span class="pdp__rating-count">({{ rating_count }})</span>{%- endif -%}
-      </div>
+      </a>
     {%- endif -%}
 
     <div class="pdp__price pdp__price--lead">

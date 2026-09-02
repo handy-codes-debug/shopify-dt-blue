@@ -99,6 +99,10 @@
     },
     "featured_collection": {
       "empty": "Select a collection to show products here."
+    },
+    "reviews": {
+      "based_on": "Based on {{ count }} reviews",
+      "none": "No reviews yet."
     }
   }
 }

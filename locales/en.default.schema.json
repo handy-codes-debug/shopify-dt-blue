@@ -65,6 +65,9 @@
     },
     "product_recommendations": {
       "name": "Product recommendations"
+    },
+    "product_reviews": {
+      "name": "Product reviews"
     }
   },
   "labels": {

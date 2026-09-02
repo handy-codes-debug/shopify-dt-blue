@@ -1,0 +1,123 @@
+{% comment %}
+  Product reviews: a rating summary from the reviews.rating /
+  reviews.rating_count metafields plus an @app block slot for a review app
+  (Judge.me, Loox, Shopify Product Reviews, etc.). Reads the template's `product`.
+{% endcomment %}
+
+{% liquid
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
+  assign has_app = false
+  if section.blocks.size > 0
+    assign has_app = true
+  endif
+%}
+
+<section
+  class="section-pad{% if section.settings.tinted %} surface-alt full-width{% endif %}"
+  id="reviews"
+>
+  <div class="{% if section.settings.tinted %}page-container{% endif %} previews">
+    <div class="previews__head">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="previews__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if rating -%}
+        {%- assign rounded = rating.rating | round -%}
+        <div class="previews__summary">
+          <span class="previews__score">{{ rating.rating }}</span>
+          <div class="previews__summary-meta">
+            <span class="previews__stars" aria-hidden="true">
+              {%- for i in (1..5) -%}{% if i <= rounded %}★{% else %}☆{% endif %}{%- endfor -%}
+            </span>
+            <span class="previews__count">
+              {%- if rating_count -%}
+                {{ 'sections.reviews.based_on' | t: count: rating_count }}
+              {%- else -%}
+                {{ rating.rating }} / {{ rating.scale_max }}
+              {%- endif -%}
+            </span>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if has_app -%}
+      <div class="previews__app">
+        {% content_for 'blocks' %}
+      </div>
+    {%- elsif rating == nil -%}
+      <p class="previews__empty">{{ 'sections.reviews.none' | t }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .previews {
+    max-width: 900px;
+  }
+  .previews__heading {
+    margin: 0 0 16px;
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  }
+  .previews__summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .previews__score {
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+  .previews__summary-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .previews__stars {
+    color: #E8A93C;
+    letter-spacing: 2px;
+    font-size: 1.05rem;
+  }
+  .previews__count {
+    font-size: 0.85rem;
+    color: var(--color-foreground-soft);
+  }
+  .previews__app {
+    margin-top: 24px;
+  }
+  .previews__empty {
+    margin-top: 16px;
+    color: var(--color-foreground-soft);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.product_reviews.name",
+  "blocks": [{ "type": "@app" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Customer reviews"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
