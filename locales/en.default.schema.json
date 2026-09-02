@@ -92,9 +92,11 @@
     "button_link_secondary": "Secondary button link",
     "columns": "Columns",
     "customer_account_menu": "Customer account menu",
+    "dark_mode": "Dark mode",
     "dark_surface": "Dark surface",
     "dark_surface_soft": "Dark surface (soft)",
     "description_label": "Description tab label",
+    "enable_dark_mode": "Enable dark mode",
     "image_ratio": "Main image shape",
     "disclaimer": "Disclaimer",
     "error": "Error",
@@ -150,6 +152,7 @@
   },
   "info": {
     "category_icon": "\"Auto\" picks an icon from the collection title.",
+    "enable_dark_mode": "Adds a light / dark / system switch in the header and a built-in dark palette.",
     "category_title": "Overrides the collection title shown on the card.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
     "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."

@@ -419,7 +419,7 @@ a:hover {
 
 .btn--primary:hover {
   background: var(--color-foreground);
-  color: #fff;
+  color: var(--color-background);
 }
 
 .btn--dark {

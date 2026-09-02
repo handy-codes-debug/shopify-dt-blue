@@ -185,6 +185,17 @@
         "label": "t:labels.error_soft"
       },
       {
+        "type": "header",
+        "content": "t:labels.dark_mode"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_dark_mode",
+        "label": "t:labels.enable_dark_mode",
+        "info": "t:info.enable_dark_mode",
+        "default": true
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,

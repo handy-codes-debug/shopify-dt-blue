@@ -46,6 +46,14 @@
       {%- endif -%}
 
       <div class="header-actions">
+        {%- if settings.enable_dark_mode -%}
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="{{ 'theme.toggle' | t }}" title="{{ 'theme.toggle' | t }}">
+            <svg class="theme-toggle__icon theme-toggle__icon--system" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5z"/></svg>
+          </button>
+        {%- endif -%}
+
         {%- if shop.customer_accounts_enabled -%}
           <shopify-account class="header-actions__account" menu="{{ section.settings.customer_account_menu }}">
             {{ 'icon-account.svg' | inline_asset_content }}
@@ -130,6 +138,33 @@
   })();
 </script>
 
+{%- if settings.enable_dark_mode -%}
+  <script>
+    (function () {
+      var order = ['system', 'light', 'dark'];
+      function saved() {
+        try { return localStorage.getItem('theme') || 'system'; } catch (e) { return 'system'; }
+      }
+      function apply(mode) {
+        var root = document.documentElement;
+        if (mode === 'system') {
+          root.removeAttribute('data-theme');
+          try { localStorage.removeItem('theme'); } catch (e) {}
+        } else {
+          root.setAttribute('data-theme', mode);
+          try { localStorage.setItem('theme', mode); } catch (e) {}
+        }
+      }
+      var buttons = document.querySelectorAll('[data-theme-toggle]');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function () {
+          apply(order[(order.indexOf(saved()) + 1) % order.length]);
+        });
+      }
+    })();
+  </script>
+{%- endif -%}
+
 {% stylesheet %}
   .site-header {
     background: var(--color-background);
@@ -210,6 +245,37 @@
   .header-actions svg {
     width: 22px;
     height: 22px;
+  }
+
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-sm);
+    background: var(--color-background);
+    color: var(--color-foreground-soft);
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    color: var(--color-accent);
+    border-color: var(--color-border-strong);
+  }
+  .header-actions .theme-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+  .theme-toggle__icon {
+    display: none;
+  }
+  :root:not([data-theme]) .theme-toggle__icon--system,
+  :root[data-theme="system"] .theme-toggle__icon--system,
+  :root[data-theme="light"] .theme-toggle__icon--light,
+  :root[data-theme="dark"] .theme-toggle__icon--dark {
+    display: block;
   }
   .cart-btn {
     display: flex;

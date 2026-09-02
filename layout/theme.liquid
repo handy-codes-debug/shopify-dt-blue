@@ -1,6 +1,18 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
+    {%- if settings.enable_dark_mode -%}
+      {% # Apply the visitor's saved light/dark choice before first paint %}
+      <script>
+        (function () {
+          try {
+            var t = localStorage.getItem('theme');
+            if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+          } catch (e) {}
+        })();
+      </script>
+    {%- endif -%}
+
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 

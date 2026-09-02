@@ -99,6 +99,9 @@
     "variant": "Option",
     "view_full_image": "View full-size image"
   },
+  "theme": {
+    "toggle": "Switch between light, dark and system colour mode"
+  },
   "search": {
     "title": "Search",
     "heading": "Search Results",

@@ -1,3 +1,29 @@
+{%- if settings.enable_dark_mode -%}
+  {%- capture dark_vars -%}
+    color-scheme: dark;
+    --color-background: #0F1729;
+    --color-foreground: #EAEEF6;
+    --color-foreground-soft: #A7B2C8;
+    --color-foreground-faint: #6E7A94;
+    --color-surface-alt: #16213A;
+    --color-border: #2A3757;
+    --color-border-strong: #3C4B72;
+    --color-accent: #5B9CFF;
+    --color-accent-soft: #1D2C4E;
+    --color-accent-contrast: #0B1220;
+    --color-dark-surface: #182444;
+    --color-dark-surface-soft: #223255;
+    --color-success: #3FC886;
+    --color-success-soft: #12291F;
+    --color-warning: #E3A63C;
+    --color-warning-soft: #2C2413;
+    --color-error: #F1707A;
+    --color-error-soft: #301B1F;
+    --img-blend: normal;
+    --style-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+    --style-shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.35), 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+  {%- endcapture -%}
+{%- endif -%}
 {% style %}
   {% # Loads all font variantions with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
@@ -11,6 +37,8 @@
   {{ settings.type_accent_font | font_face: font_display: 'swap' }}
 
   :root {
+    color-scheme: light;
+
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
@@ -47,6 +75,8 @@
     --color-error: {{ settings.error_color }};
     --color-error-soft: {{ settings.error_soft_color }};
 
+    --img-blend: multiply;
+
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --style-radius-sm: 6px;
     --style-radius: 10px;
@@ -55,4 +85,18 @@
     --style-shadow: 0 1px 2px rgba(22, 35, 63, 0.06), 0 8px 24px -12px rgba(22, 35, 63, 0.14);
     --style-shadow-lg: 0 2px 6px rgba(22, 35, 63, 0.08), 0 20px 40px -20px rgba(22, 35, 63, 0.22);
   }
+
+  {%- if settings.enable_dark_mode -%}
+    {% # Follow the OS when the visitor has not made an explicit choice %}
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        {{ dark_vars }}
+      }
+    }
+
+    {% # Explicit visitor choice always wins %}
+    :root[data-theme="dark"] {
+      {{ dark_vars }}
+    }
+  {%- endif -%}
 {% endstyle %}
