@@ -68,6 +68,12 @@
     },
     "product_reviews": {
       "name": "Product reviews"
+    },
+    "contact_form": {
+      "name": "Contact form"
+    },
+    "footer": {
+      "policy_links": "Policy links"
     }
   },
   "labels": {
@@ -109,8 +115,11 @@
     "link_url": "Link",
     "logo": "Logo",
     "low_stock_threshold": "Low stock threshold",
+    "contact_page": "Contact page",
     "menu": "Menu",
     "metafield_namespace": "Metafield namespace",
+    "newsletter": "Newsletter",
+    "newsletter_enabled": "Show newsletter signup",
     "padding": "Padding",
     "page_margin": "Page margin",
     "page_width": "Page width",
@@ -121,6 +130,7 @@
     "show_payment_icons": "Show payment icons",
     "show_search": "Show search bar",
     "show_sort": "Show sort dropdown",
+    "show_store_policies": "Link store policies (refund, shipping, terms, privacy)",
     "specification_label": "Specification tab label",
     "status_colors": "Status colors",
     "sticky_header": "Stick header to top on scroll",
@@ -135,7 +145,8 @@
     "tinted_background": "Tinted background",
     "utility_menu": "Utility bar menu",
     "warning": "Warning",
-    "warning_soft": "Warning (soft)"
+    "warning_soft": "Warning (soft)",
+    "warranty_page": "Warranty page"
   },
   "info": {
     "category_icon": "\"Auto\" picks an icon from the collection title.",

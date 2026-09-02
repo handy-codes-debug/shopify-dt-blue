@@ -16,7 +16,10 @@
       "settings": {
         "tagline": "Everything for your next build, shipped fast from regional warehouses.",
         "disclaimer": "Taxes calculated at checkout.",
-        "show_payment_icons": true
+        "show_payment_icons": true,
+        "newsletter_enabled": true,
+        "newsletter_heading": "Get deal alerts",
+        "newsletter_text": "New drops and price cuts, straight to your inbox."
       },
       "blocks": {
         "col-shop": {
@@ -33,15 +36,15 @@
             "menu": ""
           }
         },
-        "col-company": {
-          "type": "menu_column",
+        "policies": {
+          "type": "policy_links",
           "settings": {
-            "heading": "Company",
-            "menu": ""
+            "heading": "Policies",
+            "show_store_policies": true
           }
         }
       },
-      "block_order": ["col-shop", "col-support", "col-company"]
+      "block_order": ["col-shop", "col-support", "policies"]
     }
   },
   "order": ["footer"]

@@ -1,9 +1,43 @@
 {% comment %}
-  Storefront footer: brand blurb, up to several link columns, and a legal row.
+  Storefront footer: newsletter signup, link columns (custom menus + a
+  policy-links block), and a legal row.
 {% endcomment %}
 
 <footer class="site-footer full-width surface-dark">
   <div class="page-container">
+    {%- if section.settings.newsletter_enabled -%}
+      <div class="footer-news">
+        <div class="footer-news__copy">
+          {%- if section.settings.newsletter_heading != blank -%}
+            <h3>{{ section.settings.newsletter_heading }}</h3>
+          {%- endif -%}
+          {%- if section.settings.newsletter_text != blank -%}
+            <p>{{ section.settings.newsletter_text }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- form 'customer', class: 'footer-news__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="footer-news__note" role="status">{{ 'newsletter.success' | t }}</p>
+          {%- else -%}
+            <input
+              type="email"
+              name="contact[email]"
+              required
+              autocomplete="email"
+              placeholder="{{ 'newsletter.placeholder' | t }}"
+              aria-label="{{ 'newsletter.email' | t }}"
+            >
+            <button type="submit" class="btn btn--primary">{{ 'newsletter.submit' | t }}</button>
+          {%- endif -%}
+          {%- if form.errors -%}
+            <p class="footer-news__note footer-news__note--err">{{ form.errors | default_errors }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="site-logo" href="{{ routes.root_url }}" style="color:#fff">{{ shop.name }}</a>
@@ -13,18 +47,40 @@
       </div>
 
       {%- for block in section.blocks -%}
-        {%- if block.type == 'menu_column' and block.settings.menu != blank -%}
-          <div class="footer-col" {{ block.shopify_attributes }}>
-            {%- if block.settings.heading != blank -%}
-              <h4>{{ block.settings.heading }}</h4>
+        {%- case block.type -%}
+          {%- when 'menu_column' -%}
+            {%- if block.settings.menu != blank -%}
+              <div class="footer-col" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}<h4>{{ block.settings.heading }}</h4>{%- endif -%}
+                <ul>
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              </div>
             {%- endif -%}
-            <ul>
-              {%- for link in block.settings.menu.links -%}
-                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-              {%- endfor -%}
-            </ul>
-          </div>
-        {%- endif -%}
+
+          {%- when 'policy_links' -%}
+            <div class="footer-col" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}<h4>{{ block.settings.heading }}</h4>{%- endif -%}
+              <ul>
+                {%- if block.settings.warranty_page != blank -%}
+                  <li><a href="{{ block.settings.warranty_page.url }}">{{ block.settings.warranty_page.title }}</a></li>
+                {%- endif -%}
+                {%- if block.settings.show_store_policies -%}
+                  {%- if shop.refund_policy != blank -%}<li><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title }}</a></li>{%- endif -%}
+                  {%- if shop.shipping_policy != blank -%}<li><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title }}</a></li>{%- endif -%}
+                  {%- if shop.terms_of_service != blank -%}<li><a href="{{ shop.terms_of_service.url }}">{{ shop.terms_of_service.title }}</a></li>{%- endif -%}
+                  {%- if shop.privacy_policy != blank -%}<li><a href="{{ shop.privacy_policy.url }}">{{ shop.privacy_policy.title }}</a></li>{%- endif -%}
+                {%- endif -%}
+                {%- if block.settings.contact_page != blank -%}
+                  <li><a href="{{ block.settings.contact_page.url }}">{{ block.settings.contact_page.title }}</a></li>
+                {%- else -%}
+                  <li><a href="{{ routes.root_url }}pages/contact">{{ 'footer.contact_us' | t }}</a></li>
+                {%- endif -%}
+              </ul>
+            </div>
+        {%- endcase -%}
       {%- endfor -%}
     </div>
 
@@ -57,12 +113,64 @@
   .site-footer a:hover {
     color: #fff;
   }
+
+  .footer-news {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--color-dark-surface-soft);
+    flex-wrap: wrap;
+  }
+  .footer-news__copy h3 {
+    margin: 0 0 4px;
+    color: #fff;
+    font-size: 1.05rem;
+  }
+  .footer-news__copy p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .footer-news__form {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    min-width: 260px;
+    max-width: 420px;
+  }
+  .footer-news__form input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--style-radius-sm);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font: inherit;
+  }
+  .footer-news__form input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .footer-news__note {
+    margin: 0;
+    align-self: center;
+    color: #fff;
+  }
+  .footer-news__note--err {
+    color: var(--color-error);
+  }
+
   .footer-grid {
     display: grid;
-    grid-template-columns: 1.6fr repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 32px;
     padding-bottom: 28px;
     border-bottom: 1px solid var(--color-dark-surface-soft);
+  }
+  .footer-brand {
+    grid-column: span 2;
   }
   .footer-brand p {
     margin-top: 12px;
@@ -110,15 +218,22 @@
     width: auto;
   }
 
-  @media (max-width: 900px) {
-    .footer-grid {
-      grid-template-columns: 1fr 1fr;
+  @media (max-width: 700px) {
+    .footer-news {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-news__form {
+      max-width: none;
+      width: 100%;
     }
   }
   @media (max-width: 560px) {
     .footer-grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer-brand {
+      grid-column: 1 / -1;
     }
   }
 {% endstylesheet %}
@@ -142,6 +257,28 @@
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:labels.newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enabled",
+      "label": "t:labels.newsletter_enabled",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "t:labels.heading",
+      "default": "Get deal alerts"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "label": "t:general.text",
+      "default": "New drops and price cuts, straight to your inbox."
     }
   ],
   "blocks": [
@@ -160,8 +297,36 @@
           "label": "t:labels.menu"
         }
       ]
+    },
+    {
+      "type": "policy_links",
+      "name": "t:sections.footer.policy_links",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:general.text",
+          "default": "Policies"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_store_policies",
+          "label": "t:labels.show_store_policies",
+          "default": true
+        },
+        {
+          "type": "page",
+          "id": "warranty_page",
+          "label": "t:labels.warranty_page"
+        },
+        {
+          "type": "page",
+          "id": "contact_page",
+          "label": "t:labels.contact_page"
+        }
+      ]
     }
   ],
-  "max_blocks": 4
+  "max_blocks": 5
 }
 {% endschema %}
