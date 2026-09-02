@@ -589,7 +589,7 @@ a:hover {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
   margin-block: 40px 8px;
   font-size: 0.9rem;
 }
