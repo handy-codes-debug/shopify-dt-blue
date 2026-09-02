@@ -13,14 +13,6 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {
-        "tagline": "Everything for your next build, shipped fast from regional warehouses.",
-        "disclaimer": "Taxes calculated at checkout.",
-        "show_payment_icons": true,
-        "newsletter_enabled": true,
-        "newsletter_heading": "Get deal alerts",
-        "newsletter_text": "New drops and price cuts, straight to your inbox."
-      },
       "blocks": {
         "col-shop": {
           "type": "menu_column",
@@ -40,12 +32,28 @@
           "type": "policy_links",
           "settings": {
             "heading": "Policies",
-            "show_store_policies": true
+            "show_store_policies": true,
+            "warranty_page": "",
+            "contact_page": "contact-us"
           }
         }
       },
-      "block_order": ["col-shop", "col-support", "policies"]
+      "block_order": [
+        "col-shop",
+        "col-support",
+        "policies"
+      ],
+      "settings": {
+        "tagline": "Everything for your next build, shipped fast from regional warehouses.",
+        "disclaimer": "Taxes calculated at checkout.",
+        "show_payment_icons": true,
+        "newsletter_enabled": true,
+        "newsletter_heading": "Get deal alerts",
+        "newsletter_text": "New drops and price cuts, straight to your inbox."
+      }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

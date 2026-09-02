@@ -74,7 +74,7 @@
           "settings": {
             "collection": "cooling-heating",
             "title": "Cooling",
-            "label": ""
+            "icon": "auto"
           }
         },
         "category_RBDK3X": {
@@ -82,7 +82,7 @@
           "settings": {
             "collection": "intel-desktop-processors",
             "title": "Processors",
-            "label": ""
+            "icon": "auto"
           }
         },
         "category_NWqCXw": {
@@ -90,7 +90,7 @@
           "settings": {
             "collection": "power-supply",
             "title": "Power Supplies",
-            "label": ""
+            "icon": "auto"
           }
         },
         "category_WMyqED": {
@@ -98,7 +98,7 @@
           "settings": {
             "collection": "network-storage",
             "title": "Storage",
-            "label": ""
+            "icon": "auto"
           }
         },
         "c1": {
@@ -106,7 +106,7 @@
           "settings": {
             "collection": "desktop-graphics-cards",
             "title": "Graphics Cards",
-            "label": ""
+            "icon": "auto"
           }
         },
         "c2": {
@@ -114,7 +114,7 @@
           "settings": {
             "collection": "memory-cards",
             "title": "Memory",
-            "label": ""
+            "icon": "auto"
           }
         },
         "c3": {
@@ -122,7 +122,7 @@
           "settings": {
             "collection": "computer-cases",
             "title": "Cases",
-            "label": ""
+            "icon": "auto"
           }
         },
         "c4": {
@@ -130,7 +130,7 @@
           "settings": {
             "collection": "intel-motherboards",
             "title": "Motherboards",
-            "label": ""
+            "icon": "auto"
           }
         }
       },
