@@ -590,11 +590,17 @@ a:hover {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  margin-block: 36px 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 36px auto 8px;
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+}
+
+.pagination > * {
+  flex: 0 0 auto;
 }
 
 .pagination .page,
