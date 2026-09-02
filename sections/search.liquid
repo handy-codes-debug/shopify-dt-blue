@@ -1,13 +1,23 @@
 {% comment %}
-  Search template: search field plus a grid of results.
+  Search template: search field, filter sidebar, and a grid of results.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/search
 {% endcomment %}
+
+{%- liquid
+  assign has_facets = false
+  if search.filters.size > 0
+    assign has_facets = true
+  endif
+  assign encoded_terms = search.terms | url_encode
+  assign search_clear = routes.search_url | append: '?q=' | append: encoded_terms | append: '&type=product'
+-%}
 
 <div class="section-pad search-page">
   <h1 class="search-page__title">{{ 'search.title' | t }}</h1>
 
   <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+    <input type="hidden" name="type" value="product">
     <input
       type="search"
       name="q"
@@ -24,32 +34,42 @@
     {%- else -%}
       <p class="search-page__meta">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
 
-      {%- paginate search.results by 24 -%}
-        <div class="search-results">
-          {%- for result in search.results -%}
-            {%- if result.object_type == 'product' -%}
-              {% render 'product-card', product: result %}
-            {%- else -%}
-              {%- assign featured_image = result.featured_image | default: result.image -%}
-              <a class="search-result" href="{{ result.url }}">
-                {%- if featured_image -%}
-                  <div class="search-result__media">
-                    {{ featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: result.title }}
-                  </div>
-                {%- endif -%}
-                <div class="search-result__body">
-                  <span class="search-result__kind">{{ result.object_type }}</span>
-                  <span class="search-result__title">{{ result.title }}</span>
-                </div>
-              </a>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
-
-        {%- if paginate.pages > 1 -%}
-          <div class="pagination">{{ paginate | default_pagination }}</div>
+      <div class="coll-layout{% unless has_facets %} coll-layout--nofilter{% endunless %}">
+        {%- if has_facets -%}
+          <aside class="coll-layout__side">
+            {% render 'facets', results: search, clear_url: search_clear %}
+          </aside>
         {%- endif -%}
-      {%- endpaginate -%}
+
+        <div class="coll-layout__main">
+          {%- paginate search.results by 24 -%}
+            <div class="search-results">
+              {%- for result in search.results -%}
+                {%- if result.object_type == 'product' -%}
+                  {% render 'product-card', product: result %}
+                {%- else -%}
+                  {%- assign featured_image = result.featured_image | default: result.image -%}
+                  <a class="search-result" href="{{ result.url }}">
+                    {%- if featured_image -%}
+                      <div class="search-result__media">
+                        {{ featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: result.title }}
+                      </div>
+                    {%- endif -%}
+                    <div class="search-result__body">
+                      <span class="search-result__kind">{{ result.object_type }}</span>
+                      <span class="search-result__title">{{ result.title }}</span>
+                    </div>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.pages > 1 -%}
+              <div class="pagination">{{ paginate | default_pagination }}</div>
+            {%- endif -%}
+          {%- endpaginate -%}
+        </div>
+      </div>
     {%- endif -%}
   {%- endif -%}
 </div>
@@ -65,7 +85,7 @@
     max-width: 620px;
     margin-bottom: 18px;
   }
-  .search-page__form input {
+  .search-page__form input[type="search"] {
     flex: 1;
     min-width: 0;
     padding: 11px 14px;
@@ -121,12 +141,12 @@
     font-size: 0.9rem;
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1200px) {
     .search-results {
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  @media (max-width: 720px) {
+  @media (max-width: 600px) {
     .search-results {
       grid-template-columns: repeat(2, 1fr);
     }

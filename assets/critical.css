@@ -424,6 +424,29 @@ a:hover {
   color: var(--color-accent);
 }
 
+/* Listing layout: filter rail + results, shared by collection and search. */
+.coll-layout {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.coll-layout--nofilter {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.coll-layout__side:empty {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .coll-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
 @media (max-width: 700px) {
   .block-head {
     flex-direction: column;

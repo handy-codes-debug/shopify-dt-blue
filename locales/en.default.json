@@ -43,6 +43,16 @@
   "collections": {
     "title": "Collections"
   },
+  "facets": {
+    "filter_and_sort": "Filter & sort",
+    "sort_by": "Sort by",
+    "apply": "Apply",
+    "clear_all": "Clear all",
+    "reset": "Reset",
+    "min": "Min",
+    "price_from": "Minimum price",
+    "price_to": "Maximum price"
+  },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
     "card": "Gift card",

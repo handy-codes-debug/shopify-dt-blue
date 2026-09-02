@@ -1,8 +1,15 @@
 {% comment %}
-  Collection template: paginated grid of product cards.
+  Collection template: filter sidebar + paginated grid of product cards.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
+
+{%- liquid
+  assign has_facets = false
+  if collection.filters.size > 0 or collection.sort_options.size > 0
+    assign has_facets = true
+  endif
+-%}
 
 <div class="section-pad">
   <header class="coll-head">
@@ -14,35 +21,33 @@
   </header>
 
   {%- paginate collection.products by section.settings.products_per_page -%}
-    <div class="coll-toolbar">
-      <span class="coll-toolbar__count">{{ 'sections.collection.count' | t: count: collection.products_count }}</span>
+    <div class="coll-layout{% unless has_facets %} coll-layout--nofilter{% endunless %}">
+      {%- if has_facets -%}
+        <aside class="coll-layout__side">
+          {% render 'facets', results: collection, clear_url: collection.url %}
+        </aside>
+      {%- endif -%}
 
-      {%- if section.settings.show_sort -%}
-        <form method="get" class="coll-toolbar__sort">
-          <label for="SortBy">{{ 'sections.collection.sort_by' | t }}</label>
-          <select name="sort_by" id="SortBy" onchange="this.form.submit()">
-            {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
-            {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}" {% if option.value == current_sort %}selected="selected"{% endif %}>{{ option.name }}</option>
+      <div class="coll-layout__main">
+        <div class="coll-toolbar">
+          <span class="coll-toolbar__count">{{ 'sections.collection.count' | t: count: collection.products_count }}</span>
+        </div>
+
+        {%- if collection.products.size > 0 -%}
+          <div class="fc-grid" style="--fc-cols: {{ section.settings.columns }}">
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product %}
             {%- endfor -%}
-          </select>
-        </form>
-      {%- endif -%}
-    </div>
+          </div>
 
-    {%- if collection.products.size > 0 -%}
-      <div class="fc-grid" style="--fc-cols: {{ section.settings.columns }}">
-        {%- for product in collection.products -%}
-          {% render 'product-card', product: product %}
-        {%- endfor -%}
+          {%- if paginate.pages > 1 -%}
+            <div class="pagination">{{ paginate | default_pagination }}</div>
+          {%- endif -%}
+        {%- else -%}
+          <p>{{ 'sections.collection.empty' | t }}</p>
+        {%- endif -%}
       </div>
-
-      {%- if paginate.pages > 1 -%}
-        <div class="pagination">{{ paginate | default_pagination }}</div>
-      {%- endif -%}
-    {%- else -%}
-      <p>{{ 'sections.collection.empty' | t }}</p>
-    {%- endif -%}
+    </div>
   {%- endpaginate -%}
 </div>
 
@@ -57,27 +62,14 @@
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    padding-block: 14px;
+    padding-block: 12px;
     margin-bottom: 18px;
-    border-block: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
     font-size: 0.85rem;
   }
   .coll-toolbar__count {
     color: var(--color-foreground-soft);
     font-family: var(--font-accent--family);
-  }
-  .coll-toolbar__sort {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .coll-toolbar__sort select {
-    padding: 7px 10px;
-    border: 1.5px solid var(--color-border-strong);
-    border-radius: var(--style-border-radius-inputs);
-    background: var(--color-background);
-    color: var(--color-foreground);
-    font: inherit;
   }
   .fc-grid {
     display: grid;
@@ -85,12 +77,12 @@
     gap: 18px;
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 1200px) {
     .fc-grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  @media (max-width: 720px) {
+  @media (max-width: 600px) {
     .fc-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -118,12 +110,6 @@
       "step": 1,
       "label": "t:labels.columns",
       "default": 4
-    },
-    {
-      "type": "checkbox",
-      "id": "show_sort",
-      "label": "t:labels.show_sort",
-      "default": true
     }
   ]
 }
