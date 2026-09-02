@@ -36,12 +36,12 @@
   endif
 
   assign active = ''
-  if has_attr
+  if has_desc
+    assign active = 'desc'
+  elsif has_attr
     assign active = 'attr'
   elsif has_spec
     assign active = 'spec'
-  elsif has_desc
-    assign active = 'desc'
   endif
 %}
 
@@ -54,6 +54,11 @@
       {%- endif -%}
 
       <div class="ptabs__list" role="tablist" aria-label="{{ section.settings.heading | default: product.title }}">
+        {%- if has_desc -%}
+          <button type="button" class="ptabs__tab" id="tab-desc-{{ sid }}" role="tab" aria-controls="panel-desc-{{ sid }}" aria-selected="{% if active == 'desc' %}true{% else %}false{% endif %}" tabindex="{% if active == 'desc' %}0{% else %}-1{% endif %}">
+            {{ section.settings.description_label | default: 'Description' }}
+          </button>
+        {%- endif -%}
         {%- if has_attr -%}
           <button type="button" class="ptabs__tab" id="tab-attr-{{ sid }}" role="tab" aria-controls="panel-attr-{{ sid }}" aria-selected="{% if active == 'attr' %}true{% else %}false{% endif %}" tabindex="{% if active == 'attr' %}0{% else %}-1{% endif %}">
             {{ section.settings.attribute_label | default: 'Attribute' }}
@@ -64,13 +69,13 @@
             {{ section.settings.specification_label | default: 'Specification' }}
           </button>
         {%- endif -%}
-        {%- if has_desc -%}
-          <button type="button" class="ptabs__tab" id="tab-desc-{{ sid }}" role="tab" aria-controls="panel-desc-{{ sid }}" aria-selected="{% if active == 'desc' %}true{% else %}false{% endif %}" tabindex="{% if active == 'desc' %}0{% else %}-1{% endif %}">
-            {{ section.settings.description_label | default: 'Description' }}
-          </button>
-        {%- endif -%}
       </div>
 
+      {%- if has_desc -%}
+        <div class="ptabs__panel rte" id="panel-desc-{{ sid }}" role="tabpanel" aria-labelledby="tab-desc-{{ sid }}"{% unless active == 'desc' %} hidden{% endunless %}>
+          {{ product.description }}
+        </div>
+      {%- endif -%}
       {%- if has_attr -%}
         <div class="ptabs__panel rte" id="panel-attr-{{ sid }}" role="tabpanel" aria-labelledby="tab-attr-{{ sid }}"{% unless active == 'attr' %} hidden{% endunless %}>
           {{ attr_value | newline_to_br }}
@@ -79,11 +84,6 @@
       {%- if has_spec -%}
         <div class="ptabs__panel rte" id="panel-spec-{{ sid }}" role="tabpanel" aria-labelledby="tab-spec-{{ sid }}"{% unless active == 'spec' %} hidden{% endunless %}>
           {{ spec_value | newline_to_br }}
-        </div>
-      {%- endif -%}
-      {%- if has_desc -%}
-        <div class="ptabs__panel rte" id="panel-desc-{{ sid }}" role="tabpanel" aria-labelledby="tab-desc-{{ sid }}"{% unless active == 'desc' %} hidden{% endunless %}>
-          {{ product.description }}
         </div>
       {%- endif -%}
     </div>
@@ -138,9 +138,9 @@
   }
   .ptabs__list {
     display: flex;
+    flex-wrap: wrap;
     gap: 2px;
     border-bottom: 1px solid var(--color-border);
-    overflow-x: auto;
   }
   .ptabs__tab {
     appearance: none;
