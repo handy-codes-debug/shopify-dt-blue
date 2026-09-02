@@ -19,14 +19,12 @@
     {%- for block in section.blocks -%}
       {%- assign collection = block.settings.collection -%}
       {%- if collection != blank -%}
-        {%- if block.settings.label != blank -%}
-          {%- assign code = block.settings.label -%}
-        {%- else -%}
-          {%- assign code = collection.title | slice: 0, 3 | upcase -%}
-        {%- endif -%}
+        {%- assign cat_name = block.settings.title | default: collection.title -%}
         <a class="cat-card" href="{{ collection.url }}" {{ block.shopify_attributes }}>
-          <span class="cat-card__code">{{ code }}</span>
-          <span class="cat-card__name">{{ block.settings.title | default: collection.title }}</span>
+          <span class="cat-card__icon">
+            {% render 'icon-category', name: block.settings.icon, hint: cat_name %}
+          </span>
+          <span class="cat-card__name">{{ cat_name }}</span>
           <span class="cat-card__count">{{ 'sections.category_grid.count' | t: count: collection.all_products_count }}</span>
         </a>
       {%- endif -%}
@@ -53,7 +51,7 @@
   .cat-card:hover {
     border-color: var(--color-accent);
   }
-  .cat-card__code {
+  .cat-card__icon {
     width: 38px;
     height: 38px;
     border-radius: var(--style-radius-sm);
@@ -62,9 +60,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-accent--family);
-    font-weight: 700;
-    font-size: 0.82rem;
+  }
+  .cat-card__icon .cat-icon-svg {
+    width: 20px;
+    height: 20px;
   }
   .cat-card__name {
     font-weight: 600;
@@ -145,10 +144,28 @@
           "info": "t:info.category_title"
         },
         {
-          "type": "text",
-          "id": "label",
-          "label": "t:labels.tile_label",
-          "info": "t:info.tile_label"
+          "type": "select",
+          "id": "icon",
+          "label": "t:labels.icon",
+          "info": "t:info.category_icon",
+          "default": "auto",
+          "options": [
+            { "value": "auto", "label": "t:options.category_icon.auto" },
+            { "value": "processor", "label": "t:options.category_icon.processor" },
+            { "value": "gpu", "label": "t:options.category_icon.gpu" },
+            { "value": "motherboard", "label": "t:options.category_icon.motherboard" },
+            { "value": "memory", "label": "t:options.category_icon.memory" },
+            { "value": "storage", "label": "t:options.category_icon.storage" },
+            { "value": "power", "label": "t:options.category_icon.power" },
+            { "value": "cooling", "label": "t:options.category_icon.cooling" },
+            { "value": "case", "label": "t:options.category_icon.case" },
+            { "value": "keyboard", "label": "t:options.category_icon.keyboard" },
+            { "value": "monitor", "label": "t:options.category_icon.monitor" },
+            { "value": "network", "label": "t:options.category_icon.network" },
+            { "value": "tag", "label": "t:options.category_icon.tag" },
+            { "value": "box", "label": "t:options.category_icon.box" },
+            { "value": "grid", "label": "t:options.category_icon.grid" }
+          ]
         }
       ]
     }

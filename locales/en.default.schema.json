@@ -102,6 +102,7 @@
     "grid_item_width": "Grid item width",
     "heading": "Heading",
     "heading_font": "Headings",
+    "icon": "Icon",
     "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
     "link_label": "Link label",
@@ -137,6 +138,7 @@
     "warning_soft": "Warning (soft)"
   },
   "info": {
+    "category_icon": "\"Auto\" picks an icon from the collection title.",
     "category_title": "Overrides the collection title shown on the card.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
     "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."
@@ -146,6 +148,23 @@
       "left": "Left",
       "center": "Center",
       "right": "Right"
+    },
+    "category_icon": {
+      "auto": "Auto (from title)",
+      "processor": "Processor",
+      "gpu": "Graphics card",
+      "motherboard": "Motherboard",
+      "memory": "Memory",
+      "storage": "Storage",
+      "power": "Power supply",
+      "cooling": "Cooling",
+      "case": "Case",
+      "keyboard": "Keyboard",
+      "monitor": "Monitor",
+      "network": "Network",
+      "tag": "Tag / deals",
+      "box": "Bundle",
+      "grid": "Grid (default)"
     },
     "direction": {
       "horizontal": "Horizontal",
