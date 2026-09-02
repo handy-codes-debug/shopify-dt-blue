@@ -44,6 +44,7 @@
         {%- if section.settings.tagline != blank -%}
           <p>{{ section.settings.tagline }}</p>
         {%- endif -%}
+        <a class="footer-brand__link" href="{{ routes.collections_url }}">{{ 'footer.all_collections' | t }} &rarr;</a>
       </div>
 
       {%- for block in section.blocks -%}
@@ -176,6 +177,15 @@
     margin-top: 12px;
     max-width: 34ch;
     color: rgba(255, 255, 255, 0.7);
+  }
+  .footer-brand__link {
+    display: inline-block;
+    margin-top: 14px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .footer-brand__link:hover {
+    color: var(--color-accent);
   }
   .footer-col h4 {
     margin-bottom: 14px;

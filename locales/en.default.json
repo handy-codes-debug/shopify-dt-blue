@@ -52,7 +52,8 @@
     "success": "Thanks — your message has been sent. We'll be in touch soon."
   },
   "footer": {
-    "contact_us": "Contact us"
+    "contact_us": "Contact us",
+    "all_collections": "Browse all collections"
   },
   "newsletter": {
     "email": "Email address",
