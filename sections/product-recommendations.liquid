@@ -1,0 +1,131 @@
+{% comment %}
+  "You may also like" / cross-sell block shown below the product details.
+  Uses Shopify's product recommendations API, fetched client-side after load.
+{% endcomment %}
+
+{% liquid
+  assign limit = section.settings.products_to_show
+  assign intent = section.settings.intent | default: 'related'
+  assign recs_url = routes.product_recommendations_url
+%}
+
+<div
+  class="section-pad prec"
+  id="ProductRecs-{{ section.id }}"
+  data-prec
+  data-url="{{ recs_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent={{ intent }}"
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="block-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+      </div>
+    </div>
+
+    <div class="prec__grid" style="--prec-cols: {{ section.settings.columns }}">
+      {%- for product in recommendations.products -%}
+        {% render 'product-card', product: product %}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{%- if recommendations.performed == false -%}
+  <script>
+    (function () {
+      var root = document.getElementById('ProductRecs-{{ section.id }}');
+      if (!root) return;
+      var url = root.getAttribute('data-url');
+      if (!url) return;
+
+      fetch(url)
+        .then(function (response) { return response.text(); })
+        .then(function (text) {
+          var parsed = document.createElement('div');
+          parsed.innerHTML = text;
+          var fresh = parsed.querySelector('[data-prec]');
+          if (fresh && fresh.innerHTML.trim().length) {
+            root.innerHTML = fresh.innerHTML;
+          }
+        })
+        .catch(function () { /* leave the block empty on failure */ });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .prec:empty,
+  .prec:not(:has(.prec__grid)) {
+    padding-block: 0;
+  }
+  .prec__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--prec-cols, 4), 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 1000px) {
+    .prec__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 720px) {
+    .prec__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.product_recommendations.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Continue your build"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "t:labels.recommendation_intent",
+      "options": [
+        { "value": "related", "label": "t:options.intent.related" },
+        { "value": "complementary", "label": "t:options.intent.complementary" }
+      ],
+      "default": "related"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "t:labels.products_to_show",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "t:labels.columns",
+      "default": 4
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

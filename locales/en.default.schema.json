@@ -59,6 +59,12 @@
     },
     "promo_banner": {
       "name": "Promo banner"
+    },
+    "product_description": {
+      "name": "Product details"
+    },
+    "product_recommendations": {
+      "name": "Product recommendations"
     }
   },
   "labels": {
@@ -103,6 +109,7 @@
     "page_width": "Page width",
     "products_per_page": "Products per page",
     "products_to_show": "Products to show",
+    "recommendation_intent": "Recommendation type",
     "show_payment_icons": "Show payment icons",
     "show_search": "Show search bar",
     "show_sort": "Show sort dropdown",
@@ -134,6 +141,10 @@
     "direction": {
       "horizontal": "Horizontal",
       "vertical": "Vertical"
+    },
+    "intent": {
+      "related": "Related products",
+      "complementary": "Often bought together"
     },
     "page_width": {
       "narrow": "Narrow",

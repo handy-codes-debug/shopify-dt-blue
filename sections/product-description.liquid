@@ -1,0 +1,63 @@
+{% comment %}
+  Full-width product details block shown below the product buy area.
+  Reads the current template's `product` object.
+{% endcomment %}
+
+{%- if product.description != blank -%}
+  <div class="section-pad{% if section.settings.tinted %} surface-alt full-width{% endif %}">
+    <div class="{% if section.settings.tinted %}page-container{% endif %} pdesc">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pdesc__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      <div class="pdesc__body rte">{{ product.description }}</div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .pdesc {
+    max-width: 760px;
+  }
+  .pdesc__heading {
+    margin: 0 0 16px;
+    font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  }
+  .pdesc__body {
+    line-height: 1.7;
+    color: var(--color-foreground-soft);
+  }
+  .pdesc__body :is(h2, h3, h4) {
+    color: var(--color-foreground);
+    margin-top: 1.6em;
+  }
+  .pdesc__body :is(ul, ol) {
+    padding-left: 1.2em;
+  }
+  .pdesc__body img {
+    border-radius: var(--style-radius);
+    margin-block: 1em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.product_description.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Product details"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

@@ -112,10 +112,6 @@
         {{ form | payment_button }}
       </div>
     {%- endform -%}
-
-    {%- if product.description != blank -%}
-      <div class="pdp__description rte">{{ product.description }}</div>
-    {%- endif -%}
   </div>
 </div>
 
@@ -179,9 +175,13 @@
 {% stylesheet %}
   .pdp {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 44px;
+    grid-template-columns: minmax(0, 380px) 1fr;
+    gap: 48px;
     align-items: start;
+  }
+  .pdp__gallery {
+    position: sticky;
+    top: 90px;
   }
   .pdp__main-media {
     display: block;
@@ -357,19 +357,15 @@
   .pdp__actions .shopify-payment-button {
     width: 100%;
   }
-  .pdp__description {
-    margin-top: 24px;
-    line-height: 1.6;
-    color: var(--color-foreground-soft);
-  }
-  .pdp__description :is(h2, h3, h4) {
-    color: var(--color-foreground);
-  }
 
   @media (max-width: 900px) {
     .pdp {
       grid-template-columns: 1fr;
       gap: 28px;
+    }
+    .pdp__gallery {
+      position: static;
+      max-width: 420px;
     }
   }
 {% endstylesheet %}

@@ -12,9 +12,19 @@
     "main": {
       "type": "product",
       "settings": {}
+    },
+    "description": {
+      "type": "product-description",
+      "settings": {}
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "description",
+    "recommendations"
   ]
 }
