@@ -581,18 +581,77 @@ a:hover {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
 }
 
-/* Pagination row shared by listing templates. */
+/* Pagination row shared by listing templates. Styles the markup that
+   Shopify's `default_pagination` filter outputs (.page / .prev / .next /
+   .deco spans). */
 .pagination {
-  margin-top: 32px;
   display: flex;
-  justify-content: center;
-  gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-block: 40px 8px;
+  font-size: 0.9rem;
+}
+
+.pagination .page,
+.pagination .prev,
+.pagination .next,
+.pagination .deco {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  font-weight: 600;
+}
+
+.pagination .page,
+.pagination .prev,
+.pagination .next {
+  padding-inline: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--style-radius-sm);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.pagination :is(.page, .prev, .next):has(a) {
+  padding: 0;
+}
+
+.pagination :is(.page, .prev, .next) > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-inline: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.pagination :is(.page, .prev, .next):hover:has(a) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .pagination .page.current {
-  font-weight: 700;
-  color: var(--color-accent);
+  background: var(--color-dark-surface);
+  border-color: var(--color-dark-surface);
+  color: #fff;
+}
+
+.pagination .prev:not(:has(a)),
+.pagination .next:not(:has(a)) {
+  color: var(--color-foreground-faint);
+  background: var(--color-surface-alt);
+}
+
+.pagination .deco {
+  color: var(--color-foreground-faint);
+  letter-spacing: 2px;
 }
 
 /* Listing layout: filter rail + results, shared by collection and search. */
