@@ -90,6 +90,7 @@
     "button_label_primary": "Primary button label",
     "button_label_secondary": "Secondary button label",
     "button_link_primary": "Primary button link",
+    "cart_recommendations": "Recommendations collection",
     "button_link_secondary": "Secondary button link",
     "columns": "Columns",
     "customer_account_menu": "Customer account menu",
@@ -154,6 +155,7 @@
     "warranty_page": "Warranty page"
   },
   "info": {
+    "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
     "category_icon": "\"Auto\" picks an icon from the collection title.",
     "logo": "Shown in light mode.",
     "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",

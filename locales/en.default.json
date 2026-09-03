@@ -23,11 +23,15 @@
     "comment_form_title": "Add a comment"
   },
   "cart": {
-    "checkout": "Checkout",
+    "add": "Add",
+    "checkout": "Proceed to checkout",
     "continue": "Continue shopping",
     "empty": "Your cart is empty.",
-    "remove": "Remove",
-    "select_all": "Select all",
+    "heading": "Shopping Cart",
+    "price": "Price",
+    "recommended": "Recommended for you",
+    "remove": "Delete",
+    "select_all": "Select all items",
     "select_item": "Select {{ title }}",
     "selected": "Selected",
     "subtotal": "Subtotal",

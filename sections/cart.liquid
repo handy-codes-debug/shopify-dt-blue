@@ -1,11 +1,17 @@
 {% comment %}
-  Cart template: line items, quantities, per-item selection and checkout.
+  Cart template: selectable line items with a live selected-items subtotal box
+  and an optional recommended-items panel.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
 {% endcomment %}
 
+{% liquid
+  assign recs = section.settings.recommendations_collection
+  assign recs_count = section.settings.recommendations_count | default: 4
+%}
+
 <div class="section-pad cart">
-  <h1 class="cart__title">{{ 'cart.title' | t }}</h1>
+  <h1 class="cart__title">{{ 'cart.heading' | t }}</h1>
 
   {%- if cart.item_count == 0 -%}
     <div class="cart__empty">
@@ -13,71 +19,99 @@
       <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}</a>
     </div>
   {%- else -%}
-    <form action="{{ routes.cart_url }}" method="post" class="cart__form" data-cart-form>
-      <div class="cart__toolbar">
-        <label class="cart__selectall">
-          <input type="checkbox" data-cart-selectall checked>
-          <span>{{ 'cart.select_all' | t }}</span>
-        </label>
-      </div>
-
-      <div class="cart__items">
-        {%- for item in cart.items -%}
-          <div class="cart-line" data-cart-line data-line-total="{{ item.final_line_price }}">
-            <label class="cart-line__select">
-              <input type="checkbox" data-cart-select checked aria-label="{{ 'cart.select_item' | t: title: item.product.title }}">
-            </label>
-
-            <a class="cart-line__media" href="{{ item.url }}">
-              {%- if item.image -%}
-                {{ item.image | image_url: width: 320 | image_tag: loading: 'lazy', widths: '120,180,240,320', sizes: '120px', alt: item.product.title }}
-              {%- endif -%}
-            </a>
-
-            <div class="cart-line__info">
-              <a class="cart-line__name" href="{{ item.url }}">{{ item.product.title }}</a>
-              {%- unless item.variant.title == 'Default Title' -%}
-                <span class="cart-line__variant">{{ item.variant.title }}</span>
-              {%- endunless -%}
-              <span class="cart-line__unit">{{ item.final_price | money }}</span>
-            </div>
-
-            <div class="cart-line__qty">
-              <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric" aria-label="{{ 'products.quantity' | t }}">
-              <a class="cart-line__remove" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
-            </div>
-
-            <div class="cart-line__total">{{ item.final_line_price | money }}</div>
-          </div>
-        {%- endfor -%}
-      </div>
-
-      <div class="cart__footer">
-        <button type="submit" name="update" class="btn btn--ghost">{{ 'cart.update' | t }}</button>
-
-        <div class="cart__summary">
-          <div class="cart__selected" data-cart-selected>
-            <span>{{ 'cart.selected' | t }} <span data-selected-count></span></span>
-            <span class="price"><span class="price__now" data-selected-total></span></span>
-          </div>
-          <div class="cart__subtotal">
-            <span>{{ 'cart.subtotal' | t }}</span>
-            <span class="price"><span class="price__now">{{ cart.total_price | money }}</span></span>
-          </div>
-          <p class="cart__note">{{ 'cart.taxes_note' | t }}</p>
-          <button type="submit" name="checkout" class="btn btn--dark btn--block">{{ 'cart.checkout' | t }}</button>
+    <div class="cart-layout">
+      <form action="{{ routes.cart_url }}" method="post" id="CartForm" class="cart__main" data-cart-form>
+        <div class="cart__bar">
+          <label class="cart__selectall">
+            <input type="checkbox" data-cart-selectall checked>
+            <span>{{ 'cart.select_all' | t }}</span>
+          </label>
+          <span class="cart__price-head">{{ 'cart.price' | t }}</span>
         </div>
-      </div>
-    </form>
+
+        <div class="cart__items">
+          {%- for item in cart.items -%}
+            <div class="cart-line" data-cart-line data-line-total="{{ item.final_line_price }}">
+              <label class="cart-line__select">
+                <input type="checkbox" data-cart-select checked aria-label="{{ 'cart.select_item' | t: title: item.product.title }}">
+              </label>
+
+              <a class="cart-line__media" href="{{ item.url }}">
+                {%- if item.image -%}
+                  {{ item.image | image_url: width: 320 | image_tag: loading: 'lazy', widths: '120,180,240,320', sizes: '120px', alt: item.product.title }}
+                {%- endif -%}
+              </a>
+
+              <div class="cart-line__info">
+                <a class="cart-line__name" href="{{ item.url }}">{{ item.product.title }}</a>
+                {%- unless item.variant.title == 'Default Title' -%}
+                  <span class="cart-line__variant">{{ item.variant.title }}</span>
+                {%- endunless -%}
+                <span class="cart-line__unit">{{ item.final_price | money }}</span>
+                <div class="cart-line__qty">
+                  <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric" aria-label="{{ 'products.quantity' | t }}">
+                  <a class="cart-line__remove" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+                </div>
+              </div>
+
+              <div class="cart-line__total">{{ item.final_line_price | money }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="cart__actions">
+          <button type="submit" name="update" class="btn btn--ghost">{{ 'cart.update' | t }}</button>
+        </div>
+      </form>
+
+      <aside class="cart-aside">
+        <div class="cart-box">
+          <p class="cart-box__subtotal">
+            <span>{{ 'cart.subtotal' | t }} <span data-selected-count></span></span>
+            <span class="price"><span class="price__now" data-selected-total></span></span>
+          </p>
+          <button type="submit" name="checkout" form="CartForm" class="btn btn--primary btn--block">{{ 'cart.checkout' | t }}</button>
+          <p class="cart-box__note">{{ 'cart.taxes_note' | t }}</p>
+        </div>
+
+        {%- if recs != blank and recs.products.size > 0 -%}
+          <div class="cart-box cart-recs">
+            <h2 class="cart-recs__title">{{ 'cart.recommended' | t }}</h2>
+            <div class="cart-recs__list">
+              {%- for product in recs.products limit: recs_count -%}
+                {%- assign variant = product.selected_or_first_available_variant -%}
+                <div class="cart-rec">
+                  <a class="cart-rec__media" href="{{ product.url }}">
+                    {%- if product.featured_image -%}
+                      {{ product.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80,120,160', sizes: '64px', alt: product.title }}
+                    {%- endif -%}
+                  </a>
+                  <div class="cart-rec__body">
+                    <a class="cart-rec__name" href="{{ product.url }}">{{ product.title }}</a>
+                    <span class="cart-rec__price">{% render 'price', product: product %}</span>
+                    {%- if product.available -%}
+                      {%- form 'product', product, class: 'cart-rec__form' -%}
+                        <input type="hidden" name="id" value="{{ variant.id }}">
+                        <button type="submit" class="btn btn--ghost btn--sm">{{ 'cart.add' | t }}</button>
+                      {%- endform -%}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </aside>
+    </div>
 
     <script>
       (function () {
-        var form = document.querySelector('[data-cart-form]');
+        var form = document.getElementById('CartForm');
         if (!form) return;
         var selectAll = form.querySelector('[data-cart-selectall]');
         var boxes = Array.prototype.slice.call(form.querySelectorAll('[data-cart-select]'));
-        var countEl = form.querySelector('[data-selected-count]');
-        var totalEl = form.querySelector('[data-selected-total]');
+        var countEl = document.querySelector('[data-selected-count]');
+        var totalEl = document.querySelector('[data-selected-total]');
 
         var fmt;
         try {
@@ -98,7 +132,7 @@
               n += 1;
             }
           });
-          if (countEl) countEl.textContent = '(' + n + '/' + boxes.length + ')';
+          if (countEl) countEl.textContent = '(' + n + (n === 1 ? ' item)' : ' items)');
           if (totalEl) totalEl.textContent = fmt.format(cents / 100);
           if (selectAll) {
             selectAll.checked = n === boxes.length;
@@ -132,7 +166,17 @@
     color: var(--color-foreground-soft);
   }
 
-  .cart__toolbar {
+  .cart-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .cart__bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--color-border);
   }
@@ -145,12 +189,17 @@
     color: var(--color-foreground-soft);
     cursor: pointer;
   }
+  .cart__price-head {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-foreground-faint);
+  }
 
   .cart-line {
     display: grid;
-    grid-template-columns: 26px 120px 1fr auto auto;
+    grid-template-columns: 26px 120px 1fr auto;
     gap: 18px;
-    align-items: center;
+    align-items: start;
     padding-block: 20px;
     border-bottom: 1px solid var(--color-border);
     transition: opacity 0.15s ease;
@@ -160,8 +209,8 @@
   }
   .cart-line__select {
     display: flex;
-    align-items: center;
     justify-content: center;
+    padding-top: 2px;
     cursor: pointer;
   }
   .cart-line__select input,
@@ -201,9 +250,9 @@
   }
   .cart-line__qty {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
   }
   .cart-line__qty input {
     width: 72px;
@@ -225,56 +274,104 @@
   .cart-line__total {
     font-family: var(--font-accent--family);
     font-weight: 700;
+    white-space: nowrap;
   }
 
-  .cart__footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 24px;
-    margin-top: 24px;
-    flex-wrap: wrap;
+  .cart__actions {
+    margin-top: 20px;
   }
-  .cart__summary {
-    min-width: 280px;
-    margin-left: auto;
+
+  .cart-aside {
+    position: sticky;
+    top: 90px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
   }
-  .cart__selected {
+  .cart-box {
+    padding: 18px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-lg);
+    background: var(--color-background);
+  }
+  .cart-box__subtotal {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-border);
-    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0 0 14px;
+    font-size: 0.92rem;
     color: var(--color-foreground-soft);
   }
-  .cart__subtotal {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-weight: 600;
-    font-size: 1.05rem;
+  .cart-box__subtotal .price {
+    font-size: 1.4rem;
+    color: var(--color-foreground);
   }
-  .cart__note {
-    margin: 0;
-    font-size: 0.8rem;
+  .cart-box__note {
+    margin: 12px 0 0;
+    font-size: 0.76rem;
     color: var(--color-foreground-faint);
   }
 
-  @media (max-width: 720px) {
-    .cart-line {
-      grid-template-columns: 24px 88px 1fr;
-      column-gap: 12px;
+  .cart-recs__title {
+    margin: 0 0 14px;
+    font-size: 1rem;
+  }
+  .cart-recs__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .cart-rec {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 12px;
+  }
+  .cart-rec__media {
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-sm);
+    overflow: hidden;
+    background: var(--color-surface-alt);
+  }
+  .cart-rec__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .cart-rec__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .cart-rec__name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .cart-rec__price .price {
+    font-size: 0.9rem;
+  }
+  .cart-rec__form {
+    margin-top: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .cart-layout {
+      grid-template-columns: 1fr;
     }
-    .cart-line__qty {
-      grid-column: 2 / -1;
-      flex-direction: row;
-      align-items: center;
-      gap: 14px;
+    .cart-aside {
+      position: static;
+    }
+  }
+  @media (max-width: 620px) {
+    .cart-line {
+      grid-template-columns: 22px 84px 1fr;
+      column-gap: 12px;
     }
     .cart-line__total {
       grid-column: 2 / -1;
@@ -286,6 +383,22 @@
 {% schema %}
 {
   "name": "t:general.cart",
-  "settings": []
+  "settings": [
+    {
+      "type": "collection",
+      "id": "recommendations_collection",
+      "label": "t:labels.cart_recommendations",
+      "info": "t:info.cart_recommendations"
+    },
+    {
+      "type": "range",
+      "id": "recommendations_count",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "t:labels.products_to_show",
+      "default": 4
+    }
+  ]
 }
 {% endschema %}
