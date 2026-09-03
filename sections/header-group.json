@@ -14,7 +14,7 @@
     "header": {
       "type": "header",
       "settings": {
-        "logo": "shopify://shop_images/dealtargets-logo_ca-1.png",
+        "logo": "shopify://shop_images/deal_targets_logo_light.png",
         "menu": "main-menu",
         "utility_menu": "",
         "customer_account_menu": "customer-account-main-menu",
