@@ -92,11 +92,29 @@
       :root:not([data-theme="light"]) {
         {{ dark_vars }}
       }
+      :root:not([data-theme="light"]) .site-logo--dual .site-logo__img--light {
+        display: none;
+      }
+      :root:not([data-theme="light"]) .site-logo--dual .site-logo__img--dark {
+        display: block;
+      }
     }
 
     {% # Explicit visitor choice always wins %}
     :root[data-theme="dark"] {
       {{ dark_vars }}
+    }
+    :root[data-theme="dark"] .site-logo--dual .site-logo__img--light {
+      display: none;
+    }
+    :root[data-theme="dark"] .site-logo--dual .site-logo__img--dark {
+      display: block;
+    }
+    :root[data-theme="light"] .site-logo--dual .site-logo__img--dark {
+      display: none;
+    }
+    :root[data-theme="light"] .site-logo--dual .site-logo__img--light {
+      display: block;
     }
   {%- endif -%}
 {% endstyle %}

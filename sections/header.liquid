@@ -23,10 +23,22 @@
 
   <div class="header-main">
     <div class="page-container header-main__row">
-      <a class="site-logo" href="{{ routes.root_url }}">
-        {%- if section.settings.logo != blank -%}
-          {{ section.settings.logo | image_url: width: 600 | image_tag: widths: '120,240,360,480', style: 'width:auto;height:auto', alt: shop.name }}
-        {%- else -%}
+      {%- liquid
+        assign logo_light = section.settings.logo
+        assign logo_dark = section.settings.logo_dark
+        assign has_dual = false
+        if logo_light != blank and logo_dark != blank
+          assign has_dual = true
+        endif
+      -%}
+      <a class="site-logo{% if has_dual %} site-logo--dual{% endif %}" href="{{ routes.root_url }}">
+        {%- if logo_light != blank -%}
+          {{ logo_light | image_url: width: 640 | image_tag: widths: '160,320,480,640', class: 'site-logo__img site-logo__img--light', alt: shop.name }}
+        {%- endif -%}
+        {%- if logo_dark != blank -%}
+          {{ logo_dark | image_url: width: 640 | image_tag: widths: '160,320,480,640', class: 'site-logo__img site-logo__img--dark', alt: shop.name }}
+        {%- endif -%}
+        {%- if logo_light == blank and logo_dark == blank -%}
           {{ shop.name }}
         {%- endif -%}
       </a>
@@ -204,6 +216,11 @@
     display: block;
     max-height: 58px;
     width: auto;
+  }
+  /* When both a light and dark logo are set, show the light one by default;
+     css-variables.liquid reveals the dark one in dark mode. */
+  .site-logo--dual .site-logo__img--dark {
+    display: none;
   }
 
   .header-search {
@@ -475,7 +492,14 @@
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "t:labels.logo"
+      "label": "t:labels.logo",
+      "info": "t:info.logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_dark",
+      "label": "t:labels.logo_dark",
+      "info": "t:info.logo_dark"
     },
     {
       "type": "link_list",

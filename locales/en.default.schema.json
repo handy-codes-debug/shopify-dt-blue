@@ -116,6 +116,7 @@
     "link_label": "Link label",
     "link_url": "Link",
     "logo": "Logo",
+    "logo_dark": "Logo (dark mode)",
     "low_stock_threshold": "Low stock threshold",
     "contact_page": "Contact page",
     "menu": "Menu",
@@ -152,6 +153,8 @@
   },
   "info": {
     "category_icon": "\"Auto\" picks an icon from the collection title.",
+    "logo": "Shown in light mode.",
+    "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",
     "enable_dark_mode": "Adds a light / dark / system switch in the header and a built-in dark palette.",
     "category_title": "Overrides the collection title shown on the card.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
