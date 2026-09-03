@@ -173,7 +173,9 @@
         "heading": "Not sure what fits together?",
         "text": "Tell us your build and we'll check socket, clearance, and power draw before it ships.",
         "button_label": "Get in touch",
-        "button_link": "shopify://policies/contact-information"
+        "button_link": "shopify://policies/contact-information",
+        "background_image": "shopify://shop_images/pc_build_banner_background.png",
+        "overlay_opacity": 45
       }
     }
   },
