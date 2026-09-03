@@ -70,7 +70,8 @@
             <span>{{ 'cart.subtotal' | t }} <span data-selected-count></span></span>
             <span class="price"><span class="price__now" data-selected-total></span></span>
           </p>
-          <button type="submit" name="checkout" form="CartForm" class="btn btn--primary btn--block">{{ 'cart.checkout' | t }}</button>
+          <button type="submit" name="checkout" form="CartForm" class="btn btn--primary btn--block" data-cart-checkout>{{ 'cart.checkout' | t }}</button>
+          <p class="cart-box__warn" data-cart-warn hidden>{{ 'cart.partial_warn' | t }}</p>
           <p class="cart-box__note">{{ 'cart.taxes_note' | t }}</p>
         </div>
 
@@ -112,6 +113,8 @@
         var boxes = Array.prototype.slice.call(form.querySelectorAll('[data-cart-select]'));
         var countEl = document.querySelector('[data-selected-count]');
         var totalEl = document.querySelector('[data-selected-total]');
+        var checkoutBtn = document.querySelector('[data-cart-checkout]');
+        var warnEl = document.querySelector('[data-cart-warn]');
 
         var fmt;
         try {
@@ -138,6 +141,24 @@
             selectAll.checked = n === boxes.length;
             selectAll.indeterminate = n > 0 && n < boxes.length;
           }
+          if (warnEl) warnEl.hidden = n === boxes.length || n === 0;
+          if (checkoutBtn) {
+            checkoutBtn.disabled = n === 0;
+            checkoutBtn.setAttribute('aria-disabled', n === 0 ? 'true' : 'false');
+          }
+        }
+
+        // On checkout, zero the quantity of any unselected line so only the
+        // selected items are carried through to checkout.
+        if (checkoutBtn) {
+          checkoutBtn.addEventListener('click', function () {
+            boxes.forEach(function (box) {
+              if (box.checked) return;
+              var line = box.closest('[data-cart-line]');
+              var qty = line && line.querySelector('input[name="updates[]"]');
+              if (qty) qty.value = '0';
+            });
+          });
         }
 
         boxes.forEach(function (box) { box.addEventListener('change', refresh); });
@@ -306,10 +327,23 @@
     font-size: 1.4rem;
     color: var(--color-foreground);
   }
+  .cart-box__warn {
+    margin: 10px 0 0;
+    padding: 8px 10px;
+    border-radius: var(--style-radius-sm);
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
+    font-size: 0.78rem;
+  }
   .cart-box__note {
     margin: 12px 0 0;
     font-size: 0.76rem;
     color: var(--color-foreground-faint);
+  }
+  .cart-box .btn[disabled],
+  .cart-box .btn[aria-disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
   }
 
   .cart-recs__title {

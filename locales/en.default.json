@@ -28,6 +28,7 @@
     "continue": "Continue shopping",
     "empty": "Your cart is empty.",
     "heading": "Shopping Cart",
+    "partial_warn": "Unselected items will be removed from your cart at checkout.",
     "price": "Price",
     "recommended": "Recommended for you",
     "remove": "Delete",
@@ -35,7 +36,7 @@
     "select_item": "Select {{ title }}",
     "selected": "Selected",
     "subtotal": "Subtotal",
-    "taxes_note": "Shipping and taxes calculated at checkout. Checkout includes every item in your cart.",
+    "taxes_note": "Shipping and taxes calculated at checkout.",
     "title": "Cart",
     "update": "Update cart"
   },
