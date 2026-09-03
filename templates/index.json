@@ -74,8 +74,8 @@
         "category_7Varjj": {
           "type": "category",
           "settings": {
-            "collection": "cooling-heating",
-            "title": "Cooling",
+            "collection": "monitor-home-menu",
+            "title": "Monitor",
             "icon": "auto"
           }
         },
@@ -90,8 +90,8 @@
         "category_NWqCXw": {
           "type": "category",
           "settings": {
-            "collection": "power-supply",
-            "title": "Power Supplies",
+            "collection": "desktop-pc-home-menu",
+            "title": "Desktop",
             "icon": "auto"
           }
         },
@@ -122,8 +122,8 @@
         "c3": {
           "type": "category",
           "settings": {
-            "collection": "computer-cases",
-            "title": "Cases",
+            "collection": "notebook-home-menu",
+            "title": "Notebook",
             "icon": "auto"
           }
         },
