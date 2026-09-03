@@ -171,7 +171,7 @@
         "heading": "Not sure what fits together?",
         "text": "Tell us your build and we'll check socket, clearance, and power draw before it ships.",
         "button_label": "Get in touch",
-        "button_link": ""
+        "button_link": "shopify://policies/contact-information"
       }
     }
   },
