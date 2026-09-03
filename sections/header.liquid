@@ -85,31 +85,63 @@
     <nav class="site-nav" aria-label="{{ section.settings.menu.title | default: 'Primary' }}">
       <ul class="page-container site-nav__row">
         {%- for link in section.settings.menu.links -%}
-          <li class="site-nav__item{% if link.links.size > 0 %} has-menu{% endif %}">
+          {%- liquid
+            assign has_children = false
+            assign is_mega = false
+            if link.links.size > 0
+              assign has_children = true
+              for child in link.links
+                if child.links.size > 0
+                  assign is_mega = true
+                  break
+                endif
+              endfor
+            endif
+          -%}
+          <li class="site-nav__item{% if has_children %} has-menu{% endif %}{% if is_mega %} site-nav__item--mega{% endif %}">
             <a
               href="{{ link.url }}"
               class="site-nav__link{% if link.current or link.child_active %} is-current{% endif %}"
               {% if link.current or link.child_active %}aria-current="page"{% endif %}
             >{{ link.title }}</a>
 
-            {%- if link.links.size > 0 -%}
+            {%- if has_children -%}
               <button type="button" class="site-nav__toggle" aria-expanded="false" aria-label="{{ link.title }}">
                 <span aria-hidden="true">&#9662;</span>
               </button>
-              <ul class="site-nav__dropdown">
-                {%- for child in link.links -%}
-                  <li class="site-nav__subitem{% if child.links.size > 0 %} has-menu{% endif %}">
-                    <a href="{{ child.url }}" class="site-nav__sublink{% if child.current %} is-current{% endif %}">{{ child.title }}</a>
-                    {%- if child.links.size > 0 -%}
-                      <ul class="site-nav__dropdown site-nav__dropdown--nested">
-                        {%- for grandchild in child.links -%}
-                          <li><a href="{{ grandchild.url }}" class="site-nav__sublink{% if grandchild.current %} is-current{% endif %}">{{ grandchild.title }}</a></li>
-                        {%- endfor -%}
-                      </ul>
-                    {%- endif -%}
-                  </li>
-                {%- endfor -%}
-              </ul>
+
+              {%- if is_mega -%}
+                <div class="site-nav__mega">
+                  <div class="page-container site-nav__mega-inner">
+                    <div class="site-nav__mega-head">
+                      <span class="site-nav__mega-title">{{ link.title }}</span>
+                      <a class="site-nav__mega-all" href="{{ link.url }}">{{ 'header.shop_all' | t: title: link.title }} &rarr;</a>
+                    </div>
+                    <div class="site-nav__mega-cols">
+                      {%- for child in link.links -%}
+                        <div class="site-nav__mega-col">
+                          <a href="{{ child.url }}" class="site-nav__mega-col-title{% if child.current %} is-current{% endif %}">{{ child.title }}</a>
+                          {%- if child.links.size > 0 -%}
+                            <ul>
+                              {%- for grandchild in child.links -%}
+                                <li><a href="{{ grandchild.url }}"{% if grandchild.current %} class="is-current"{% endif %}>{{ grandchild.title }}</a></li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- else -%}
+                <ul class="site-nav__dropdown">
+                  {%- for child in link.links -%}
+                    <li class="site-nav__subitem">
+                      <a href="{{ child.url }}" class="site-nav__sublink{% if child.current %} is-current{% endif %}">{{ child.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -331,8 +363,8 @@
 
   .site-nav {
     position: relative;
-    background: var(--color-dark-surface);
-    border-top: 1px solid var(--color-dark-surface-soft);
+    background: var(--color-background);
+    border-top: 1px solid var(--color-border);
     font-family: 'Anta', var(--font-heading--family);
     letter-spacing: 0.02em;
   }
@@ -349,20 +381,25 @@
     display: flex;
     align-items: stretch;
   }
+  .site-nav__item--mega {
+    position: static;
+  }
   .site-nav__link {
-    padding: 12px 14px;
+    padding: 14px 14px;
     white-space: nowrap;
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.87rem;
-    font-weight: 500;
-    border-bottom: 2px solid transparent;
+    color: var(--color-foreground-soft);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 3px solid transparent;
   }
   .site-nav__item.has-menu .site-nav__link {
     padding-right: 4px;
   }
   .site-nav__link:hover,
-  .site-nav__link.is-current {
-    color: #fff;
+  .site-nav__link.is-current,
+  .site-nav__item.is-open .site-nav__link {
+    color: var(--color-foreground);
     border-bottom-color: var(--color-accent);
   }
   .site-nav__toggle {
@@ -371,15 +408,15 @@
     font-family: inherit;
     padding: 0 10px 0 4px;
     border: 0;
-    border-bottom: 2px solid transparent;
+    border-bottom: 3px solid transparent;
     background: none;
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 0.7rem;
+    color: var(--color-foreground-faint);
+    font-size: 0.66rem;
     cursor: pointer;
   }
   .site-nav__toggle:hover,
   .site-nav__item.is-open .site-nav__toggle {
-    color: #fff;
+    color: var(--color-foreground);
   }
   .site-nav__toggle span {
     display: inline-block;
@@ -389,15 +426,16 @@
     transform: rotate(180deg);
   }
 
+  /* ---- simple dropdown (2-level menus) ---- */
   .site-nav__dropdown {
     position: absolute;
     top: 100%;
     left: 0;
     z-index: 60;
     display: none;
-    min-width: 210px;
+    min-width: 220px;
     margin: 0;
-    padding: 6px;
+    padding: 8px;
     list-style: none;
     background: var(--color-background);
     border: 1px solid var(--color-border);
@@ -409,15 +447,12 @@
   .site-nav__item.is-open > .site-nav__dropdown {
     display: block;
   }
-  .site-nav__subitem {
-    position: relative;
-  }
   .site-nav__sublink {
     display: block;
-    padding: 8px 12px;
+    padding: 9px 12px;
     border-radius: var(--style-radius-sm);
     color: var(--color-foreground);
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     white-space: nowrap;
   }
   .site-nav__sublink:hover,
@@ -425,13 +460,95 @@
     background: var(--color-surface-alt);
     color: var(--color-accent);
   }
-  .site-nav__dropdown--nested {
-    top: -7px;
-    left: 100%;
+
+  /* ---- mega menu (3-level menus) ---- */
+  .site-nav__mega {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 60;
+    display: none;
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--style-shadow-lg);
   }
-  .site-nav__subitem:hover > .site-nav__dropdown--nested,
-  .site-nav__subitem:focus-within > .site-nav__dropdown--nested {
+  .site-nav__item--mega:hover > .site-nav__mega,
+  .site-nav__item--mega:focus-within > .site-nav__mega,
+  .site-nav__item--mega.is-open > .site-nav__mega {
     display: block;
+  }
+  .site-nav__mega-inner {
+    padding-block: 28px 32px;
+  }
+  .site-nav__mega-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .site-nav__mega-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+  }
+  .site-nav__mega-all {
+    flex-shrink: 0;
+    font-family: var(--font-accent--family);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+  .site-nav__mega-cols {
+    columns: 2 260px;
+    column-gap: 48px;
+    max-width: 980px;
+  }
+  .site-nav__mega-col {
+    break-inside: avoid;
+    margin-bottom: 26px;
+  }
+  .site-nav__mega-col-title {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-foreground);
+  }
+  .site-nav__mega-col-title:hover,
+  .site-nav__mega-col-title.is-current {
+    color: var(--color-accent);
+  }
+  .site-nav__mega-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-nav__mega-col li {
+    margin: 0;
+  }
+  .site-nav__mega-col li a {
+    display: block;
+    padding: 6px 0;
+    font-family: var(--font-primary--family);
+    font-size: 0.88rem;
+    color: var(--color-foreground-soft);
+  }
+  .site-nav__mega-col li a::before {
+    content: "\203A";
+    margin-right: 9px;
+    color: var(--color-foreground-faint);
+  }
+  .site-nav__mega-col li a:hover,
+  .site-nav__mega-col li a.is-current {
+    color: var(--color-accent);
   }
 
   @media (max-width: 900px) {
@@ -452,38 +569,50 @@
     .site-nav__item {
       flex-wrap: wrap;
     }
-    .site-nav__dropdown {
+    .site-nav__link {
+      border-bottom: 0;
+    }
+    .site-nav__dropdown,
+    .site-nav__mega {
       position: static;
       display: none;
       min-width: 0;
-      margin: 0 0 4px;
-      padding: 0 0 4px 14px;
+      margin: 0;
+      padding: 0 0 8px 14px;
       border: 0;
       border-radius: 0;
       background: none;
       box-shadow: none;
     }
-    .site-nav__item.is-open > .site-nav__dropdown {
+    .site-nav__item.is-open > .site-nav__dropdown,
+    .site-nav__item--mega.is-open > .site-nav__mega {
       display: block;
     }
     .site-nav__item:hover > .site-nav__dropdown,
-    .site-nav__item:focus-within > .site-nav__dropdown {
+    .site-nav__item:focus-within > .site-nav__dropdown,
+    .site-nav__item--mega:hover > .site-nav__mega,
+    .site-nav__item--mega:focus-within > .site-nav__mega {
       display: none;
     }
     .site-nav__item.is-open:hover > .site-nav__dropdown,
-    .site-nav__item.is-open:focus-within > .site-nav__dropdown {
+    .site-nav__item.is-open:focus-within > .site-nav__dropdown,
+    .site-nav__item--mega.is-open:hover > .site-nav__mega,
+    .site-nav__item--mega.is-open:focus-within > .site-nav__mega {
       display: block;
     }
-    .site-nav__dropdown--nested {
-      left: 0;
+    .site-nav__mega-inner {
+      padding: 0;
     }
-    .site-nav__sublink {
-      color: rgba(255, 255, 255, 0.7);
+    .site-nav__mega-head {
+      padding-bottom: 8px;
+      margin-bottom: 12px;
     }
-    .site-nav__sublink:hover,
-    .site-nav__sublink.is-current {
-      background: none;
-      color: #fff;
+    .site-nav__mega-cols {
+      columns: auto;
+      max-width: none;
+    }
+    .site-nav__mega-col {
+      margin-bottom: 14px;
     }
   }
 {% endstylesheet %}
