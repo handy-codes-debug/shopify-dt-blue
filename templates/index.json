@@ -82,7 +82,7 @@
         "category_RBDK3X": {
           "type": "category",
           "settings": {
-            "collection": "intel-desktop-processors",
+            "collection": "cpu",
             "title": "Processors",
             "icon": "auto"
           }
@@ -98,7 +98,7 @@
         "category_WMyqED": {
           "type": "category",
           "settings": {
-            "collection": "network-storage",
+            "collection": "storage",
             "title": "Storage",
             "icon": "auto"
           }
@@ -106,7 +106,7 @@
         "c1": {
           "type": "category",
           "settings": {
-            "collection": "desktop-graphics-cards",
+            "collection": "video-cards",
             "title": "Graphics Cards",
             "icon": "auto"
           }
@@ -114,7 +114,7 @@
         "c2": {
           "type": "category",
           "settings": {
-            "collection": "memory-cards",
+            "collection": "memory-1",
             "title": "Memory",
             "icon": "auto"
           }
@@ -130,7 +130,7 @@
         "c4": {
           "type": "category",
           "settings": {
-            "collection": "intel-motherboards",
+            "collection": "motherboards",
             "title": "Motherboards",
             "icon": "auto"
           }
