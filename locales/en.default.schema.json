@@ -159,6 +159,7 @@
     "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",
     "enable_dark_mode": "Adds a light / dark / system switch in the header and a built-in dark palette.",
     "hero_background_image": "Optional. Sits behind the hero text with a dark overlay. Leave empty for the plain colour panel.",
+    "promo_background_image": "Optional. Sits behind the banner with a dark overlay. Leave empty for the solid dark panel.",
     "category_title": "Overrides the collection title shown on the card.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
     "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."

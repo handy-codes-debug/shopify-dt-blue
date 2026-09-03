@@ -1,9 +1,31 @@
 {% comment %}
-  A single call-to-action banner on a dark rounded panel.
+  A single call-to-action banner on a rounded panel — a solid dark colour, or a
+  chosen background image with a dark overlay.
 {% endcomment %}
 
+{% liquid
+  assign bg_image = section.settings.background_image
+  assign overlay = section.settings.overlay_opacity | default: 45 | divided_by: 100.0
+%}
+
 <div class="section-pad">
-  <div class="promo">
+  <div class="promo{% if bg_image != blank %} promo--image{% endif %}">
+    {%- if bg_image != blank -%}
+      <div class="promo__bg" aria-hidden="true">
+        {{
+          bg_image
+          | image_url: width: 2000
+          | image_tag:
+            widths: '600,900,1200,1600,2000',
+            sizes: '(max-width: 1200px) 100vw, 1200px',
+            class: 'promo__bg-img',
+            loading: 'lazy',
+            alt: ''
+        }}
+        <span class="promo__bg-overlay" style="opacity: {{ overlay }}"></span>
+      </div>
+    {%- endif -%}
+
     <div class="promo__copy">
       {%- if section.settings.heading != blank -%}<h3 class="promo__title">{{ section.settings.heading }}</h3>{%- endif -%}
       {%- if section.settings.text != blank -%}<p class="promo__text">{{ section.settings.text }}</p>{%- endif -%}
@@ -16,6 +38,8 @@
 
 {% stylesheet %}
   .promo {
+    position: relative;
+    overflow: hidden;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
@@ -24,6 +48,29 @@
     border-radius: var(--style-radius-lg);
     background: var(--color-dark-surface);
     color: #fff;
+  }
+  .promo--image {
+    background: #0B1220;
+  }
+  .promo__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .promo__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .promo__bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: #0B1220;
+  }
+  .promo__copy,
+  .promo .btn {
+    position: relative;
+    z-index: 1;
   }
   .promo__title {
     margin: 0 0 6px;
@@ -73,6 +120,26 @@
       "type": "url",
       "id": "button_link",
       "label": "t:labels.button_link_primary"
+    },
+    {
+      "type": "header",
+      "content": "t:labels.background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "t:labels.background_image",
+      "info": "t:info.promo_background_image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "t:labels.overlay_opacity",
+      "default": 45
     }
   ],
   "presets": [
