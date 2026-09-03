@@ -177,6 +177,8 @@
       "processor": "Processor",
       "gpu": "Graphics card",
       "motherboard": "Motherboard",
+      "laptop": "Laptop / notebook",
+      "desktop": "Desktop PC",
       "memory": "Memory",
       "storage": "Storage",
       "power": "Power supply",
