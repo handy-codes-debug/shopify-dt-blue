@@ -27,8 +27,11 @@
     "continue": "Continue shopping",
     "empty": "Your cart is empty.",
     "remove": "Remove",
+    "select_all": "Select all",
+    "select_item": "Select {{ title }}",
+    "selected": "Selected",
     "subtotal": "Subtotal",
-    "taxes_note": "Shipping and taxes calculated at checkout.",
+    "taxes_note": "Shipping and taxes calculated at checkout. Checkout includes every item in your cart.",
     "title": "Cart",
     "update": "Update cart"
   },
