@@ -1,0 +1,39 @@
+{% comment %}
+  Classic customer accounts: create account.
+{% endcomment %}
+
+<div class="section-pad account">
+  <div class="account__head">
+    <h1 class="account__title">{{ 'customer.register.title' | t }}</h1>
+  </div>
+
+  <div class="acct-panel">
+    {%- form 'create_customer', class: 'acct-form acct-form--narrow' -%}
+      {%- if form.errors -%}<div class="acct-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <label class="acct-field">
+        <span>{{ 'customer.register.first_name' | t }}</span>
+        <input type="text" name="customer[first_name]" value="{{ form.first_name }}" autocomplete="given-name">
+      </label>
+      <label class="acct-field">
+        <span>{{ 'customer.register.last_name' | t }}</span>
+        <input type="text" name="customer[last_name]" value="{{ form.last_name }}" autocomplete="family-name">
+      </label>
+      <label class="acct-field">
+        <span>{{ 'customer.login.email' | t }}</span>
+        <input type="email" name="customer[email]" value="{{ form.email }}" autocomplete="email" required>
+      </label>
+      <label class="acct-field">
+        <span>{{ 'customer.login.password' | t }}</span>
+        <input type="password" name="customer[password]" autocomplete="new-password" required>
+      </label>
+      <div class="acct-actions">
+        <button type="submit" class="btn btn--dark">{{ 'customer.register.submit' | t }}</button>
+        <a href="{{ routes.account_login_url }}">{{ 'customer.register.has_account' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Customer register", "settings": [] }
+{% endschema %}

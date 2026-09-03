@@ -432,6 +432,280 @@ a:hover {
   font-size: 0.9rem;
 }
 
+/* ============================================================
+ *  Customer account pages (classic customer accounts)
+ *  ============================================================ */
+.account {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.account--wide {
+  max-width: 860px;
+}
+
+.account__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.account__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+}
+
+.account__back {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.acct-panel {
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--style-radius-lg);
+  background: var(--color-background);
+}
+
+.acct-panel + .acct-panel {
+  margin-top: 20px;
+}
+
+.acct-panel__title {
+  margin: 0 0 14px;
+  font-size: 1rem;
+}
+
+.acct-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.acct-form--narrow {
+  max-width: 420px;
+}
+
+.acct-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.acct-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-foreground-soft);
+}
+
+.acct-field input,
+.acct-field select,
+.acct-field textarea {
+  padding: 10px 12px;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--style-border-radius-inputs);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font: inherit;
+  font-weight: 400;
+}
+
+.acct-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.acct-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.acct-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 6px;
+  font-size: 0.86rem;
+}
+
+.acct-links a {
+  color: var(--color-accent);
+}
+
+.acct-errors {
+  margin-bottom: 4px;
+  padding: 12px 14px;
+  border-radius: var(--style-radius-sm);
+  background: var(--color-error-soft);
+  color: var(--color-error);
+  font-size: 0.88rem;
+}
+
+.acct-errors ul {
+  margin: 6px 0 0;
+  padding-left: 1.2em;
+}
+
+.acct-note {
+  margin: 0;
+  color: var(--color-foreground-soft);
+  font-size: 0.9rem;
+}
+
+.acct-empty {
+  color: var(--color-foreground-soft);
+}
+
+/* Tables (order history, order line items) */
+.acct-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.acct-table th {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border-strong);
+  font-family: var(--font-accent--family);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-foreground-faint);
+}
+
+.acct-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.acct-table tr:hover td {
+  background: var(--color-surface-alt);
+}
+
+.acct-table__scroll {
+  overflow-x: auto;
+}
+
+/* Status pills */
+.acct-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: var(--style-radius-pill);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--color-surface-alt);
+  color: var(--color-foreground-soft);
+}
+
+.acct-badge--paid,
+.acct-badge--fulfilled {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.acct-badge--pending,
+.acct-badge--partial {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.acct-badge--voided,
+.acct-badge--refunded,
+.acct-badge--unfulfilled {
+  background: var(--color-error-soft);
+  color: var(--color-error);
+}
+
+/* Address cards */
+.acct-addr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.acct-addr {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--style-radius);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.acct-addr__default {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-family: var(--font-accent--family);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.acct-addr__actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 12px;
+  font-size: 0.82rem;
+}
+
+.acct-addr__actions button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.acct-addr__actions .is-delete {
+  color: var(--color-foreground-faint);
+}
+
+.acct-addr__actions .is-delete:hover {
+  color: var(--color-error);
+}
+
+.acct-summary {
+  margin-left: auto;
+  max-width: 320px;
+}
+
+.acct-summary__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 0;
+}
+
+.acct-summary__row--total {
+  border-top: 1px solid var(--color-border-strong);
+  margin-top: 6px;
+  padding-top: 12px;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 560px) {
+  .acct-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Vertical rhythm for stacked sections. */
 .section-pad {
   padding-block: clamp(32px, 5vw, 56px);

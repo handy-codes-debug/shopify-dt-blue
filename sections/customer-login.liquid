@@ -1,0 +1,75 @@
+{% comment %}
+  Classic customer accounts: login + password recovery.
+{% endcomment %}
+
+{% # theme-check-disable UndefinedObject %}
+<div class="section-pad account">
+  <div class="account__head">
+    <h1 class="account__title">{{ 'customer.login.title' | t }}</h1>
+  </div>
+
+  <div id="recover" class="acct-panel"{% unless recover_password %} hidden{% endunless %}>
+    <h2 class="acct-panel__title">{{ 'customer.recover.title' | t }}</h2>
+    <p class="acct-note">{{ 'customer.recover.subtext' | t }}</p>
+    {%- form 'recover_customer_password', class: 'acct-form acct-form--narrow' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="acct-note">{{ 'customer.recover.success' | t }}</p>
+      {%- endif -%}
+      {%- if form.errors -%}<div class="acct-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <label class="acct-field">
+        <span>{{ 'customer.login.email' | t }}</span>
+        <input type="email" name="email" autocomplete="email" required>
+      </label>
+      <div class="acct-actions">
+        <button type="submit" class="btn btn--dark">{{ 'customer.recover.submit' | t }}</button>
+        <a href="#login" data-recover-hide>{{ 'customer.recover.cancel' | t }}</a>
+      </div>
+    {%- endform -%}
+  </div>
+
+  <div id="login" class="acct-panel"{% if recover_password %} hidden{% endif %}>
+    {%- form 'customer_login', class: 'acct-form acct-form--narrow' -%}
+      {%- if form.errors -%}<div class="acct-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <label class="acct-field">
+        <span>{{ 'customer.login.email' | t }}</span>
+        <input type="email" name="customer[email]" autocomplete="email" required>
+      </label>
+      <label class="acct-field">
+        <span>{{ 'customer.login.password' | t }}</span>
+        <input type="password" name="customer[password]" autocomplete="current-password" required>
+      </label>
+      <div class="acct-actions">
+        <button type="submit" class="btn btn--dark">{{ 'customer.login.submit' | t }}</button>
+        <a href="#recover" data-recover-show>{{ 'customer.login.forgot' | t }}</a>
+      </div>
+    {%- endform -%}
+    <p class="acct-note" style="margin-top:16px">
+      {{ 'customer.login.no_account' | t }}
+      <a href="{{ routes.account_register_url }}">{{ 'customer.register.title' | t }}</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var recover = document.getElementById('recover');
+    var login = document.getElementById('login');
+    if (!recover || !login) return;
+    function show(which) {
+      recover.hidden = which !== 'recover';
+      login.hidden = which === 'recover';
+    }
+    document.querySelectorAll('[data-recover-show]').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); show('recover'); });
+    });
+    document.querySelectorAll('[data-recover-hide]').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); show('login'); });
+    });
+    if (location.hash === '#recover') show('recover');
+  })();
+</script>
+{% # theme-check-enable UndefinedObject %}
+
+{% schema %}
+{ "name": "Customer login", "settings": [] }
+{% endschema %}

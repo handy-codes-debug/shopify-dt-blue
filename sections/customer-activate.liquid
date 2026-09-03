@@ -1,0 +1,32 @@
+{% comment %}
+  Classic customer accounts: activate an account from the invite email link.
+{% endcomment %}
+
+<div class="section-pad account">
+  <div class="account__head">
+    <h1 class="account__title">{{ 'customer.activate.title' | t }}</h1>
+  </div>
+
+  <div class="acct-panel">
+    <p class="acct-note">{{ 'customer.activate.subtext' | t }}</p>
+    {%- form 'activate_customer_password', class: 'acct-form acct-form--narrow' -%}
+      {%- if form.errors -%}<div class="acct-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <label class="acct-field">
+        <span>{{ 'customer.activate.password' | t }}</span>
+        <input type="password" name="customer[password]" autocomplete="new-password" required>
+      </label>
+      <label class="acct-field">
+        <span>{{ 'customer.activate.confirm' | t }}</span>
+        <input type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+      </label>
+      <div class="acct-actions">
+        <button type="submit" name="commit" class="btn btn--dark">{{ 'customer.activate.submit' | t }}</button>
+        <button type="submit" name="decline" class="btn btn--ghost">{{ 'customer.activate.decline' | t }}</button>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Customer activate account", "settings": [] }
+{% endschema %}

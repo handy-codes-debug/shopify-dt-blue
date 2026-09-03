@@ -1,0 +1,30 @@
+{% comment %}
+  Classic customer accounts: set a new password from the reset email link.
+{% endcomment %}
+
+<div class="section-pad account">
+  <div class="account__head">
+    <h1 class="account__title">{{ 'customer.reset.title' | t }}</h1>
+  </div>
+
+  <div class="acct-panel">
+    {%- form 'reset_customer_password', class: 'acct-form acct-form--narrow' -%}
+      {%- if form.errors -%}<div class="acct-errors">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <label class="acct-field">
+        <span>{{ 'customer.reset.password' | t }}</span>
+        <input type="password" name="customer[password]" autocomplete="new-password" required>
+      </label>
+      <label class="acct-field">
+        <span>{{ 'customer.reset.confirm' | t }}</span>
+        <input type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+      </label>
+      <div class="acct-actions">
+        <button type="submit" class="btn btn--dark">{{ 'customer.reset.submit' | t }}</button>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Customer reset password", "settings": [] }
+{% endschema %}
