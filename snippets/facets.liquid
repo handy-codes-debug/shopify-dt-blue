@@ -49,11 +49,14 @@
         <div class="facets__active">
           {%- for filter in results.filters -%}
             {%- for value in filter.active_values -%}
-              <a class="facets__pill" href="{{ value.url_to_remove }}">{{ value.label }} &times;</a>
+              {%- assign pill_label = value.label | strip -%}
+              {%- unless pill_label.size > 60 or pill_label contains 'function(' or pill_label contains '{' or pill_label contains '</' or pill_label contains 'window.' -%}
+                <a class="facets__pill" href="{{ value.url_to_remove }}">{{ value.label | escape }} &times;</a>
+              {%- endunless -%}
             {%- endfor -%}
             {%- if filter.type == 'price_range' -%}
               {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
-                <a class="facets__pill" href="{{ filter.url_to_remove }}">{{ filter.label }} &times;</a>
+                <a class="facets__pill" href="{{ filter.url_to_remove }}">{{ filter.label | escape }} &times;</a>
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
@@ -75,30 +78,39 @@
       {%- for filter in results.filters -%}
         {%- case filter.type -%}
           {%- when 'list', 'boolean' -%}
-            <fieldset class="facet">
-              <legend class="facet__legend">{{ filter.label }}</legend>
-              <div class="facet__options">
-                {%- for value in filter.values -%}
+            {%- capture facet_options -%}
+              {%- for value in filter.values -%}
+                {%- assign vlabel = value.label | strip -%}
+                {%- assign is_junk = false -%}
+                {%- if vlabel == blank or vlabel.size > 60 -%}{%- assign is_junk = true -%}{%- endif -%}
+                {%- if vlabel contains 'function(' or vlabel contains '{' or vlabel contains '</' or vlabel contains 'window.' or vlabel contains 'javascript:' -%}{%- assign is_junk = true -%}{%- endif -%}
+                {%- unless is_junk -%}
                   {%- assign disabled = false -%}
                   {%- if value.count == 0 and value.active == false -%}{%- assign disabled = true -%}{%- endif -%}
                   <label class="facet__option{% if disabled %} is-disabled{% endif %}">
                     <input
                       type="checkbox"
-                      name="{{ value.param_name }}"
-                      value="{{ value.value }}"
+                      name="{{ value.param_name | escape }}"
+                      value="{{ value.value | escape }}"
                       {% if value.active %}checked{% endif %}
                       {% if disabled %}disabled{% endif %}
                     >
-                    <span class="facet__label">{{ value.label }}</span>
+                    <span class="facet__label">{{ value.label | escape }}</span>
                     <span class="facet__count">{{ value.count }}</span>
                   </label>
-                {%- endfor -%}
-              </div>
-            </fieldset>
+                {%- endunless -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if facet_options contains 'facet__option' -%}
+              <fieldset class="facet">
+                <legend class="facet__legend">{{ filter.label | escape }}</legend>
+                <div class="facet__options">{{ facet_options }}</div>
+              </fieldset>
+            {%- endif -%}
           {%- when 'price_range' -%}
             {%- assign price_ceiling = filter.range_max | money_without_currency | replace: ',', '' -%}
             <fieldset class="facet">
-              <legend class="facet__legend">{{ filter.label }}</legend>
+              <legend class="facet__legend">{{ filter.label | escape }}</legend>
               <div class="facet__price">
                 <input
                   type="number"
