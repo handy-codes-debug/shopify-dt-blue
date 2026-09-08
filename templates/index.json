@@ -32,7 +32,8 @@
           "settings": {
             "abbr": "FS",
             "title": "Shipping From CA",
-            "text": "Tracked, 2–4 business days"
+            "text": "Tracked, 2–4 business days",
+            "link": "shopify://policies/shipping-policy"
           }
         },
         "b2": {
@@ -40,7 +41,8 @@
           "settings": {
             "abbr": "CC",
             "title": "Customer Service",
-            "text": "Ready to help"
+            "text": "Ready to help",
+            "link": "shopify://policies/contact-information"
           }
         },
         "b3": {
@@ -48,7 +50,8 @@
           "settings": {
             "abbr": "30",
             "title": "30-day returns",
-            "text": "No restocking fee"
+            "text": "No restocking fee",
+            "link": "shopify://policies/refund-policy"
           }
         },
         "b4": {
@@ -56,7 +59,8 @@
           "settings": {
             "abbr": "B2B",
             "title": "Business accounts",
-            "text": "Net terms and volume pricing"
+            "text": "Net terms and volume pricing",
+            "link": "shopify://policies/contact-information"
           }
         }
       },
