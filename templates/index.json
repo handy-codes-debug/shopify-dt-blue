@@ -31,7 +31,7 @@
           "type": "item",
           "settings": {
             "abbr": "FS",
-            "title": "Free shipping over $75",
+            "title": "Shipping From CA",
             "text": "Tracked, 2–4 business days"
           }
         },
@@ -39,8 +39,8 @@
           "type": "item",
           "settings": {
             "abbr": "CC",
-            "title": "Compatibility checked",
-            "text": "Verified before it ships"
+            "title": "Customer Service",
+            "text": "Ready to help"
           }
         },
         "b3": {
