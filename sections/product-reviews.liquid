@@ -44,13 +44,17 @@
       {%- endif -%}
     </div>
 
+    {%- if section.settings.custom_html != blank -%}
+      <div class="previews__list">{{ section.settings.custom_html }}</div>
+    {%- endif -%}
+
     {%- if has_app -%}
       <div class="previews__app">
         {% content_for 'blocks' %}
       </div>
     {%- elsif spr_reviews != blank -%}
       <div id="shopify-product-reviews" class="previews__list" data-id="{{ product.id }}">{{ spr_reviews }}</div>
-    {%- elsif rating == nil -%}
+    {%- elsif rating == nil and section.settings.custom_html == blank -%}
       <p class="previews__empty">{{ 'sections.reviews.none' | t }}</p>
     {%- endif -%}
   </div>
@@ -199,6 +203,12 @@
       "id": "heading",
       "label": "t:labels.heading",
       "default": "Customer reviews"
+    },
+    {
+      "type": "html",
+      "id": "custom_html",
+      "label": "t:labels.reviews_embed",
+      "info": "t:info.reviews_embed"
     },
     {
       "type": "checkbox",
