@@ -7,6 +7,7 @@
 {% liquid
   assign rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count.value
+  assign spr_reviews = product.metafields.spr.reviews
   assign has_app = false
   if section.blocks.size > 0
     assign has_app = true
@@ -47,6 +48,8 @@
       <div class="previews__app">
         {% content_for 'blocks' %}
       </div>
+    {%- elsif spr_reviews != blank -%}
+      <div id="shopify-product-reviews" class="previews__list" data-id="{{ product.id }}">{{ spr_reviews }}</div>
     {%- elsif rating == nil -%}
       <p class="previews__empty">{{ 'sections.reviews.none' | t }}</p>
     {%- endif -%}
@@ -89,12 +92,100 @@
     font-size: 0.85rem;
     color: var(--color-foreground-soft);
   }
-  .previews__app {
+  .previews__app,
+  .previews__list {
     margin-top: 24px;
   }
   .previews__empty {
     margin-top: 16px;
     color: var(--color-foreground-soft);
+  }
+
+  /* Shopify Product Reviews app markup (product.metafields.spr.reviews) */
+  .previews__list .spr-header,
+  .previews__list .spr-summary {
+    display: none;
+  }
+  .previews__list .spr-reviews {
+    margin: 0;
+  }
+  .previews__list .spr-review {
+    padding: 20px 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .previews__list .spr-review:first-child {
+    border-top: 0;
+  }
+  .previews__list .spr-review-header-starratings,
+  .previews__list .spr-starrating,
+  .previews__list .spr-icon-star {
+    color: #E8A93C;
+    letter-spacing: 1px;
+  }
+  .previews__list .spr-review-header-title {
+    margin: 6px 0 2px;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .previews__list .spr-review-header-byline {
+    font-size: 0.78rem;
+    color: var(--color-foreground-faint);
+  }
+  .previews__list .spr-review-content-body {
+    margin-top: 8px;
+    line-height: 1.6;
+    color: var(--color-foreground-soft);
+  }
+  .previews__list .spr-review-reportreview {
+    font-size: 0.74rem;
+    color: var(--color-foreground-faint);
+  }
+  .previews__list .spr-form {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border-strong);
+  }
+  .previews__list .spr-form-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .previews__list .spr-form-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-foreground-soft);
+  }
+  .previews__list .spr-form-input-text,
+  .previews__list .spr-form-input-email,
+  .previews__list .spr-form-input-textarea {
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--color-border-strong);
+    border-radius: var(--style-border-radius-inputs);
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font: inherit;
+  }
+  .previews__list .spr-button,
+  .previews__list .spr-summary-actions-newreview {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: var(--style-radius-sm);
+    background: var(--color-dark-surface);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .previews__list .spr-pagination {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.86rem;
   }
 {% endstylesheet %}
 
