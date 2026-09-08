@@ -57,6 +57,10 @@
       {%- endif -%}
     </div>
 
+    {%- if product.featured_image -%}
+      <p class="pdp__media-note">{{ 'products.image_disclaimer' | t }}</p>
+    {%- endif -%}
+
     <dialog class="pdp__lightbox" data-pdp-lightbox scroll-lock>
       <button type="button" class="pdp__lightbox-close" data-pdp-lightbox-close aria-label="{{ 'products.close' | t }}">&times;</button>
       {%- comment -%} theme-check-disable ImgWidthAndHeight, RemoteAsset {%- endcomment -%}
@@ -291,6 +295,12 @@
     flex-direction: column;
     gap: 10px;
     flex-shrink: 0;
+  }
+  .pdp__media-note {
+    margin: 10px 0 0;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: var(--color-foreground-faint);
   }
   .pdp__thumb {
     width: 60px;

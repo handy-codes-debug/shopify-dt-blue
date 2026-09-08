@@ -189,6 +189,7 @@
     "brand": "Brand",
     "close": "Close",
     "from_price_html": "From {{ price }}",
+    "image_disclaimer": "Photo for reference only — the actual product may differ.",
     "in_stock": "In stock",
     "low_stock": "Low stock",
     "new": "New",
