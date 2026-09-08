@@ -11,19 +11,55 @@
   "sections": {
     "main": {
       "type": "product",
-      "settings": {}
+      "settings": {
+        "image_ratio": "1 / 1",
+        "low_stock_threshold": 5
+      }
     },
     "description": {
       "type": "product-description",
-      "settings": {}
+      "settings": {
+        "heading": "",
+        "metafield_namespace": "custom",
+        "attribute_label": "Attribute",
+        "specification_label": "Specification",
+        "show_description": true,
+        "description_label": "Description",
+        "tinted": false
+      }
     },
     "reviews": {
       "type": "product-reviews",
-      "settings": {}
+      "blocks": {
+        "trustshop_reviews_widget_box_MLXkcN": {
+          "type": "shopify://apps/trustshop-reviews/blocks/widget-box/18b0c4cc-5411-4b6e-922d-34fdc2f30ab9",
+          "settings": {
+            "selected_product": "",
+            "wrapper_class": "",
+            "review_to_display": "product_reviews_only",
+            "main_tab": "auto",
+            "qa_enabled": false
+          }
+        }
+      },
+      "block_order": [
+        "trustshop_reviews_widget_box_MLXkcN"
+      ],
+      "settings": {
+        "heading": "Customer reviews",
+        "custom_html": "",
+        "tinted": false
+      }
     },
     "recommendations": {
       "type": "product-recommendations",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Continue your build",
+        "heading": "You may also like",
+        "intent": "related",
+        "products_to_show": 4,
+        "columns": 4
+      }
     }
   },
   "order": [
