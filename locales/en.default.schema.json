@@ -73,6 +73,11 @@
       "name": "Contact form",
       "info": "Contact information panel"
     },
+    "business_form": {
+      "name": "Business account form",
+      "pitch": "Pitch panel",
+      "feature": "Feature"
+    },
     "footer": {
       "policy_links": "Policy links"
     }

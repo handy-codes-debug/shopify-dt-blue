@@ -156,6 +156,32 @@
     "order_id_placeholder": "Enter your Order ID if you have one",
     "message_placeholder": "Enter your message"
   },
+  "business": {
+    "form_title": "Apply for a business account",
+    "company": "Company name",
+    "name": "Contact name",
+    "email": "Business email",
+    "phone": "Phone",
+    "type": "Business type",
+    "select": "Select…",
+    "type_retailer": "Retailer",
+    "type_reseller": "Reseller / VAR",
+    "type_integrator": "System integrator",
+    "type_education": "Education",
+    "type_government": "Government",
+    "type_corporate": "Corporate IT",
+    "type_other": "Other",
+    "tax_id": "Tax ID / resale certificate #",
+    "volume": "Estimated monthly volume",
+    "volume_1": "Under $1,000",
+    "volume_2": "$1,000 – $5,000",
+    "volume_3": "$5,000 – $25,000",
+    "volume_4": "$25,000+",
+    "message": "Anything else?",
+    "message_placeholder": "Tell us about your business and what you buy",
+    "submit": "Submit application",
+    "success": "Thanks — we've received your application and will review it within 1–2 business days."
+  },
   "footer": {
     "contact_us": "Contact us",
     "all_collections": "Browse all collections"

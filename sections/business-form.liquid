@@ -1,0 +1,351 @@
+{% comment %}
+  Business / wholesale account page: a B2B pitch on the left and an
+  application form on the right. Assign to a page via the "business" template.
+{% endcomment %}
+
+{% liquid
+  assign pitch_heading = section.settings.pitch_heading | default: 'Business accounts'
+%}
+
+<div class="section-pad">
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <header class="bacct__head">
+      {%- if section.settings.heading != blank -%}<h1>{{ section.settings.heading }}</h1>{%- endif -%}
+      {%- if section.settings.subheading != blank -%}<p>{{ section.settings.subheading }}</p>{%- endif -%}
+    </header>
+  {%- endif -%}
+
+  <div class="bacct">
+    <aside class="bacct__pitch">
+      <h2 class="bacct__title bacct__title--light">{{ pitch_heading }}</h2>
+      {%- if section.settings.pitch_text != blank -%}
+        <p class="bacct__lead">{{ section.settings.pitch_text }}</p>
+      {%- endif -%}
+
+      {%- assign feature_count = 0 -%}
+      {%- for block in section.blocks -%}{%- if block.type == 'feature' -%}{%- assign feature_count = feature_count | plus: 1 -%}{%- endif -%}{%- endfor -%}
+      {%- if feature_count > 0 -%}
+        <ul class="bacct__features">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature' -%}
+              <li {{ block.shopify_attributes }}>
+                <span class="bacct__feature-title">{{ block.settings.title }}</span>
+                {%- if block.settings.text != blank -%}<span class="bacct__feature-text">{{ block.settings.text }}</span>{%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.pitch_note != blank -%}
+        <p class="bacct__note">{{ section.settings.pitch_note }}</p>
+      {%- endif -%}
+    </aside>
+
+    <div class="bacct__form">
+      <h2 class="bacct__title">{{ 'business.form_title' | t }}</h2>
+
+      {%- form 'contact', class: 'bform' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="bform__ok" role="status">{{ 'business.success' | t }}</p>
+        {%- endif -%}
+        {%- if form.errors -%}
+          <div class="bform__errors">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+
+        <label class="bform__field">
+          <span>{{ 'business.company' | t }} <sup class="bform__req">*</sup></span>
+          <input type="text" name="contact[Company]" autocomplete="organization" required>
+        </label>
+
+        <div class="bform__row">
+          <label class="bform__field">
+            <span>{{ 'business.name' | t }} <sup class="bform__req">*</sup></span>
+            <input type="text" name="contact[name]" value="{{ form.name }}" autocomplete="name" required>
+          </label>
+          <label class="bform__field">
+            <span>{{ 'business.email' | t }} <sup class="bform__req">*</sup></span>
+            <input type="email" name="contact[email]" value="{{ form.email }}" autocomplete="email" required>
+          </label>
+        </div>
+
+        <div class="bform__row">
+          <label class="bform__field">
+            <span>{{ 'business.phone' | t }} <sup class="bform__req">*</sup></span>
+            <input type="tel" name="contact[phone]" value="{{ form.phone }}" autocomplete="tel" required>
+          </label>
+          <label class="bform__field">
+            <span>{{ 'business.type' | t }}</span>
+            <select name="contact[Business type]">
+              <option value="">{{ 'business.select' | t }}</option>
+              <option>{{ 'business.type_retailer' | t }}</option>
+              <option>{{ 'business.type_reseller' | t }}</option>
+              <option>{{ 'business.type_integrator' | t }}</option>
+              <option>{{ 'business.type_education' | t }}</option>
+              <option>{{ 'business.type_government' | t }}</option>
+              <option>{{ 'business.type_corporate' | t }}</option>
+              <option>{{ 'business.type_other' | t }}</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="bform__row">
+          <label class="bform__field">
+            <span>{{ 'business.tax_id' | t }}</span>
+            <input type="text" name="contact[Tax or resale ID]">
+          </label>
+          <label class="bform__field">
+            <span>{{ 'business.volume' | t }}</span>
+            <select name="contact[Estimated monthly volume]">
+              <option value="">{{ 'business.select' | t }}</option>
+              <option>{{ 'business.volume_1' | t }}</option>
+              <option>{{ 'business.volume_2' | t }}</option>
+              <option>{{ 'business.volume_3' | t }}</option>
+              <option>{{ 'business.volume_4' | t }}</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="bform__field">
+          <span>{{ 'business.message' | t }}</span>
+          <textarea name="contact[body]" rows="4" placeholder="{{ 'business.message_placeholder' | t }}"></textarea>
+        </label>
+
+        <div class="bform__actions">
+          <button type="submit" class="btn btn--dark">{{ 'business.submit' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .bacct__head {
+    max-width: 640px;
+    margin: 0 auto 24px;
+    text-align: center;
+  }
+  .bacct__head h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  }
+  .bacct__head p {
+    margin: 0;
+    color: var(--color-foreground-soft);
+  }
+  .bacct {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    max-width: 1040px;
+    margin-inline: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-radius-lg);
+    overflow: hidden;
+  }
+  .bacct__pitch {
+    padding: clamp(24px, 4vw, 44px);
+    background: var(--color-dark-surface);
+    color: #fff;
+  }
+  .bacct__form {
+    padding: clamp(24px, 4vw, 44px);
+  }
+  .bacct__title {
+    margin: 0 0 18px;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .bacct__title--light {
+    color: #fff;
+  }
+  .bacct__lead {
+    margin: 0 0 22px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .bacct__features {
+    list-style: none;
+    margin: 0 0 22px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .bacct__features li {
+    padding-left: 18px;
+    border-left: 2px solid var(--color-accent);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .bacct__feature-title {
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .bacct__feature-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+  }
+  .bacct__note {
+    margin: 0;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .bform {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .bform__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .bform__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-foreground-soft);
+  }
+  .bform__req {
+    color: var(--color-error);
+    font-size: 0.9em;
+  }
+  .bform__field input,
+  .bform__field select,
+  .bform__field textarea {
+    padding: 8px 2px;
+    border: 0;
+    border-bottom: 1.5px solid var(--color-border-strong);
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-foreground);
+    font: inherit;
+    font-weight: 400;
+  }
+  .bform__field select {
+    padding-left: 0;
+  }
+  .bform__field input::placeholder,
+  .bform__field textarea::placeholder {
+    color: var(--color-foreground-faint);
+  }
+  .bform__field input:focus,
+  .bform__field select:focus,
+  .bform__field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--color-accent);
+  }
+  .bform__field textarea {
+    resize: vertical;
+  }
+  .bform__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+  .bform__ok {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: var(--style-radius-sm);
+    background: var(--color-success-soft);
+    color: var(--color-success);
+    font-weight: 600;
+  }
+  .bform__errors {
+    color: var(--color-error);
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 800px) {
+    .bacct {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .bform__row {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.business_form.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.business_form.pitch"
+    },
+    {
+      "type": "text",
+      "id": "pitch_heading",
+      "label": "t:labels.heading",
+      "default": "Business accounts"
+    },
+    {
+      "type": "textarea",
+      "id": "pitch_text",
+      "label": "t:general.text",
+      "default": "Buy at scale for your store, IT department, or integration projects. A business account unlocks better pricing, terms, and a direct line to our team."
+    },
+    {
+      "type": "text",
+      "id": "pitch_note",
+      "label": "t:labels.disclaimer",
+      "default": "Approval usually takes 1–2 business days."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "t:sections.business_form.feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:labels.heading",
+          "default": "Volume pricing"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:general.text",
+          "default": "Tiered discounts that scale with order size."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "t:sections.business_form.name",
+      "blocks": [
+        { "type": "feature", "settings": { "title": "Volume pricing", "text": "Tiered discounts that scale with order size." } },
+        { "type": "feature", "settings": { "title": "Net terms", "text": "Net-30 invoicing for approved accounts." } },
+        { "type": "feature", "settings": { "title": "Dedicated rep", "text": "One point of contact for quotes and sourcing." } },
+        { "type": "feature", "settings": { "title": "Priority stock", "text": "Early access and reserved inventory on key lines." } }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
