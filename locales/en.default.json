@@ -157,7 +157,7 @@
     "message_placeholder": "Enter your message"
   },
   "business": {
-    "form_title": "Apply for a business account",
+    "form_title": "Request a quote",
     "company": "Company name",
     "name": "Contact name",
     "email": "Business email",
@@ -171,16 +171,15 @@
     "type_government": "Government",
     "type_corporate": "Corporate IT",
     "type_other": "Other",
-    "tax_id": "Tax ID / resale certificate #",
-    "volume": "Estimated monthly volume",
+    "volume": "Approximate order size",
     "volume_1": "Under $1,000",
     "volume_2": "$1,000 – $5,000",
     "volume_3": "$5,000 – $25,000",
     "volume_4": "$25,000+",
-    "message": "Anything else?",
-    "message_placeholder": "Tell us about your business and what you buy",
-    "submit": "Submit application",
-    "success": "Thanks — we've received your application and will review it within 1–2 business days."
+    "message": "Parts and quantities",
+    "message_placeholder": "List the products, part numbers and quantities you need a quote for",
+    "submit": "Request quote",
+    "success": "Thanks — we've received your request and will send a quote shortly, usually within one business day."
   },
   "footer": {
     "contact_us": "Contact us",

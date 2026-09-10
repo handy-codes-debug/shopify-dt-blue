@@ -1,10 +1,10 @@
 {% comment %}
-  Business / wholesale account page: a B2B pitch on the left and an
-  application form on the right. Assign to a page via the "business" template.
+  Business quote page: a B2B pitch on the left and a quote-request form on
+  the right. Assign to a page via the "business" template.
 {% endcomment %}
 
 {% liquid
-  assign pitch_heading = section.settings.pitch_heading | default: 'Business accounts'
+  assign pitch_heading = section.settings.pitch_heading | default: 'Business & bulk orders'
 %}
 
 <div class="section-pad">
@@ -89,26 +89,20 @@
           </label>
         </div>
 
-        <div class="bform__row">
-          <label class="bform__field">
-            <span>{{ 'business.tax_id' | t }}</span>
-            <input type="text" name="contact[Tax or resale ID]">
-          </label>
-          <label class="bform__field">
-            <span>{{ 'business.volume' | t }}</span>
-            <select name="contact[Estimated monthly volume]">
-              <option value="">{{ 'business.select' | t }}</option>
-              <option>{{ 'business.volume_1' | t }}</option>
-              <option>{{ 'business.volume_2' | t }}</option>
-              <option>{{ 'business.volume_3' | t }}</option>
-              <option>{{ 'business.volume_4' | t }}</option>
-            </select>
-          </label>
-        </div>
+        <label class="bform__field">
+          <span>{{ 'business.volume' | t }}</span>
+          <select name="contact[Approximate order size]">
+            <option value="">{{ 'business.select' | t }}</option>
+            <option>{{ 'business.volume_1' | t }}</option>
+            <option>{{ 'business.volume_2' | t }}</option>
+            <option>{{ 'business.volume_3' | t }}</option>
+            <option>{{ 'business.volume_4' | t }}</option>
+          </select>
+        </label>
 
         <label class="bform__field">
-          <span>{{ 'business.message' | t }}</span>
-          <textarea name="contact[body]" rows="4" placeholder="{{ 'business.message_placeholder' | t }}"></textarea>
+          <span>{{ 'business.message' | t }} <sup class="bform__req">*</sup></span>
+          <textarea name="contact[body]" rows="5" placeholder="{{ 'business.message_placeholder' | t }}" required></textarea>
         </label>
 
         <div class="bform__actions">
@@ -297,19 +291,19 @@
       "type": "text",
       "id": "pitch_heading",
       "label": "t:labels.heading",
-      "default": "Business accounts"
+      "default": "Business & bulk orders"
     },
     {
       "type": "textarea",
       "id": "pitch_text",
       "label": "t:general.text",
-      "default": "Buy at scale for your store, IT department, or integration projects. A business account unlocks better pricing, terms, and a direct line to our team."
+      "default": "Buying for a store, IT department, or integration project? Send us the parts and quantities and we'll come back with pricing and lead times."
     },
     {
       "type": "text",
       "id": "pitch_note",
       "label": "t:labels.disclaimer",
-      "default": "Approval usually takes 1–2 business days."
+      "default": "Most quotes go out within one business day."
     }
   ],
   "blocks": [
@@ -338,9 +332,9 @@
       "name": "t:sections.business_form.name",
       "blocks": [
         { "type": "feature", "settings": { "title": "Volume pricing", "text": "Tiered discounts that scale with order size." } },
-        { "type": "feature", "settings": { "title": "Net terms", "text": "Net-30 invoicing for approved accounts." } },
+        { "type": "feature", "settings": { "title": "Fast turnaround", "text": "Quotes and lead times, usually within a business day." } },
         { "type": "feature", "settings": { "title": "Dedicated rep", "text": "One point of contact for quotes and sourcing." } },
-        { "type": "feature", "settings": { "title": "Priority stock", "text": "Early access and reserved inventory on key lines." } }
+        { "type": "feature", "settings": { "title": "Net terms available", "text": "Net-30 invoicing for approved accounts." } }
       ]
     }
   ],
