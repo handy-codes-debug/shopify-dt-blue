@@ -142,12 +142,19 @@
     "title": "Collections"
   },
   "contact": {
-    "name": "Name",
+    "form_title": "Send us a message",
+    "name": "Full name",
     "email": "Email",
-    "phone": "Phone (optional)",
+    "phone": "Phone",
+    "order_id": "Order ID",
     "message": "Message",
     "submit": "Send message",
-    "success": "Thanks — your message has been sent. We'll be in touch soon."
+    "success": "Thanks — your message has been sent. We'll be in touch soon.",
+    "name_placeholder": "Enter your name",
+    "email_placeholder": "Enter your email",
+    "phone_placeholder": "Enter your phone number",
+    "order_id_placeholder": "Enter your Order ID if you have one",
+    "message_placeholder": "Enter your message"
   },
   "footer": {
     "contact_us": "Contact us",

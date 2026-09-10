@@ -70,7 +70,8 @@
       "name": "Product reviews"
     },
     "contact_form": {
-      "name": "Contact form"
+      "name": "Contact form",
+      "info": "Contact information panel"
     },
     "footer": {
       "policy_links": "Policy links"
@@ -81,6 +82,7 @@
     "accent_contrast": "Accent contrast",
     "accent_font": "Accent (monospace)",
     "accent_soft": "Accent (soft)",
+    "address": "Address",
     "alignment": "Alignment",
     "attribute_label": "Attribute tab label",
     "background": "Background",
@@ -101,6 +103,7 @@
     "enable_dark_mode": "Enable dark mode",
     "image_ratio": "Main image shape",
     "disclaimer": "Disclaimer",
+    "email": "Email",
     "error": "Error",
     "error_soft": "Error (soft)",
     "eyebrow": "Eyebrow",
@@ -112,6 +115,7 @@
     "grid_item_width": "Grid item width",
     "heading": "Heading",
     "heading_font": "Headings",
+    "hours": "Hours",
     "icon": "Icon",
     "input_corner_radius": "Input corner radius",
     "layout_direction": "Layout direction",
@@ -127,6 +131,7 @@
     "newsletter_enabled": "Show newsletter signup",
     "overlay_opacity": "Image overlay darkness",
     "padding": "Padding",
+    "phone": "Phone",
     "page_margin": "Page margin",
     "page_width": "Page width",
     "products_per_page": "Products per page",
@@ -134,6 +139,7 @@
     "recommendation_intent": "Recommendation type",
     "reviews_embed": "Review app embed code",
     "show_description_tab": "Show description tab",
+    "show_order_id": "Show Order ID field",
     "show_payment_icons": "Show payment icons",
     "show_search": "Show search bar",
     "show_sort": "Show sort dropdown",
@@ -157,6 +163,7 @@
   },
   "info": {
     "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
+    "contact_info_fallback": "Leave any field blank to fall back to your store's address / email / phone.",
     "category_icon": "\"Auto\" picks an icon from the collection title.",
     "logo": "Shown in light mode.",
     "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",
