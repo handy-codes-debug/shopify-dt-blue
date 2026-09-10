@@ -176,8 +176,8 @@
     "volume_2": "$1,000 – $5,000",
     "volume_3": "$5,000 – $25,000",
     "volume_4": "$25,000+",
-    "message": "Parts and quantities",
-    "message_placeholder": "List the products, part numbers and quantities you need a quote for",
+    "message": "Additional message",
+    "message_placeholder": "Anything else we should know? (optional)",
     "submit": "Request quote",
     "success": "Thanks — we've received your request and will send a quote shortly, usually within one business day."
   },
