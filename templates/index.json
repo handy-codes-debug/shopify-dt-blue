@@ -20,6 +20,7 @@
         "button_label_2": "Browse all products",
         "button_link_2": "shopify://collections/all",
         "featured_product": "gigabyte-geforce-rtx-5070-ti-16gb-gddr6x-gaming-desktop-graphics-card",
+        "featured_product_image": "shopify://shop_images/product_display_main.png",
         "background_image": "shopify://shop_images/shop_banner_background.png",
         "overlay_opacity": 45
       }
