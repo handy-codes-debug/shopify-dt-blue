@@ -6,6 +6,7 @@
 
 {% liquid
   assign product = section.settings.featured_product
+  assign card_image = section.settings.featured_product_image | default: product.featured_image
   assign bg_image = section.settings.background_image
   assign overlay = section.settings.overlay_opacity | default: 45 | divided_by: 100.0
 %}
@@ -61,8 +62,8 @@
     {%- if product != blank -%}
       <a class="hero__card" href="{{ product.url }}">
         <div class="hero__card-media">
-          {%- if product.featured_image -%}
-            {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '300,450,600,700', sizes: '(max-width: 900px) 90vw, 380px', alt: product.title }}
+          {%- if card_image -%}
+            {{ card_image | image_url: width: 700 | image_tag: loading: 'lazy', widths: '300,450,600,700', sizes: '(max-width: 900px) 90vw, 380px', alt: product.title }}
           {%- endif -%}
         </div>
         <div class="hero__card-name">{{ product.title }}</div>
@@ -245,6 +246,12 @@
       "type": "product",
       "id": "featured_product",
       "label": "t:labels.featured_product"
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_product_image",
+      "label": "t:labels.featured_product_image",
+      "info": "t:info.featured_product_image"
     },
     {
       "type": "header",
