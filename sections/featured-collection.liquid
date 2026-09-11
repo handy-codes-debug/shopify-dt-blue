@@ -25,8 +25,6 @@
           {% render 'product-card', product: product %}
         {%- endfor -%}
       </div>
-    {%- else -%}
-      <p class="fc-empty">{{ 'sections.featured_collection.empty' | t }}</p>
     {%- endif -%}
   </div>
 </div>
@@ -36,9 +34,6 @@
     display: grid;
     grid-template-columns: repeat(var(--fc-cols, 4), 1fr);
     gap: 18px;
-  }
-  .fc-empty {
-    color: var(--color-foreground-soft);
   }
 
   @media (max-width: 1000px) {
