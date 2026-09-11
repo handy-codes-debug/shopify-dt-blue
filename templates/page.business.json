@@ -11,8 +11,16 @@
   "sections": {
     "main": {
       "type": "business-form",
-      "settings": {}
+      "settings": {
+        "heading": "",
+        "subheading": "",
+        "pitch_heading": "Business & bulk orders",
+        "pitch_text": "Buying for a store, IT department, or integration project? Send us the parts and quantities and we'll come back with pricing and lead times.",
+        "pitch_note": "Most quotes go out within one business day."
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
