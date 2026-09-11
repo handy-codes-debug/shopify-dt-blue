@@ -46,6 +46,8 @@
       ],
       "settings": {
         "tagline": "Everything for your next build, shipped fast from regional warehouses.",
+        "browse_link_label": "Browse all brands",
+        "browse_link_url": "shopify://pages/brands",
         "disclaimer": "Taxes calculated at checkout.",
         "show_payment_icons": true,
         "newsletter_enabled": true,
