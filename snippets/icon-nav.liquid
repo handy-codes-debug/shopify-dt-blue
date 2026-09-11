@@ -1,0 +1,27 @@
+{% doc %}
+  Curated icon lookup for header menu items — intentionally separate from
+  icon-category.liquid's auto-guess (which drives the homepage category
+  tiles), so header menu icons only appear where explicitly matched here.
+  Add new phrase -> icon matches as they're requested; nothing is guessed.
+
+  @param {string} hint - The menu item's title.
+{% enddoc %}
+
+{%- liquid
+  assign h = hint | downcase
+  assign key = ''
+
+  if h contains 'build your own'
+    assign key = 'components'
+  elsif h contains 'ready to use'
+    assign key = 'desktop'
+  elsif h contains 'rebate'
+    assign key = 'tag'
+  elsif h contains 'clearance'
+    assign key = 'clearance'
+  endif
+-%}
+
+{%- if key != '' -%}
+  {% render 'icon-category', name: key %}
+{%- endif -%}

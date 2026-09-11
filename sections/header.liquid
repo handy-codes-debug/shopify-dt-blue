@@ -110,7 +110,7 @@
               {% if link.current or link.child_active %}aria-current="page"{% endif %}
             >
               {%- if section.settings.show_nav_icons -%}
-                <span class="site-nav__icon">{% render 'icon-category', name: 'auto', hint: link.title, hide_if_unmatched: true %}</span>
+                <span class="site-nav__icon">{% render 'icon-nav', hint: link.title %}</span>
               {%- endif -%}
               {{ link.title }}
             </a>

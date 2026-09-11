@@ -171,7 +171,7 @@
     "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
     "contact_info_fallback": "Leave any field blank to fall back to your store's address / email / phone.",
     "category_icon": "\"Auto\" picks an icon from the collection title.",
-    "show_nav_icons": "Guesses a small icon for each top-level menu item from its title (e.g. \"Networking\", \"Peripherals\"). Items with no match show no icon.",
+    "show_nav_icons": "Shows a small icon next to menu items with a recognized title (currently: Build Your Own, Ready To Use, We Have Rebate, Clearance). Other items show no icon; ask your developer to add more matches.",
     "logo": "Shown in light mode.",
     "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",
     "enable_dark_mode": "Adds a light / dark / system switch in the header and a built-in dark palette.",

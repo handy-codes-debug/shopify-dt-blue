@@ -110,6 +110,8 @@
         <path d="M4 12.5V5a1 1 0 0 1 1-1h7.5L20 11.5a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1-2 0z"/><circle cx="8.5" cy="8.5" r="1.2"/>
       {%- when 'box' -%}
         <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 21V12M12 12l8-4.5M12 12L4 7.5"/>
+      {%- when 'clearance' -%}
+        <path d="M4 11h16v9H4z"/><path d="M4 11l3-6h10l3 6"/><path d="M9 5 7.5 11M15 5l1.5 6"/><path d="M12 11v9"/>
       {%- else -%}
         <rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>
     {%- endcase -%}
