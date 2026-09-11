@@ -382,7 +382,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 2px;
+    align-items: stretch;
+    gap: 8px 36px;
     margin: 0;
     list-style: none;
   }
@@ -397,13 +398,12 @@
   .site-nav__link {
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 14px 14px;
-    white-space: nowrap;
+    gap: 12px;
+    padding: 18px 2px;
     color: var(--color-foreground-soft);
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-transform: uppercase;
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.2;
     border-bottom: 3px solid transparent;
   }
   .site-nav__icon {
@@ -411,8 +411,9 @@
     flex-shrink: 0;
   }
   .site-nav__icon .cat-icon-svg {
-    width: 15px;
-    height: 15px;
+    width: 27px;
+    height: 27px;
+    stroke-width: 1.5;
   }
   .site-nav__item.has-menu .site-nav__link {
     padding-right: 4px;
