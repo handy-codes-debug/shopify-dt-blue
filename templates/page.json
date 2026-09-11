@@ -12,9 +12,57 @@
     "main": {
       "type": "page",
       "settings": {}
+    },
+    "business_form_FhCLpY": {
+      "type": "business-form",
+      "blocks": {
+        "feature_mmzKpj": {
+          "type": "feature",
+          "settings": {
+            "title": "Volume pricing",
+            "text": "Tiered discounts that scale with order size."
+          }
+        },
+        "feature_zHLQJB": {
+          "type": "feature",
+          "settings": {
+            "title": "Fast turnaround",
+            "text": "Quotes and lead times, usually within a business day."
+          }
+        },
+        "feature_VeRLw9": {
+          "type": "feature",
+          "settings": {
+            "title": "Dedicated rep",
+            "text": "One point of contact for quotes and sourcing."
+          }
+        },
+        "feature_HeJdBG": {
+          "type": "feature",
+          "settings": {
+            "title": "Net terms available",
+            "text": "Net-30 invoicing for approved accounts."
+          }
+        }
+      },
+      "block_order": [
+        "feature_mmzKpj",
+        "feature_zHLQJB",
+        "feature_VeRLw9",
+        "feature_HeJdBG"
+      ],
+      "name": "t:sections.business_form.name",
+      "settings": {
+        "heading": "",
+        "subheading": "",
+        "pitch_heading": "Business & bulk orders",
+        "pitch_text": "Buying for a store, IT department, or integration project? Send us the parts and quantities and we'll come back with pricing and lead times.",
+        "pitch_note": "Most quotes go out within one business day."
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "business_form_FhCLpY"
   ]
 }
