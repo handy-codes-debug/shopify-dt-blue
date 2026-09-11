@@ -44,7 +44,9 @@
         {%- if section.settings.tagline != blank -%}
           <p>{{ section.settings.tagline }}</p>
         {%- endif -%}
-        <a class="footer-brand__link" href="{{ routes.collections_url }}">{{ 'footer.all_collections' | t }} &rarr;</a>
+        {%- if section.settings.browse_link_label != blank -%}
+          <a class="footer-brand__link" href="{{ section.settings.browse_link_url | default: routes.collections_url }}">{{ section.settings.browse_link_label }} &rarr;</a>
+        {%- endif -%}
       </div>
 
       {%- for block in section.blocks -%}
@@ -256,6 +258,19 @@
       "type": "text",
       "id": "tagline",
       "label": "t:labels.tagline"
+    },
+    {
+      "type": "text",
+      "id": "browse_link_label",
+      "label": "t:labels.browse_link_label",
+      "info": "t:info.browse_link_label",
+      "default": "Browse all collections"
+    },
+    {
+      "type": "url",
+      "id": "browse_link_url",
+      "label": "t:labels.browse_link_url",
+      "info": "t:info.browse_link_url"
     },
     {
       "type": "text",

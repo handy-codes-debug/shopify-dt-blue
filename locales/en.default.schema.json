@@ -93,6 +93,8 @@
     "background": "Background",
     "background_image": "Background image",
     "border": "Border",
+    "browse_link_label": "\"Browse all\" link label",
+    "browse_link_url": "\"Browse all\" link",
     "border_strong": "Border (strong)",
     "button_label_primary": "Primary button label",
     "button_label_secondary": "Secondary button label",
@@ -169,6 +171,8 @@
     "warranty_page": "Warranty page"
   },
   "info": {
+    "browse_link_label": "Shown below the tagline in the footer. Leave empty to hide the link entirely.",
+    "browse_link_url": "Defaults to your all-collections page (/collections) when left empty.",
     "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
     "contact_info_fallback": "Leave any field blank to fall back to your store's address / email / phone.",
     "category_icon": "\"Auto\" picks an icon from the collection title.",

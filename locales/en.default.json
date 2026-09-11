@@ -182,8 +182,7 @@
     "success": "Thanks — we've received your request and will send a quote shortly, usually within one business day."
   },
   "footer": {
-    "contact_us": "Contact us",
-    "all_collections": "Browse all collections"
+    "contact_us": "Contact us"
   },
   "header": {
     "shop_all": "Shop all {{ title }}"
