@@ -181,6 +181,20 @@
         "background_image": "shopify://shop_images/pc_build_banner_background.png",
         "overlay_opacity": 45
       }
+    },
+    "featured_collection_x7NzRN": {
+      "type": "featured-collection",
+      "name": "t:sections.featured_collection.name",
+      "settings": {
+        "eyebrow": "Ending Soon",
+        "heading": "Shopping Deals",
+        "collection": "on-sale",
+        "products_to_show": 4,
+        "columns": 4,
+        "link_label": "See all",
+        "link_url": "",
+        "surface_alt": true
+      }
     }
   },
   "order": [
@@ -188,6 +202,7 @@
     "trust_bar",
     "category_grid",
     "featured_collection",
+    "featured_collection_x7NzRN",
     "promo_banner"
   ]
 }
