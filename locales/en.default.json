@@ -187,11 +187,6 @@
   "header": {
     "shop_all": "Shop all {{ title }}"
   },
-  "tracker": {
-    "not_configured": "Live tracking isn't connected yet — check your shipping confirmation email for a tracking link.",
-    "help": "You'll also find your tracking link in your shipping confirmation email.",
-    "help_account_html": " Or <a href=\"{{ url }}\">sign in</a> to view your orders."
-  },
   "newsletter": {
     "email": "Email address",
     "placeholder": "Email address",

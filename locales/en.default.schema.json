@@ -80,9 +80,6 @@
     },
     "footer": {
       "policy_links": "Policy links"
-    },
-    "order_tracker": {
-      "name": "Order tracker"
     }
   },
   "labels": {
@@ -143,7 +140,6 @@
     "overlay_opacity": "Image overlay darkness",
     "padding": "Padding",
     "phone": "Phone",
-    "placeholder_text": "Input placeholder",
     "page_margin": "Page margin",
     "page_width": "Page width",
     "products_per_page": "Products per page",
@@ -169,7 +165,6 @@
     "text_style": "Text style",
     "tile_label": "Tile label",
     "tinted_background": "Tinted background",
-    "tracking_url_template": "Tracking URL template",
     "utility_menu": "Utility bar menu",
     "warning": "Warning",
     "warning_soft": "Warning (soft)",
@@ -179,7 +174,6 @@
     "browse_link_label": "Shown below the tagline in the footer. Leave empty to hide the link entirely.",
     "browse_link_url": "Defaults to your all-collections page (/collections) when left empty.",
     "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
-    "tracking_url_template": "Where the tracking number should go, using {number} as a placeholder, e.g. https://t.17track.net/en#nums={number}. Leave empty to show a fallback message instead.",
     "contact_info_fallback": "Leave any field blank to fall back to your store's address / email / phone.",
     "category_icon": "\"Auto\" picks an icon from the collection title.",
     "show_nav_icons": "Shows a small icon next to menu items with a recognized title (currently: Build Your Own, Ready To Use, We Have Rebate, Clearance). Other items show no icon; ask your developer to add more matches.",
