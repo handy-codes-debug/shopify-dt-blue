@@ -17,19 +17,20 @@
         "col-shop": {
           "type": "menu_column",
           "settings": {
-            "heading": "Shop",
-            "menu": ""
+            "heading": "Policies",
+            "menu": "policies"
           }
         },
         "col-support": {
           "type": "menu_column",
           "settings": {
             "heading": "Support",
-            "menu": ""
+            "menu": "support"
           }
         },
         "policies": {
           "type": "policy_links",
+          "disabled": true,
           "settings": {
             "heading": "Policies",
             "show_store_policies": true,
