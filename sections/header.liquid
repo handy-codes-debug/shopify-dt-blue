@@ -108,7 +108,12 @@
               href="{{ link.url }}"
               class="site-nav__link{% if link.current or link.child_active %} is-current{% endif %}"
               {% if link.current or link.child_active %}aria-current="page"{% endif %}
-            >{{ link.title }}</a>
+            >
+              {%- if section.settings.show_nav_icons -%}
+                <span class="site-nav__icon">{% render 'icon-category', name: 'auto', hint: link.title, hide_if_unmatched: true %}</span>
+              {%- endif -%}
+              {{ link.title }}
+            </a>
 
             {%- if has_children -%}
               <button type="button" class="site-nav__toggle" aria-expanded="false" aria-label="{{ link.title }}">
@@ -390,6 +395,9 @@
     position: static;
   }
   .site-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     padding: 14px 14px;
     white-space: nowrap;
     color: var(--color-foreground-soft);
@@ -397,6 +405,14 @@
     font-weight: 700;
     text-transform: uppercase;
     border-bottom: 3px solid transparent;
+  }
+  .site-nav__icon {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .site-nav__icon .cat-icon-svg {
+    width: 15px;
+    height: 15px;
   }
   .site-nav__item.has-menu .site-nav__link {
     padding-right: 4px;
@@ -642,6 +658,13 @@
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_nav_icons",
+      "label": "t:labels.show_nav_icons",
+      "info": "t:info.show_nav_icons",
+      "default": true
     },
     {
       "type": "link_list",
