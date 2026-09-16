@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "rolling_banner": {
+      "type": "rolling-banner",
+      "settings": {}
+    },
     "hero": {
       "type": "hero",
       "settings": {
@@ -199,6 +203,7 @@
     }
   },
   "order": [
+    "rolling_banner",
     "hero",
     "trust_bar",
     "category_grid",

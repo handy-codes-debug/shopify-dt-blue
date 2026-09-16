@@ -1,0 +1,143 @@
+{% comment %}
+  Homepage rolling banner: an auto-scrolling strip echoing the title + text
+  of each block from the Trust bar section (id "trust_bar"), so the wording
+  only needs to be maintained in one place. Renders nothing if no trust bar
+  section is on the page, or it has no items.
+{% endcomment %}
+
+{% # theme-check-disable UndefinedObject %}
+{% liquid
+  assign trust = sections['trust_bar']
+  assign items = trust.blocks
+  assign speed = section.settings.speed | default: 28
+%}
+{% # theme-check-enable UndefinedObject %}
+
+{%- if items.size > 0 -%}
+  <div class="rolling-banner full-width rolling-banner--{{ section.settings.style }}" aria-label="{{ 'sections.rolling_banner.label' | t }}">
+    <div class="rolling-banner__track" style="--rb-speed: {{ speed }}s">
+      {%- for i in (1..2) -%}
+        <div class="rolling-banner__set"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+          {%- for block in items -%}
+            {%- if block.type == 'item' -%}
+              <span class="rolling-banner__item">
+                <strong>{{ block.settings.title }}</strong>
+                {%- if block.settings.text != blank -%}
+                  <span class="rolling-banner__sep" aria-hidden="true">&mdash;</span>{{ block.settings.text }}
+                {%- endif -%}
+              </span>
+              <span class="rolling-banner__dot" aria-hidden="true">&bull;</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .rolling-banner {
+    overflow: hidden;
+  }
+  .rolling-banner--accent {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+  .rolling-banner--dark {
+    background: var(--color-dark-surface);
+    color: #fff;
+  }
+  .rolling-banner--surface_alt {
+    background: var(--color-surface-alt);
+    color: var(--color-foreground);
+  }
+  .rolling-banner__track {
+    display: flex;
+    width: max-content;
+    animation: rolling-banner-scroll var(--rb-speed, 28s) linear infinite;
+  }
+  .rolling-banner:hover .rolling-banner__track {
+    animation-play-state: paused;
+  }
+  .rolling-banner__set {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+  .rolling-banner__item {
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    padding-block: 11px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .rolling-banner__item strong {
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .rolling-banner__sep {
+    margin-right: 6px;
+    opacity: 0.75;
+  }
+  .rolling-banner__dot {
+    margin: 0 22px;
+    opacity: 0.5;
+  }
+
+  @keyframes rolling-banner-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rolling-banner__track {
+      animation: none;
+    }
+    .rolling-banner {
+      overflow-x: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.rolling_banner.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:labels.background",
+      "options": [
+        { "value": "accent", "label": "t:options.rolling_banner_style.accent" },
+        { "value": "dark", "label": "t:options.rolling_banner_style.dark" },
+        { "value": "surface_alt", "label": "t:options.rolling_banner_style.surface_alt" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "s",
+      "label": "t:labels.rolling_banner_speed",
+      "info": "t:info.rolling_banner_speed",
+      "default": 28
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "presets": [
+    {
+      "name": "t:sections.rolling_banner.name"
+    }
+  ]
+}
+{% endschema %}
