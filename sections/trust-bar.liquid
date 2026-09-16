@@ -2,18 +2,25 @@
   A row of short trust / service promises, each with a small label tile.
 {% endcomment %}
 
-{%- if section.blocks.size > 0 -%}
+{%- liquid
+  assign trust_count = section.blocks.size
+  assign trust_cycle = trust_count | times: 2.4
+-%}
+
+{%- if trust_count > 0 -%}
   <div class="trust-bar full-width surface-alt">
-    <div class="page-container trust-bar__row">
+    <div class="page-container trust-bar__row" style="--trust-cycle: {{ trust_cycle }}s">
       {%- for block in section.blocks -%}
         {%- if block.settings.link != blank -%}
           {%- assign trust_tag = 'a' -%}
         {%- else -%}
           {%- assign trust_tag = 'div' -%}
         {%- endif -%}
+        {%- assign trust_delay = forloop.index0 | times: 1.0 | times: trust_cycle | divided_by: trust_count -%}
         <{{ trust_tag }}
           class="trust-item{% if block.settings.link != blank %} trust-item--link{% endif %}"
           {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}
+          style="--trust-delay: {{ trust_delay }}s"
           {{ block.shopify_attributes }}
         >
           {%- if block.settings.abbr != blank -%}
@@ -57,6 +64,47 @@
   }
   .trust-item--link:hover .trust-item__title {
     color: var(--color-accent);
+  }
+  .trust-item__tile,
+  .trust-item__title {
+    animation-name: trust-spotlight-tile;
+    animation-duration: var(--trust-cycle, 9.6s);
+    animation-delay: var(--trust-delay, 0s);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  .trust-item__title {
+    animation-name: trust-spotlight-title;
+  }
+  .trust-item:hover .trust-item__tile,
+  .trust-item:hover .trust-item__title,
+  .trust-item:focus-within .trust-item__tile,
+  .trust-item:focus-within .trust-item__title {
+    animation: none;
+  }
+  @keyframes trust-spotlight-tile {
+    0%, 8% {
+      background: var(--color-accent);
+      color: var(--color-accent-contrast);
+    }
+    20%, 100% {
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+  }
+  @keyframes trust-spotlight-title {
+    0%, 8% {
+      color: var(--color-accent);
+    }
+    20%, 100% {
+      color: inherit;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trust-item__tile,
+    .trust-item__title {
+      animation: none;
+    }
   }
   .trust-item__tile {
     flex-shrink: 0;
