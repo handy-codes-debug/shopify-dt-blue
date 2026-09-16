@@ -112,7 +112,6 @@
               <button
                 type="button"
                 class="site-nav__link site-nav__toggle{% if link.current or link.child_active %} is-current{% endif %}"
-                aria-expanded="false"
                 aria-haspopup="true"
               >
                 {%- if section.settings.show_nav_icons -%}
@@ -174,38 +173,6 @@
     </nav>
   {%- endif -%}
 </div>
-
-<script>
-  (function () {
-    var nav = document.querySelector('.site-nav');
-    if (!nav) return;
-    var toggles = nav.querySelectorAll('.site-nav__toggle');
-
-    function closeAll(except) {
-      toggles.forEach(function (t) {
-        if (t === except) return;
-        t.setAttribute('aria-expanded', 'false');
-        t.closest('.site-nav__item').classList.remove('is-open');
-      });
-    }
-
-    toggles.forEach(function (toggle) {
-      toggle.addEventListener('click', function () {
-        var item = toggle.closest('.site-nav__item');
-        var open = item.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        closeAll(open ? toggle : null);
-      });
-    });
-
-    document.addEventListener('click', function (event) {
-      if (!nav.contains(event.target)) closeAll(null);
-    });
-    nav.addEventListener('keyup', function (event) {
-      if (event.key === 'Escape') closeAll(null);
-    });
-  })();
-</script>
 
 {%- if settings.enable_dark_mode -%}
   <script>
@@ -432,7 +399,8 @@
   }
   .site-nav__link:hover,
   .site-nav__link.is-current,
-  .site-nav__item.is-open .site-nav__link {
+  .site-nav__item:hover .site-nav__link,
+  .site-nav__item:focus-within .site-nav__link {
     color: var(--color-foreground);
     border-bottom-color: var(--color-accent);
   }
@@ -450,11 +418,9 @@
     font-size: 0.66rem;
     transition: transform 0.15s ease, color 0.15s ease;
   }
-  .site-nav__toggle:hover .site-nav__caret,
-  .site-nav__item.is-open .site-nav__caret {
+  .site-nav__item:hover .site-nav__caret,
+  .site-nav__item:focus-within .site-nav__caret {
     color: var(--color-foreground);
-  }
-  .site-nav__item.is-open .site-nav__caret {
     transform: rotate(180deg);
   }
 
@@ -475,8 +441,7 @@
     box-shadow: var(--style-shadow-lg);
   }
   .site-nav__item:hover > .site-nav__dropdown,
-  .site-nav__item:focus-within > .site-nav__dropdown,
-  .site-nav__item.is-open > .site-nav__dropdown {
+  .site-nav__item:focus-within > .site-nav__dropdown {
     display: block;
   }
   .site-nav__sublink {
@@ -506,8 +471,7 @@
     box-shadow: var(--style-shadow-lg);
   }
   .site-nav__item--mega:hover > .site-nav__mega,
-  .site-nav__item--mega:focus-within > .site-nav__mega,
-  .site-nav__item--mega.is-open > .site-nav__mega {
+  .site-nav__item--mega:focus-within > .site-nav__mega {
     display: block;
   }
   .site-nav__mega-inner {
@@ -615,22 +579,6 @@
       border-radius: 0;
       background: none;
       box-shadow: none;
-    }
-    .site-nav__item.is-open > .site-nav__dropdown,
-    .site-nav__item--mega.is-open > .site-nav__mega {
-      display: block;
-    }
-    .site-nav__item:hover > .site-nav__dropdown,
-    .site-nav__item:focus-within > .site-nav__dropdown,
-    .site-nav__item--mega:hover > .site-nav__mega,
-    .site-nav__item--mega:focus-within > .site-nav__mega {
-      display: none;
-    }
-    .site-nav__item.is-open:hover > .site-nav__dropdown,
-    .site-nav__item.is-open:focus-within > .site-nav__dropdown,
-    .site-nav__item--mega.is-open:hover > .site-nav__mega,
-    .site-nav__item--mega.is-open:focus-within > .site-nav__mega {
-      display: block;
     }
     .site-nav__mega-inner {
       padding: 0;
