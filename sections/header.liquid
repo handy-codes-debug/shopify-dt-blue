@@ -104,22 +104,37 @@
             endif
           -%}
           <li class="site-nav__item{% if has_children %} has-menu{% endif %}{% if is_mega %} site-nav__item--mega{% endif %}">
-            <a
-              href="{{ link.url }}"
-              class="site-nav__link{% if link.current or link.child_active %} is-current{% endif %}"
-              {% if link.current or link.child_active %}aria-current="page"{% endif %}
-            >
-              {%- if section.settings.show_nav_icons -%}
-                <span class="site-nav__icon">{% render 'icon-nav', hint: link.title %}</span>
-              {%- endif -%}
-              {{ link.title }}
-            </a>
+            {%- if has_children -%}
+              {%- comment -%}
+                Top-level items with a dropdown/mega menu are a toggle only —
+                they don't navigate. Only leaf items (no children) are links.
+              {%- endcomment -%}
+              <button
+                type="button"
+                class="site-nav__link site-nav__toggle{% if link.current or link.child_active %} is-current{% endif %}"
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {%- if section.settings.show_nav_icons -%}
+                  <span class="site-nav__icon">{% render 'icon-nav', hint: link.title %}</span>
+                {%- endif -%}
+                {{ link.title }}
+                <span class="site-nav__caret" aria-hidden="true">&#9662;</span>
+              </button>
+            {%- else -%}
+              <a
+                href="{{ link.url }}"
+                class="site-nav__link{% if link.current %} is-current{% endif %}"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                {%- if section.settings.show_nav_icons -%}
+                  <span class="site-nav__icon">{% render 'icon-nav', hint: link.title %}</span>
+                {%- endif -%}
+                {{ link.title }}
+              </a>
+            {%- endif -%}
 
             {%- if has_children -%}
-              <button type="button" class="site-nav__toggle" aria-expanded="false" aria-label="{{ link.title }}">
-                <span aria-hidden="true">&#9662;</span>
-              </button>
-
               {%- if is_mega -%}
                 <div class="site-nav__mega">
                   <div class="page-container site-nav__mega-inner">
@@ -415,9 +430,6 @@
     height: 27px;
     stroke-width: 1.5;
   }
-  .site-nav__item.has-menu .site-nav__link {
-    padding-right: 4px;
-  }
   .site-nav__link:hover,
   .site-nav__link.is-current,
   .site-nav__item.is-open .site-nav__link {
@@ -425,26 +437,24 @@
     border-bottom-color: var(--color-accent);
   }
   .site-nav__toggle {
-    display: flex;
-    align-items: center;
     font-family: inherit;
-    padding: 0 10px 0 4px;
+    background: none;
     border: 0;
     border-bottom: 3px solid transparent;
-    background: none;
+    cursor: pointer;
+    text-align: left;
+  }
+  .site-nav__caret {
+    display: inline-block;
     color: var(--color-foreground-faint);
     font-size: 0.66rem;
-    cursor: pointer;
+    transition: transform 0.15s ease, color 0.15s ease;
   }
-  .site-nav__toggle:hover,
-  .site-nav__item.is-open .site-nav__toggle {
+  .site-nav__toggle:hover .site-nav__caret,
+  .site-nav__item.is-open .site-nav__caret {
     color: var(--color-foreground);
   }
-  .site-nav__toggle span {
-    display: inline-block;
-    transition: transform 0.15s ease;
-  }
-  .site-nav__item.is-open .site-nav__toggle span {
+  .site-nav__item.is-open .site-nav__caret {
     transform: rotate(180deg);
   }
 
