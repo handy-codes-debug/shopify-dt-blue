@@ -11,6 +11,25 @@
   "sections": {
     "rolling_banner": {
       "type": "rolling-banner",
+      "blocks": {
+        "r1": {
+          "type": "item",
+          "settings": { "title": "Shipping From CA", "text": "Tracked, 2–4 business days" }
+        },
+        "r2": {
+          "type": "item",
+          "settings": { "title": "Customer Service", "text": "Ready to help" }
+        },
+        "r3": {
+          "type": "item",
+          "settings": { "title": "30-day returns", "text": "No restocking fee" }
+        },
+        "r4": {
+          "type": "item",
+          "settings": { "title": "Business accounts", "text": "Net terms and volume pricing" }
+        }
+      },
+      "block_order": ["r1", "r2", "r3", "r4"],
       "settings": {}
     },
     "hero": {
