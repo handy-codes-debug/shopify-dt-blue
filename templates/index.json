@@ -69,7 +69,8 @@
         "button_link_2": "shopify://collections/all",
         "featured_product": "gigabyte-geforce-rtx-5070-ti-16gb-gddr6x-gaming-desktop-graphics-card",
         "featured_product_image": "shopify://shop_images/product_display_main.png",
-        "fallback_slogan": "Every build, compatibility-checked before it ships.",
+        "fallback_heading": "Build it right, every time.",
+        "fallback_subheading": "Compatibility-checked parts, real-time stock, and support from real PC builders.",
         "background_image": "shopify://shop_images/shop_banner_background.png",
         "overlay_opacity": 45
       }

@@ -9,9 +9,20 @@
   assign card_image = section.settings.featured_product_image | default: product.featured_image
   assign bg_image = section.settings.background_image
   assign overlay = section.settings.overlay_opacity | default: 45 | divided_by: 100.0
-  assign show_fallback = false
-  if product == blank and section.settings.fallback_slogan != blank
-    assign show_fallback = true
+
+  assign eyebrow = section.settings.eyebrow
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  if product == blank
+    if section.settings.fallback_eyebrow != blank
+      assign eyebrow = section.settings.fallback_eyebrow
+    endif
+    if section.settings.fallback_heading != blank
+      assign heading = section.settings.fallback_heading
+    endif
+    if section.settings.fallback_subheading != blank
+      assign subheading = section.settings.fallback_subheading
+    endif
   endif
 %}
 
@@ -33,18 +44,18 @@
     </div>
   {%- endif -%}
 
-  <div class="page-container hero__row{% if product == blank and show_fallback == false %} hero__row--solo{% endif %}">
+  <div class="page-container hero__row{% if product == blank %} hero__row--solo{% endif %}">
     <div class="hero__copy">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="eyebrow hero__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- if eyebrow != blank -%}
+        <span class="eyebrow hero__eyebrow">{{ eyebrow }}</span>
       {%- endif -%}
 
-      {%- if section.settings.heading != blank -%}
-        <h1 class="hero__title">{{ section.settings.heading }}</h1>
+      {%- if heading != blank -%}
+        <h1 class="hero__title">{{ heading }}</h1>
       {%- endif -%}
 
-      {%- if section.settings.subheading != blank -%}
-        <p class="hero__sub">{{ section.settings.subheading }}</p>
+      {%- if subheading != blank -%}
+        <p class="hero__sub">{{ subheading }}</p>
       {%- endif -%}
 
       {%- if section.settings.button_label_1 != blank or section.settings.button_label_2 != blank -%}
@@ -87,10 +98,6 @@
           {%- endif -%}
         </div>
       </a>
-    {%- elsif show_fallback -%}
-      <div class="hero__card hero__card--fallback">
-        <div class="hero__fallback-text">{{ section.settings.fallback_slogan }}</div>
-      </div>
     {%- endif -%}
   </div>
 </div>
@@ -165,21 +172,6 @@
     border-radius: var(--style-radius-lg);
     padding: 22px;
     box-shadow: var(--style-shadow-lg);
-  }
-  .hero__card--fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 220px;
-    text-align: center;
-    padding: 32px;
-  }
-  .hero__fallback-text {
-    font-family: 'Quantico', var(--font-heading--family);
-    font-weight: 700;
-    font-size: 1.35rem;
-    line-height: 1.3;
-    color: var(--color-foreground);
   }
   .hero__card-media {
     border-radius: var(--style-radius);
@@ -277,11 +269,26 @@
       "info": "t:info.featured_product_image"
     },
     {
+      "type": "header",
+      "content": "t:labels.fallback_content",
+      "info": "t:info.fallback_content"
+    },
+    {
       "type": "text",
-      "id": "fallback_slogan",
-      "label": "t:labels.fallback_slogan",
-      "info": "t:info.fallback_slogan",
-      "default": "Every build, compatibility-checked before it ships."
+      "id": "fallback_eyebrow",
+      "label": "t:labels.eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "fallback_heading",
+      "label": "t:labels.heading",
+      "default": "Build it right, every time."
+    },
+    {
+      "type": "textarea",
+      "id": "fallback_subheading",
+      "label": "t:labels.subheading",
+      "default": "Compatibility-checked parts, real-time stock, and support from real PC builders."
     },
     {
       "type": "header",
