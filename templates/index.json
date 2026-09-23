@@ -215,7 +215,7 @@
       "settings": {
         "eyebrow": "Best sellers",
         "heading": "Popular right now",
-        "collection": "best-selling-collection",
+        "collection": "hot-sale",
         "products_to_show": 4,
         "columns": 4,
         "link_label": "See all",
