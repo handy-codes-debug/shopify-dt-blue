@@ -8,5 +8,8 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "dark_photo_backdrop_color": "#FFFFFF",
+    "content_for_index": []
+  }
 }
