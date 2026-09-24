@@ -20,7 +20,7 @@
 %}
 
 <div class="section-pad pdp">
-  <div class="pdp__gallery" id="Gallery-{{ section.id }}">
+  <div class="pdp__gallery" id="Gallery-{{ section.id }}" style="--pdp-gallery-width: {{ section.settings.gallery_width | default: 100 }}%">
     <div class="pdp__stage">
       {%- if product.images.size > 1 -%}
         <div class="pdp__thumbs" role="group" aria-label="{{ product.title }}">
@@ -237,6 +237,7 @@
     grid-area: gallery;
     position: sticky;
     top: 90px;
+    max-width: var(--pdp-gallery-width, 100%);
   }
   .pdp__info {
     grid-area: info;
@@ -567,6 +568,17 @@
         { "value": "3 / 4", "label": "t:options.ratio.portrait" }
       ],
       "default": "1 / 1"
+    },
+    {
+      "type": "range",
+      "id": "gallery_width",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "t:labels.gallery_width",
+      "info": "t:info.gallery_width",
+      "default": 75
     },
     {
       "type": "range",

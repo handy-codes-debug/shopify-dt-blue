@@ -13,6 +13,7 @@
       "type": "product",
       "settings": {
         "image_ratio": "1 / 1",
+        "gallery_width": 75,
         "low_stock_threshold": 5,
         "image_disclaimer": "Photo for reference only — the actual product may differ.",
         "image_disclaimer_color": "#55637A"
