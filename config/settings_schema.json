@@ -196,6 +196,13 @@
         "default": true
       },
       {
+        "type": "color",
+        "id": "dark_photo_backdrop_color",
+        "default": "#B4B7BF",
+        "label": "t:labels.dark_photo_backdrop",
+        "info": "t:info.dark_photo_backdrop"
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
