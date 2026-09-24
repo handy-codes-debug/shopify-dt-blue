@@ -68,9 +68,18 @@
         <div class="facet">
           <label class="facet__legend" for="FacetSort">{{ 'facets.sort_by' | t }}</label>
           <select id="FacetSort" name="sort_by" class="facet__select">
+            {%- assign has_newest = false -%}
             {%- for option in results.sort_options -%}
-              <option value="{{ option.value }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name }}</option>
+              {%- if option.value == 'created-descending' -%}
+                {%- assign has_newest = true -%}
+                <option value="{{ option.value }}"{% if option.value == current_sort %} selected{% endif %}>{{ 'facets.newest_arrival' | t }}</option>
+              {%- else -%}
+                <option value="{{ option.value }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name }}</option>
+              {%- endif -%}
             {%- endfor -%}
+            {%- unless has_newest -%}
+              <option value="created-descending"{% if current_sort == 'created-descending' %} selected{% endif %}>{{ 'facets.newest_arrival' | t }}</option>
+            {%- endunless -%}
           </select>
         </div>
       {%- endif -%}

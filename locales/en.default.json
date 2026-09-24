@@ -196,6 +196,7 @@
   "facets": {
     "filter_and_sort": "Filter & sort",
     "sort_by": "Sort by",
+    "newest_arrival": "Newest arrival",
     "apply": "Apply",
     "clear_all": "Clear all",
     "reset": "Reset",
