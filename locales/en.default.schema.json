@@ -114,6 +114,7 @@
     "enable_dark_mode": "Enable dark mode",
     "image_ratio": "Main image shape",
     "disclaimer": "Disclaimer",
+    "disclaimer_color": "Disclaimer text color",
     "email": "Email",
     "error": "Error",
     "error_soft": "Error (soft)",
