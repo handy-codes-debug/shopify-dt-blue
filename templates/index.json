@@ -205,7 +205,7 @@
       "settings": {
         "eyebrow": "Shop by category",
         "heading": "Browse the catalog",
-        "link_label": "View full catalog",
+        "link_label": "",
         "link_url": "",
         "columns": 4
       }
