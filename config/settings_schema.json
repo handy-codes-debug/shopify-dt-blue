@@ -218,23 +218,41 @@
     "name": "t:general.product_card",
     "settings": [
       {
-        "type": "select",
-        "id": "card_subtitle_source",
-        "label": "t:labels.card_subtitle_source",
-        "info": "t:info.card_subtitle_source",
-        "options": [
-          { "value": "tags", "label": "t:options.card_subtitle_source.tags" },
-          { "value": "metafield", "label": "t:options.card_subtitle_source.metafield" },
-          { "value": "none", "label": "t:options.card_subtitle_source.none" }
-        ],
-        "default": "tags"
+        "type": "header",
+        "content": "t:labels.card_subtitle_source",
+        "info": "t:info.card_subtitle_source"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_tags",
+        "label": "t:options.card_subtitle_source.tags",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_metafield_1",
+        "label": "t:labels.card_show_metafield_1",
+        "default": false
       },
       {
         "type": "text",
-        "id": "card_subtitle_metafield",
-        "label": "t:labels.card_subtitle_metafield",
+        "id": "card_metafield_1",
+        "label": "t:labels.card_metafield_1",
         "info": "t:info.card_subtitle_metafield",
         "placeholder": "custom.material"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_metafield_2",
+        "label": "t:labels.card_show_metafield_2",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "card_metafield_2",
+        "label": "t:labels.card_metafield_2",
+        "info": "t:info.card_subtitle_metafield",
+        "placeholder": "custom.manufacturer_part_number"
       },
       {
         "type": "range",

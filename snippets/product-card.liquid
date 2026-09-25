@@ -29,10 +29,24 @@
     assign low_stock = true
   endif
 
-  assign subtitle_source = settings.card_subtitle_source | default: 'tags'
-  if subtitle_source == 'metafield'
-    assign mf_path = settings.card_subtitle_metafield | split: '.'
-    assign subtitle_metafield_value = product.metafields[mf_path[0]][mf_path[1]].value
+  assign show_card_tags = settings.card_show_tags
+  assign card_mf1_value = blank
+  if settings.card_show_metafield_1 and settings.card_metafield_1 != blank
+    assign card_mf1_path = settings.card_metafield_1 | split: '.'
+    assign card_mf1_value = product.metafields[card_mf1_path[0]][card_mf1_path[1]].value
+  endif
+  assign card_mf2_value = blank
+  if settings.card_show_metafield_2 and settings.card_metafield_2 != blank
+    assign card_mf2_path = settings.card_metafield_2 | split: '.'
+    assign card_mf2_value = product.metafields[card_mf2_path[0]][card_mf2_path[1]].value
+  endif
+
+  assign has_card_subtitle = false
+  if show_card_tags and product.tags.size > 0
+    assign has_card_subtitle = true
+  endif
+  if card_mf1_value != blank or card_mf2_value != blank
+    assign has_card_subtitle = true
   endif
 %}
 
@@ -63,15 +77,15 @@
 
     <a class="pcard__title" href="{{ product.url }}">{{ product.title }}</a>
 
-    {%- if subtitle_source == 'tags' and product.tags.size > 0 -%}
+    {%- if has_card_subtitle -%}
       <div class="pcard__specs">
-        {%- for tag in product.tags limit: 2 -%}
-          {%- unless tag contains ':' -%}<span class="chip">{{ tag }}</span>{%- endunless -%}
-        {%- endfor -%}
-      </div>
-    {%- elsif subtitle_source == 'metafield' and subtitle_metafield_value != blank -%}
-      <div class="pcard__specs">
-        <span class="chip">{{ subtitle_metafield_value }}</span>
+        {%- if show_card_tags -%}
+          {%- for tag in product.tags limit: 2 -%}
+            {%- unless tag contains ':' -%}<span class="chip">{{ tag }}</span>{%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- if card_mf1_value != blank -%}<span class="chip">{{ card_mf1_value }}</span>{%- endif -%}
+        {%- if card_mf2_value != blank -%}<span class="chip">{{ card_mf2_value }}</span>{%- endif -%}
       </div>
     {%- endif -%}
 

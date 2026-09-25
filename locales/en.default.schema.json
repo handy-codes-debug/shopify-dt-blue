@@ -106,7 +106,10 @@
     "cart_recommendations": "Recommendations collection",
     "button_link_secondary": "Secondary button link",
     "card_subtitle_source": "Show under the title",
-    "card_subtitle_metafield": "Metafield (namespace.key)",
+    "card_show_metafield_1": "Show metafield 1",
+    "card_metafield_1": "Metafield 1 (namespace.key)",
+    "card_show_metafield_2": "Show metafield 2",
+    "card_metafield_2": "Metafield 2 (namespace.key)",
     "badge_size": "Badge size",
     "columns": "Columns",
     "customer_account_menu": "Customer account menu",
@@ -203,7 +206,7 @@
     "fallback_content": "Replaces the eyebrow, headline, and subheading above when no product is selected, or the selected one is deleted, unpublished, or set to Draft. Leave any field blank to keep the text above for that one.",
     "promo_background_image": "Optional. Sits behind the banner with a dark overlay. Leave empty for the solid dark panel.",
     "category_title": "Overrides the collection title shown on the card.",
-    "card_subtitle_source": "What to show below the title on every product card, across the homepage, collections, search, and cart recommendations.",
+    "card_subtitle_source": "Choose any combination to show below the title on every product card, across the homepage, collections, search, and cart recommendations.",
     "card_subtitle_metafield": "Used when \"Show under the title\" above is set to Metafield. The metafield's namespace and key, separated by a period, e.g. custom.material. Works best with a single-value (not list) metafield.",
     "badge_size": "Scales the \"Sale\", \"New\", and \"Low stock\" badges shown on product images.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
@@ -216,9 +219,7 @@
       "right": "Right"
     },
     "card_subtitle_source": {
-      "tags": "Tags",
-      "metafield": "Metafield",
-      "none": "None"
+      "tags": "Tags"
     },
     "category_icon": {
       "auto": "Auto (from title)",
