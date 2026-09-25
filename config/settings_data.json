@@ -13,6 +13,7 @@
     "card_show_tags": false,
     "card_show_metafield_1": true,
     "card_metafield_1": "custom.manufacturer_part_number",
+    "card_image_padding": 20,
     "content_for_index": []
   }
 }
