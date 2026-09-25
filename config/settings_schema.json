@@ -264,6 +264,17 @@
         "label": "t:labels.badge_size",
         "info": "t:info.badge_size",
         "default": 100
+      },
+      {
+        "type": "range",
+        "id": "card_size",
+        "min": 70,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "t:labels.card_size",
+        "info": "t:info.card_size",
+        "default": 100
       }
     ]
   }
