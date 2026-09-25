@@ -217,7 +217,7 @@
         "heading": "Popular right now",
         "collection": "hot-sale",
         "products_to_show": 12,
-        "columns": 6,
+        "columns": 4,
         "link_label": "See all",
         "link_url": "",
         "surface_alt": true
