@@ -267,14 +267,14 @@
       },
       {
         "type": "range",
-        "id": "card_image_size",
-        "min": 70,
-        "max": 130,
-        "step": 5,
+        "id": "card_image_padding",
+        "min": 0,
+        "max": 35,
+        "step": 1,
         "unit": "%",
-        "label": "t:labels.card_image_size",
-        "info": "t:info.card_image_size",
-        "default": 100
+        "label": "t:labels.card_image_padding",
+        "info": "t:info.card_image_padding",
+        "default": 10
       }
     ]
   }
