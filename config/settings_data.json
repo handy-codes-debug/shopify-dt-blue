@@ -10,6 +10,8 @@
 {
   "current": {
     "dark_photo_backdrop_color": "#FFFFFF",
+    "card_subtitle_source": "metafield",
+    "card_subtitle_metafield": "custom.manufacturer_part_number",
     "content_for_index": []
   }
 }
