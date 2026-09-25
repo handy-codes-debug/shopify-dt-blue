@@ -267,13 +267,13 @@
       },
       {
         "type": "range",
-        "id": "card_size",
+        "id": "card_image_size",
         "min": 70,
         "max": 130,
         "step": 5,
         "unit": "%",
-        "label": "t:labels.card_size",
-        "info": "t:info.card_size",
+        "label": "t:labels.card_image_size",
+        "info": "t:info.card_image_size",
         "default": 100
       }
     ]

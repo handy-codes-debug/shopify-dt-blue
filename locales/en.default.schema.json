@@ -111,7 +111,7 @@
     "card_show_metafield_2": "Show metafield 2",
     "card_metafield_2": "Metafield 2 (namespace.key)",
     "badge_size": "Badge size",
-    "card_size": "Card size",
+    "card_image_size": "Product image size",
     "columns": "Columns",
     "customer_account_menu": "Customer account menu",
     "dark_mode": "Dark mode",
@@ -210,7 +210,7 @@
     "card_subtitle_source": "Choose any combination to show below the title on every product card, across the homepage, collections, search, and cart recommendations.",
     "card_subtitle_metafield": "Used when \"Show under the title\" above is set to Metafield. The metafield's namespace and key, separated by a period, e.g. custom.material. Works best with a single-value (not list) metafield.",
     "badge_size": "Scales the \"Sale\", \"New\", and \"Low stock\" badges shown on product images.",
-    "card_size": "Scales product card padding, photo margin, and text size, without changing how many columns show per row -- adjust \"Columns\" separately on each grid section to control that.",
+    "card_image_size": "Scales how much of the product card tile the photo fills, by adjusting its inner margin -- a lower value shows a smaller photo with more surrounding space. Doesn't change text size or how many columns show per row; adjust \"Columns\" separately on each grid section to control that.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
     "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."
   },
