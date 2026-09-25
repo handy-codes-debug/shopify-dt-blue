@@ -191,6 +191,8 @@
     "show_nav_icons": "Shows a small icon next to menu items with a recognized title (currently: Build Your Own, Ready To Use, We Have Rebate, Clearance). Other items show no icon; ask your developer to add more matches.",
     "logo": "Shown in light mode.",
     "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",
+    "footer_logo": "The footer's background is always dark, so this is only used if no dark-mode logo below is set.",
+    "footer_logo_dark": "Shown in the footer, whose background is always dark regardless of site mode. Falls back to the plain logo above when empty.",
     "enable_dark_mode": "Adds a light / dark / system switch in the header and a built-in dark palette.",
     "gallery_width": "Scales down the main photo and thumbnail column. 100% fills the available space next to the product info.",
     "dark_photo_backdrop": "Background behind product images in dark mode. Uses multiply blending, so a plain white product photo merges into this colour instead of showing as a box; a darker shade merges more seamlessly but also mutes the photo's own colours slightly.",

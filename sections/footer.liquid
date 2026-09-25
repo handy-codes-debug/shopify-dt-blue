@@ -40,7 +40,22 @@
 
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="site-logo" href="{{ routes.root_url }}" style="color:#fff">{{ shop.name }}</a>
+        {%- comment -%}
+          The footer's background is always the dark surface colour, in
+          both light and dark site mode, so it always prefers the
+          dark-mode logo (suited to a dark background) over the regular
+          one -- unlike the header, which switches with the site's mode.
+        {%- endcomment -%}
+        {%- liquid
+          assign footer_logo = section.settings.logo_dark | default: section.settings.logo
+        -%}
+        <a class="site-logo footer-brand__logo" href="{{ routes.root_url }}" {% if footer_logo == blank %}style="color:#fff"{% endif %}>
+          {%- if footer_logo != blank -%}
+            {{ footer_logo | image_url: width: 480 | image_tag: widths: '120,240,360,480', class: 'site-logo__img', alt: shop.name }}
+          {%- else -%}
+            {{ shop.name }}
+          {%- endif -%}
+        </a>
         {%- if section.settings.tagline != blank -%}
           <p>{{ section.settings.tagline }}</p>
         {%- endif -%}
@@ -175,6 +190,14 @@
   .footer-brand {
     grid-column: span 2;
   }
+  .footer-brand__logo {
+    display: inline-flex;
+  }
+  .footer-brand__logo img {
+    display: block;
+    max-height: 42px;
+    width: auto;
+  }
   .footer-brand p {
     margin-top: 12px;
     max-width: 34ch;
@@ -254,6 +277,18 @@
 {
   "name": "t:general.footer",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:labels.logo",
+      "info": "t:info.footer_logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_dark",
+      "label": "t:labels.logo_dark",
+      "info": "t:info.footer_logo_dark"
+    },
     {
       "type": "text",
       "id": "tagline",
