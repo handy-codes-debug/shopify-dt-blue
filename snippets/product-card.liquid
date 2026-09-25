@@ -10,8 +10,10 @@
   assign threshold = low_stock_threshold | default: 5
   assign variant = product.selected_or_first_available_variant
   assign on_sale = false
+  assign discount_percent = 0
   if product.compare_at_price > product.price
     assign on_sale = true
+    assign discount_percent = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
   endif
 
   assign is_new = false
@@ -46,7 +48,7 @@
     {%- if product.available == false -%}
       {%- comment -%} no badge, sold-out pill shown below {%- endcomment -%}
     {%- elsif on_sale -%}
-      <span class="badge badge--sale">{{ 'products.sale' | t }}</span>
+      <span class="badge badge--sale">{{ 'products.sale_percent' | t: percent: discount_percent }}</span>
     {%- elsif low_stock -%}
       <span class="badge badge--low">{{ 'products.low_stock' | t }}</span>
     {%- elsif is_new -%}

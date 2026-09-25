@@ -225,7 +225,7 @@
     "low_stock": "Low stock",
     "new": "New",
     "quantity": "Quantity",
-    "sale": "Sale",
+    "sale_percent": "Sale -{{ percent }}%",
     "sku": "SKU",
     "sold_out": "Sold out",
     "type": "Category",
