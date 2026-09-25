@@ -53,8 +53,7 @@
         "policies"
       ],
       "settings": {
-        "logo": "shopify://shop_images/deal_targets_logo_light_1dc39296-8fb7-4b5b-b286-226bcd7dd2fc.png",
-        "logo_dark": "shopify://shop_images/deal_targets_logo_dark.png",
+        "logo": "shopify://shop_images/deal_targets_logo_dark.png",
         "tagline": "Everything for your next build, shipped fast from regional warehouses.",
         "browse_link_label": "Browse all brands",
         "browse_link_url": "shopify://pages/brands",
