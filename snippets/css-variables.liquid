@@ -79,6 +79,8 @@
     --color-photo-backdrop: {{ settings.surface_alt_color }};
     --img-blend: normal;
 
+    --badge-scale: {{ settings.badge_size | default: 100 | divided_by: 100.0 }};
+
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --style-radius-sm: 6px;
     --style-radius: 10px;

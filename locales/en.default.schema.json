@@ -107,6 +107,7 @@
     "button_link_secondary": "Secondary button link",
     "card_subtitle_source": "Show under the title",
     "card_subtitle_metafield": "Metafield (namespace.key)",
+    "badge_size": "Badge size",
     "columns": "Columns",
     "customer_account_menu": "Customer account menu",
     "dark_mode": "Dark mode",
@@ -202,6 +203,7 @@
     "category_title": "Overrides the collection title shown on the card.",
     "card_subtitle_source": "What to show below the title on every product card, across the homepage, collections, search, and cart recommendations.",
     "card_subtitle_metafield": "Used when \"Show under the title\" above is set to Metafield. The metafield's namespace and key, separated by a period, e.g. custom.material. Works best with a single-value (not list) metafield.",
+    "badge_size": "Scales the \"Sale\", \"New\", and \"Low stock\" badges shown on product images.",
     "metafield_namespace": "Namespace of the attribute_tab and specification_tab metafields. Usually \"custom\".",
     "tile_label": "Short code shown in the tile, e.g. CPU. Defaults to the first letters of the title."
   },

@@ -235,6 +235,17 @@
         "label": "t:labels.card_subtitle_metafield",
         "info": "t:info.card_subtitle_metafield",
         "placeholder": "custom.material"
+      },
+      {
+        "type": "range",
+        "id": "badge_size",
+        "min": 70,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "t:labels.badge_size",
+        "info": "t:info.badge_size",
+        "default": 100
       }
     ]
   }
