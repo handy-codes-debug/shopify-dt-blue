@@ -26,6 +26,12 @@
   if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= threshold
     assign low_stock = true
   endif
+
+  assign subtitle_source = settings.card_subtitle_source | default: 'tags'
+  if subtitle_source == 'metafield'
+    assign mf_path = settings.card_subtitle_metafield | split: '.'
+    assign subtitle_metafield_value = product.metafields[mf_path[0]][mf_path[1]].value
+  endif
 %}
 
 <div class="pcard">
@@ -55,11 +61,15 @@
 
     <a class="pcard__title" href="{{ product.url }}">{{ product.title }}</a>
 
-    {%- if product.tags.size > 0 -%}
+    {%- if subtitle_source == 'tags' and product.tags.size > 0 -%}
       <div class="pcard__specs">
         {%- for tag in product.tags limit: 2 -%}
           {%- unless tag contains ':' -%}<span class="chip">{{ tag }}</span>{%- endunless -%}
         {%- endfor -%}
+      </div>
+    {%- elsif subtitle_source == 'metafield' and subtitle_metafield_value != blank -%}
+      <div class="pcard__specs">
+        <span class="chip">{{ subtitle_metafield_value }}</span>
       </div>
     {%- endif -%}
 

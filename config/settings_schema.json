@@ -213,5 +213,29 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "t:general.product_card",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_subtitle_source",
+        "label": "t:labels.card_subtitle_source",
+        "info": "t:info.card_subtitle_source",
+        "options": [
+          { "value": "tags", "label": "t:options.card_subtitle_source.tags" },
+          { "value": "metafield", "label": "t:options.card_subtitle_source.metafield" },
+          { "value": "none", "label": "t:options.card_subtitle_source.none" }
+        ],
+        "default": "tags"
+      },
+      {
+        "type": "text",
+        "id": "card_subtitle_metafield",
+        "label": "t:labels.card_subtitle_metafield",
+        "info": "t:info.card_subtitle_metafield",
+        "placeholder": "custom.material"
+      }
+    ]
   }
 ]
