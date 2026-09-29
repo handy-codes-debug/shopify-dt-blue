@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
+ {%- if content_for_header contains 'tapita-seo-script-tags' -%}{%- include 'tapita-seo-schema' -%}{%- endif -%} 
+
     {%- if settings.enable_dark_mode -%}
       {% # Apply the visitor's saved light/dark choice before first paint %}
       <script>
@@ -45,7 +47,7 @@
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
     {% # Social, title, etc. %}
-    {% render 'meta-tags' %}
+    {% render 'meta-tags', page_description: page_description, page_title: page_title  %}
 
     {{ content_for_header }}
     <meta name="google-site-verification" content="FwY7oo8f-MxfqhLZOFkd5Km7BgS7iK8FfhWUUWSnEmg" />
