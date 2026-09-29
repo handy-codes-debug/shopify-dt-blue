@@ -192,7 +192,7 @@
     "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
     "contact_info_fallback": "Leave any field blank to fall back to your store's address / email / phone.",
     "category_icon": "\"Auto\" picks an icon from the collection title.",
-    "show_nav_icons": "Shows a small icon next to menu items with a recognized title (currently: Build Your Own, Ready To Use, We Have Rebate, Clearance). Other items show no icon; ask your developer to add more matches.",
+    "show_nav_icons": "Shows a small icon next to menu items with a recognized title (currently: Build Your Own, Ready To Use, Weekly Sales, Rebate, Clearance). Other items show no icon; ask your developer to add more matches.",
     "logo": "Shown in light mode.",
     "logo_dark": "Optional. Shown in dark mode; falls back to the light logo when empty.",
     "footer_logo": "The footer's background is always dark, so this is only used if no dark-mode logo below is set.",
