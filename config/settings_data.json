@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "favicon": "shopify://shop_images/deal_targets_icon_flag_light_cf75a953-156d-476a-89e2-1db13e94c258.png",
     "dark_photo_backdrop_color": "#FFFFFF",
     "card_show_tags": false,
     "card_show_metafield_1": true,
