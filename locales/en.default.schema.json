@@ -22,6 +22,7 @@
     "column": "Column",
     "content": "Content",
     "custom_section": "Custom section",
+    "favicon": "Favicon",
     "fonts": "Fonts",
     "footer": "Footer",
     "group": "Group",
@@ -96,6 +97,7 @@
     "attribute_label": "Attribute tab label",
     "background": "Background",
     "background_image": "Background image",
+    "favicon": "Favicon image",
     "border": "Border",
     "browse_link_label": "\"Browse all\" link label",
     "browse_link_url": "\"Browse all\" link",
@@ -187,6 +189,7 @@
     "warranty_page": "Warranty page"
   },
   "info": {
+    "favicon": "Shown as the small icon in the browser tab. Square images work best; it's automatically scaled down to 32×32px.",
     "browse_link_label": "Shown below the tagline in the footer. Leave empty to hide the link entirely.",
     "browse_link_url": "Defaults to your all-collections page (/collections) when left empty.",
     "cart_recommendations": "Products for the cart's recommended panel. Leave empty to hide it.",
