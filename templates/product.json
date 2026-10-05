@@ -13,9 +13,16 @@
       "type": "product",
       "settings": {
         "image_ratio": "1 / 1",
+        "gallery_width": 75,
         "low_stock_threshold": 5,
         "image_disclaimer": "",
-        "image_disclaimer_color": "#55637a"
+        "image_disclaimer_color": "#55637a",
+        "fact_1_label": "Condition",
+        "fact_1_metafield": "custom.condition_filter",
+        "fact_2_label": "",
+        "fact_2_metafield": "",
+        "fact_3_label": "",
+        "fact_3_metafield": ""
       }
     },
     "description": {
