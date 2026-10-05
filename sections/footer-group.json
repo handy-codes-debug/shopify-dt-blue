@@ -44,13 +44,20 @@
             "warranty_page": "",
             "contact_page": "contact-us"
           }
+        },
+        "contact_info": {
+          "type": "contact_info",
+          "settings": {
+            "heading": "Contact information"
+          }
         }
       },
       "block_order": [
         "menu_column_YhPMVm",
         "col-shop",
         "col-support",
-        "policies"
+        "policies",
+        "contact_info"
       ],
       "settings": {
         "logo": "shopify://shop_images/deal_targets_logo_dark.png",
