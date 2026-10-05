@@ -93,8 +93,11 @@
     "accent_font": "Accent (monospace)",
     "accent_soft": "Accent (soft)",
     "address": "Address",
+    "additional_details": "Additional details",
     "alignment": "Alignment",
     "attribute_label": "Attribute tab label",
+    "fact_label": "Label",
+    "fact_metafield": "Metafield (namespace.key)",
     "background": "Background",
     "background_image": "Background image",
     "favicon": "Favicon image",
@@ -190,6 +193,7 @@
     "warranty_page": "Warranty page"
   },
   "info": {
+    "additional_details": "Up to 3 extra rows shown below Brand/Type/SKU, each pulled from a single-value metafield. Leave a Metafield field blank to skip that row.",
     "favicon": "Shown as the small icon in the browser tab. Square images work best; it's automatically scaled down to 32×32px.",
     "browse_link_label": "Shown below the tagline in the footer. Leave empty to hide the link entirely.",
     "browse_link_url": "Defaults to your all-collections page (/collections) when left empty.",

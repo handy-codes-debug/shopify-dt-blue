@@ -17,6 +17,22 @@
 
   assign rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count.value
+
+  assign fact_1_value = blank
+  if section.settings.fact_1_metafield != blank
+    assign fact_1_path = section.settings.fact_1_metafield | split: '.'
+    assign fact_1_value = product.metafields[fact_1_path[0]][fact_1_path[1]].value
+  endif
+  assign fact_2_value = blank
+  if section.settings.fact_2_metafield != blank
+    assign fact_2_path = section.settings.fact_2_metafield | split: '.'
+    assign fact_2_value = product.metafields[fact_2_path[0]][fact_2_path[1]].value
+  endif
+  assign fact_3_value = blank
+  if section.settings.fact_3_metafield != blank
+    assign fact_3_path = section.settings.fact_3_metafield | split: '.'
+    assign fact_3_value = product.metafields[fact_3_path[0]][fact_3_path[1]].value
+  endif
 %}
 
 <div class="section-pad pdp">
@@ -107,6 +123,15 @@
       {%- unless product.has_only_default_variant -%}
         <div><dt>{{ 'products.variant' | t }}</dt><dd>{{ current_variant.title }}</dd></div>
       {%- endunless -%}
+      {%- if fact_1_value != blank -%}
+        <div><dt>{{ section.settings.fact_1_label | default: 'Detail' }}</dt><dd>{{ fact_1_value }}</dd></div>
+      {%- endif -%}
+      {%- if fact_2_value != blank -%}
+        <div><dt>{{ section.settings.fact_2_label | default: 'Detail' }}</dt><dd>{{ fact_2_value }}</dd></div>
+      {%- endif -%}
+      {%- if fact_3_value != blank -%}
+        <div><dt>{{ section.settings.fact_3_label | default: 'Detail' }}</dt><dd>{{ fact_3_value }}</dd></div>
+      {%- endif -%}
     </dl>
 
     {%- if product.tags.size > 0 -%}
@@ -604,6 +629,44 @@
       "id": "image_disclaimer_color",
       "label": "t:labels.disclaimer_color",
       "default": "#55637A"
+    },
+    {
+      "type": "header",
+      "content": "t:labels.additional_details",
+      "info": "t:info.additional_details"
+    },
+    {
+      "type": "text",
+      "id": "fact_1_label",
+      "label": "t:labels.fact_label"
+    },
+    {
+      "type": "text",
+      "id": "fact_1_metafield",
+      "label": "t:labels.fact_metafield",
+      "placeholder": "custom.material"
+    },
+    {
+      "type": "text",
+      "id": "fact_2_label",
+      "label": "t:labels.fact_label"
+    },
+    {
+      "type": "text",
+      "id": "fact_2_metafield",
+      "label": "t:labels.fact_metafield",
+      "placeholder": "custom.warranty"
+    },
+    {
+      "type": "text",
+      "id": "fact_3_label",
+      "label": "t:labels.fact_label"
+    },
+    {
+      "type": "text",
+      "id": "fact_3_metafield",
+      "label": "t:labels.fact_metafield",
+      "placeholder": "custom.country_of_origin"
     }
   ],
   "disabled_on": {
