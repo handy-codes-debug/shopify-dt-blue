@@ -27,7 +27,9 @@
 
     <div class="prec__grid" style="--prec-cols: {{ section.settings.columns }}">
       {%- for product in recommendations.products -%}
-        {% render 'product-card', product: product %}
+        {%- unless settings.hide_sold_out_products and product.available == false -%}
+          {% render 'product-card', product: product %}
+        {%- endunless -%}
       {%- endfor -%}
     </div>
   {%- endif -%}

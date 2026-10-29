@@ -37,7 +37,9 @@
         {%- if collection.products.size > 0 -%}
           <div class="fc-grid" style="--fc-cols: {{ section.settings.columns }}">
             {%- for product in collection.products -%}
-              {% render 'product-card', product: product %}
+              {%- unless settings.hide_sold_out_products and product.available == false -%}
+                {% render 'product-card', product: product %}
+              {%- endunless -%}
             {%- endfor -%}
           </div>
 

@@ -61,7 +61,9 @@
           <div class="search-results">
             {%- for result in search.results -%}
               {%- if result.object_type == 'product' -%}
-                {% render 'product-card', product: result %}
+                {%- unless settings.hide_sold_out_products and result.available == false -%}
+                  {% render 'product-card', product: result %}
+                {%- endunless -%}
               {%- else -%}
                 {%- assign featured_image = result.featured_image | default: result.image -%}
                 <a class="search-result" href="{{ result.url }}">
