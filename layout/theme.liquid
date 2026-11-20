@@ -40,11 +40,11 @@
       {{ settings.type_heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
-    {% # Google Fonts: Anta (header nav) and Quantico (hero card) — not in Shopify's font library %}
+    {% # Google Fonts: Anta (header nav), Quantico (hero card), Big Shoulders Display (sale banner) — not in Shopify's font library %}
     {% # theme-check-disable RemoteAsset %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anta&family=Quantico:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anta&family=Quantico:wght@400;700&family=Big+Shoulders+Display:wght@700;900&display=swap">
     {% # theme-check-enable RemoteAsset %}
 
     {% # Load and preload the critical CSS %}

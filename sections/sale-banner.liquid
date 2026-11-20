@@ -1,0 +1,308 @@
+{% comment %}
+  Wide seasonal sale banner (Black Friday, etc.): eyebrow badge + label, a big
+  display headline, a subheading, a CTA with a category breadcrumb line, and
+  an optional shipping note pinned to the bottom-right corner. Background is
+  a bundled circuit-board photo by default, or a merchant-chosen image.
+{% endcomment %}
+
+{% liquid
+  assign bg_image = section.settings.background_image
+  assign accent = section.settings.accent_color | default: '#8FB7FF'
+%}
+
+<div class="sbanner full-width" style="--sbanner-accent: {{ accent }}">
+  <div class="sbanner__bg" aria-hidden="true">
+    {%- if bg_image != blank -%}
+      {{
+        bg_image
+        | image_url: width: 2400
+        | image_tag:
+          widths: '800,1200,1600,2000,2400',
+          sizes: '100vw',
+          class: 'sbanner__bg-img',
+          loading: 'lazy',
+          alt: ''
+      }}
+    {%- else -%}
+      {%- comment -%} theme-check-disable ImgWidthAndHeight {%- endcomment -%}
+      <img src="{{ 'sale-banner-circuit-bg.jpg' | asset_url }}" class="sbanner__bg-img" loading="lazy" alt="">
+      {%- comment -%} theme-check-enable ImgWidthAndHeight {%- endcomment -%}
+    {%- endif -%}
+    <span class="sbanner__shade"></span>
+  </div>
+
+  <div class="page-container sbanner__row">
+    <div class="sbanner__copy">
+      {%- if section.settings.eyebrow_badge != blank or section.settings.eyebrow_label != blank -%}
+        <div class="sbanner__eyebrow-row">
+          {%- if section.settings.eyebrow_badge != blank -%}
+            <span class="sbanner__badge">{{ section.settings.eyebrow_badge }}</span>
+          {%- endif -%}
+          {%- if section.settings.eyebrow_label != blank -%}
+            <span class="sbanner__eyebrow-label">{{ section.settings.eyebrow_label }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="sbanner__title">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="sbanner__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      <div class="sbanner__actions">
+        {%- if section.settings.button_label != blank -%}
+          <a class="sbanner__cta" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+            {{ section.settings.button_label }}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.category_list != blank -%}
+          <div class="sbanner__cats">
+            {%- assign cats = section.settings.category_list | split: ',' -%}
+            {%- for cat in cats -%}
+              <span>{{ cat | strip }}</span>{%- unless forloop.last -%}<span class="sbanner__cats-sep">/</span>{%- endunless -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if section.settings.shipping_note != blank -%}
+    <div class="sbanner__ship">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="13" height="10"/><path d="M16 10h3l2 3v4h-5"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>
+      {{ section.settings.shipping_note }}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .sbanner {
+    position: relative;
+    overflow: hidden;
+    background: #06040E;
+    color: #FFFFFF;
+  }
+  .sbanner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .sbanner__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+  }
+  .sbanner__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(6, 4, 14, 0.96) 0%, rgba(6, 4, 14, 0.9) 34%, rgba(6, 4, 14, 0.45) 62%, rgba(6, 4, 14, 0.1) 100%);
+  }
+  .sbanner__row {
+    position: relative;
+    z-index: 1;
+    padding-block: clamp(48px, 9vw, 96px);
+  }
+  .sbanner__copy {
+    max-width: 46rem;
+  }
+  .sbanner__eyebrow-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .sbanner__badge {
+    display: inline-block;
+    padding: 6px 13px;
+    border: 1.5px solid var(--sbanner-accent);
+    color: var(--sbanner-accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .sbanner__eyebrow-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .sbanner__title {
+    margin: 0 0 20px;
+    font-family: 'Big Shoulders Display', Impact, var(--font-heading--family), sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 8vw, 7.5rem);
+    line-height: 0.85;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+  .sbanner__title em {
+    font-style: normal;
+    color: var(--sbanner-accent);
+  }
+  .sbanner__sub {
+    margin: 0 0 28px;
+    font-size: clamp(1.05rem, 2.1vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: #FFFFFF;
+  }
+  .sbanner__sub em {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--sbanner-accent);
+  }
+  .sbanner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+  }
+  .sbanner__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 26px;
+    background: var(--sbanner-accent);
+    color: #0B1220;
+    font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--style-radius-sm);
+  }
+  .sbanner__cta:hover {
+    opacity: 0.88;
+  }
+  .sbanner__cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: clamp(0.8rem, 1vw, 0.92rem);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .sbanner__cats-sep {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  .sbanner__ship {
+    position: absolute;
+    z-index: 1;
+    right: 24px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 14px;
+    background: rgba(6, 4, 14, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--style-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sbanner-accent);
+  }
+  .sbanner__ship svg {
+    flex-shrink: 0;
+    color: var(--sbanner-accent);
+  }
+
+  @media (max-width: 700px) {
+    .sbanner__ship {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.sale_banner.name",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_badge",
+      "label": "t:labels.eyebrow_badge",
+      "default": "Limited time"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_label",
+      "label": "t:labels.eyebrow_label",
+      "default": "DealTargets · Computer Components"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Black\n<em>Friday</em>"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "Up to <em>30% off</em> GPUs, CPUs, SSDs &amp; more"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label_primary",
+      "default": "Shop the deals"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:labels.button_link_primary"
+    },
+    {
+      "type": "text",
+      "id": "category_list",
+      "label": "t:labels.sale_banner_categories",
+      "info": "t:info.sale_banner_categories",
+      "default": "Graphics Cards, Processors, Memory, Storage"
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "label": "t:labels.sale_banner_shipping_note",
+      "default": "Free shipping on orders over $99"
+    },
+    {
+      "type": "header",
+      "content": "t:labels.background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "t:labels.background_image",
+      "info": "t:info.sale_banner_background_image"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "t:labels.accent",
+      "default": "#8FB7FF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.sale_banner.name"
+    }
+  ]
+}
+{% endschema %}
