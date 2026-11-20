@@ -258,6 +258,12 @@
     "rolling_banner": {
       "label": "Promotions"
     },
+    "sale_banner": {
+      "name": "Sale banner",
+      "previous": "Previous banner",
+      "next": "Next banner",
+      "goto": "Go to banner {{ index }}"
+    },
     "reviews": {
       "based_on": "Based on {{ count }} reviews",
       "none": "No reviews yet."

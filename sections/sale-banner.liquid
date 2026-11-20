@@ -1,84 +1,190 @@
 {% comment %}
   Wide seasonal sale banner (Black Friday, etc.): eyebrow badge + label, a big
   display headline, a subheading, a CTA with a category breadcrumb line, and
-  an optional shipping note pinned to the bottom-right corner. Background is
-  a bundled circuit-board photo by default, or a merchant-chosen image.
+  an optional shipping note pinned to the bottom-right corner. Each banner is
+  a "slide" block; with more than one, it becomes a slideshow with arrows,
+  dots, and optional autoplay. A single slide renders with no slideshow
+  chrome at all.
 {% endcomment %}
 
-{% liquid
-  assign bg_image = section.settings.background_image
-  assign accent = section.settings.accent_color | default: '#8FB7FF'
-%}
+{%- liquid
+  assign slides = section.blocks
+  assign slide_count = slides.size
+-%}
 
-<div class="sbanner full-width" style="--sbanner-accent: {{ accent }}">
-  <div class="sbanner__bg" aria-hidden="true">
-    {%- if bg_image != blank -%}
-      {{
-        bg_image
-        | image_url: width: 2400
-        | image_tag:
-          widths: '800,1200,1600,2000,2400',
-          sizes: '100vw',
-          class: 'sbanner__bg-img',
-          loading: 'lazy',
-          alt: ''
-      }}
-    {%- else -%}
-      {%- comment -%} theme-check-disable ImgWidthAndHeight {%- endcomment -%}
-      <img src="{{ 'sale-banner-circuit-bg.jpg' | asset_url }}" class="sbanner__bg-img" loading="lazy" alt="">
-      {%- comment -%} theme-check-enable ImgWidthAndHeight {%- endcomment -%}
-    {%- endif -%}
-    <span class="sbanner__shade"></span>
-  </div>
-
-  <div class="page-container sbanner__row">
-    <div class="sbanner__copy">
-      {%- if section.settings.eyebrow_badge != blank or section.settings.eyebrow_label != blank -%}
-        <div class="sbanner__eyebrow-row">
-          {%- if section.settings.eyebrow_badge != blank -%}
-            <span class="sbanner__badge">{{ section.settings.eyebrow_badge }}</span>
+{%- if slide_count > 0 -%}
+  <div
+    class="sbanner full-width"
+    id="SaleBanner-{{ section.id }}"
+    data-sbanner
+    {% if slide_count > 1 and section.settings.autoplay %}
+      data-autoplay="{{ section.settings.autoplay_speed | times: 1000 }}"
+    {% endif %}
+  >
+    {%- for block in slides -%}
+      {%- liquid
+        assign bg_image = block.settings.background_image
+        assign accent = block.settings.accent_color | default: '#8FB7FF'
+        assign img_loading = 'lazy'
+        if forloop.first
+          assign img_loading = 'eager'
+        endif
+      -%}
+      <div
+        class="sbanner__slide{% if forloop.first %} is-active{% endif %}"
+        style="--sbanner-accent: {{ accent }}"
+        data-sbanner-slide
+        {% if forloop.first %}aria-hidden="false"{% else %}aria-hidden="true"{% endif %}
+        {{ block.shopify_attributes }}
+      >
+        <div class="sbanner__bg" aria-hidden="true">
+          {%- if bg_image != blank -%}
+            {{
+              bg_image
+              | image_url: width: 2400
+              | image_tag:
+                widths: '800,1200,1600,2000,2400',
+                sizes: '100vw',
+                class: 'sbanner__bg-img',
+                loading: img_loading,
+                alt: ''
+            }}
+          {%- else -%}
+            {%- comment -%} theme-check-disable ImgWidthAndHeight {%- endcomment -%}
+            <img src="{{ 'sale-banner-circuit-bg.jpg' | asset_url }}" class="sbanner__bg-img" loading="lazy" alt="">
+            {%- comment -%} theme-check-enable ImgWidthAndHeight {%- endcomment -%}
           {%- endif -%}
-          {%- if section.settings.eyebrow_label != blank -%}
-            <span class="sbanner__eyebrow-label">{{ section.settings.eyebrow_label }}</span>
-          {%- endif -%}
+          <span class="sbanner__shade"></span>
         </div>
-      {%- endif -%}
 
-      {%- if section.settings.heading != blank -%}
-        <h2 class="sbanner__title">{{ section.settings.heading }}</h2>
-      {%- endif -%}
+        <div class="page-container sbanner__row">
+          <div class="sbanner__copy">
+            {%- if block.settings.eyebrow_badge != blank or block.settings.eyebrow_label != blank -%}
+              <div class="sbanner__eyebrow-row">
+                {%- if block.settings.eyebrow_badge != blank -%}
+                  <span class="sbanner__badge">{{ block.settings.eyebrow_badge }}</span>
+                {%- endif -%}
+                {%- if block.settings.eyebrow_label != blank -%}
+                  <span class="sbanner__eyebrow-label">{{ block.settings.eyebrow_label }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
 
-      {%- if section.settings.subheading != blank -%}
-        <p class="sbanner__sub">{{ section.settings.subheading }}</p>
-      {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="sbanner__title">{{ block.settings.heading }}</h2>
+            {%- endif -%}
 
-      <div class="sbanner__actions">
-        {%- if section.settings.button_label != blank -%}
-          <a class="sbanner__cta" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
-            {{ section.settings.button_label }}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
-          </a>
-        {%- endif -%}
+            {%- if block.settings.subheading != blank -%}
+              <p class="sbanner__sub">{{ block.settings.subheading }}</p>
+            {%- endif -%}
 
-        {%- if section.settings.category_list != blank -%}
-          <div class="sbanner__cats">
-            {%- assign cats = section.settings.category_list | split: ',' -%}
-            {%- for cat in cats -%}
-              <span>{{ cat | strip }}</span>{%- unless forloop.last -%}<span class="sbanner__cats-sep">/</span>{%- endunless -%}
-            {%- endfor -%}
+            <div class="sbanner__actions">
+              {%- if block.settings.button_label != blank -%}
+                <a class="sbanner__cta" href="{{ block.settings.button_link | default: routes.all_products_collection_url }}">
+                  {{ block.settings.button_label }}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                </a>
+              {%- endif -%}
+
+              {%- if block.settings.category_list != blank -%}
+                <div class="sbanner__cats">
+                  {%- assign cats = block.settings.category_list | split: ',' -%}
+                  {%- for cat in cats -%}
+                    <span>{{ cat | strip }}</span>{%- unless forloop.last -%}<span class="sbanner__cats-sep">/</span>{%- endunless -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+        {%- if block.settings.shipping_note != blank -%}
+          <div class="sbanner__ship">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="13" height="10"/><path d="M16 10h3l2 3v4h-5"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>
+            {{ block.settings.shipping_note }}
           </div>
         {%- endif -%}
       </div>
-    </div>
-  </div>
+    {%- endfor -%}
 
-  {%- if section.settings.shipping_note != blank -%}
-    <div class="sbanner__ship">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="13" height="10"/><path d="M16 10h3l2 3v4h-5"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>
-      {{ section.settings.shipping_note }}
-    </div>
-  {%- endif -%}
-</div>
+    {%- if slide_count > 1 -%}
+      <button type="button" class="sbanner__arrow sbanner__arrow--prev" data-sbanner-prev aria-label="{{ 'sections.sale_banner.previous' | t }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button type="button" class="sbanner__arrow sbanner__arrow--next" data-sbanner-next aria-label="{{ 'sections.sale_banner.next' | t }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+
+      <div class="sbanner__dots" role="tablist" aria-label="{{ 'sections.sale_banner.name' | t }}">
+        {%- for block in slides -%}
+          <button
+            type="button"
+            class="sbanner__dot{% if forloop.first %} is-active{% endif %}"
+            data-sbanner-dot
+            role="tab"
+            aria-label="{{ 'sections.sale_banner.goto' | t: index: forloop.index }}"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- if slide_count > 1 -%}
+  <script>
+    (function () {
+      var root = document.getElementById('SaleBanner-{{ section.id }}');
+      if (!root) return;
+
+      var slides = Array.prototype.slice.call(root.querySelectorAll('[data-sbanner-slide]'));
+      var dots = Array.prototype.slice.call(root.querySelectorAll('[data-sbanner-dot]'));
+      var prevBtn = root.querySelector('[data-sbanner-prev]');
+      var nextBtn = root.querySelector('[data-sbanner-next]');
+      var current = 0;
+      var timer = null;
+      var autoplayMs = parseInt(root.dataset.autoplay, 10);
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function goTo(index) {
+        var next = (index + slides.length) % slides.length;
+        slides[current].classList.remove('is-active');
+        slides[current].setAttribute('aria-hidden', 'true');
+        dots[current] && dots[current].classList.remove('is-active');
+        dots[current] && dots[current].setAttribute('aria-selected', 'false');
+
+        current = next;
+
+        slides[current].classList.add('is-active');
+        slides[current].setAttribute('aria-hidden', 'false');
+        dots[current] && dots[current].classList.add('is-active');
+        dots[current] && dots[current].setAttribute('aria-selected', 'true');
+      }
+
+      function start() {
+        if (!autoplayMs || reduceMotion) return;
+        stop();
+        timer = setInterval(function () { goTo(current + 1); }, autoplayMs);
+      }
+      function stop() {
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+
+      prevBtn && prevBtn.addEventListener('click', function () { goTo(current - 1); start(); });
+      nextBtn && nextBtn.addEventListener('click', function () { goTo(current + 1); start(); });
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { goTo(i); start(); });
+      });
+
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', start);
+
+      start();
+    })();
+  </script>
+{%- endif -%}
 
 {% stylesheet %}
   .sbanner {
@@ -86,6 +192,20 @@
     overflow: hidden;
     background: #06040E;
     color: #FFFFFF;
+    min-height: clamp(400px, 46vw, 620px);
+  }
+  .sbanner__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease;
+  }
+  .sbanner__slide.is-active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
   }
   .sbanner__bg {
     position: absolute;
@@ -106,6 +226,10 @@
   .sbanner__row {
     position: relative;
     z-index: 1;
+    height: 100%;
+    min-height: clamp(400px, 46vw, 620px);
+    display: flex;
+    align-items: center;
     padding-block: clamp(48px, 9vw, 96px);
   }
   .sbanner__copy {
@@ -199,7 +323,7 @@
   }
   .sbanner__ship {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     right: 24px;
     bottom: 20px;
     display: flex;
@@ -220,9 +344,71 @@
     color: var(--sbanner-accent);
   }
 
+  .sbanner__arrow {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    background: rgba(6, 4, 14, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--style-radius-pill);
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .sbanner__arrow:hover {
+    background: rgba(6, 4, 14, 0.8);
+  }
+  .sbanner__arrow--prev {
+    left: 20px;
+  }
+  .sbanner__arrow--next {
+    right: 20px;
+  }
+
+  .sbanner__dots {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 9px;
+  }
+  .sbanner__dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .sbanner__dot.is-active {
+    background: #FFFFFF;
+    transform: scale(1.2);
+  }
+
   @media (max-width: 700px) {
     .sbanner__ship {
       display: none;
+    }
+    .sbanner__arrow {
+      width: 36px;
+      height: 36px;
+    }
+    .sbanner__arrow--prev {
+      left: 10px;
+    }
+    .sbanner__arrow--next {
+      right: 10px;
     }
   }
 {% endstylesheet %}
@@ -235,73 +421,98 @@
   },
   "settings": [
     {
-      "type": "text",
-      "id": "eyebrow_badge",
-      "label": "t:labels.eyebrow_badge",
-      "default": "Limited time"
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:labels.autoplay",
+      "info": "t:info.autoplay",
+      "default": true
     },
     {
-      "type": "text",
-      "id": "eyebrow_label",
-      "label": "t:labels.eyebrow_label",
-      "default": "DealTargets · Computer Components"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "label": "t:labels.heading",
-      "default": "Black\n<em>Friday</em>"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "subheading",
-      "label": "t:labels.subheading",
-      "default": "Up to <em>30% off</em> GPUs, CPUs, SSDs &amp; more"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "t:labels.button_label_primary",
-      "default": "Shop the deals"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "t:labels.button_link_primary"
-    },
-    {
-      "type": "text",
-      "id": "category_list",
-      "label": "t:labels.sale_banner_categories",
-      "info": "t:info.sale_banner_categories",
-      "default": "Graphics Cards, Processors, Memory, Storage"
-    },
-    {
-      "type": "text",
-      "id": "shipping_note",
-      "label": "t:labels.sale_banner_shipping_note",
-      "default": "Free shipping on orders over $99"
-    },
-    {
-      "type": "header",
-      "content": "t:labels.background"
-    },
-    {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "t:labels.background_image",
-      "info": "t:info.sale_banner_background_image"
-    },
-    {
-      "type": "color",
-      "id": "accent_color",
-      "label": "t:labels.accent",
-      "default": "#8FB7FF"
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "label": "t:labels.autoplay_speed",
+      "default": 6
     }
   ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:sections.sale_banner.slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow_badge",
+          "label": "t:labels.eyebrow_badge",
+          "default": "Limited time"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow_label",
+          "label": "t:labels.eyebrow_label"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:labels.heading",
+          "default": "Sale"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "label": "t:labels.subheading"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:labels.button_label_primary",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:labels.button_link_primary"
+        },
+        {
+          "type": "text",
+          "id": "category_list",
+          "label": "t:labels.sale_banner_categories",
+          "info": "t:info.sale_banner_categories"
+        },
+        {
+          "type": "text",
+          "id": "shipping_note",
+          "label": "t:labels.sale_banner_shipping_note"
+        },
+        {
+          "type": "header",
+          "content": "t:labels.background"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image",
+          "label": "t:labels.background_image",
+          "info": "t:info.sale_banner_background_image"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "t:labels.accent",
+          "default": "#8FB7FF"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
   "presets": [
     {
-      "name": "t:sections.sale_banner.name"
+      "name": "t:sections.sale_banner.name",
+      "blocks": [
+        { "type": "slide" }
+      ]
     }
   ]
 }

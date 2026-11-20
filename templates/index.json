@@ -59,16 +59,26 @@
     },
     "sale_banner": {
       "type": "sale-banner",
+      "blocks": {
+        "slide_bf": {
+          "type": "slide",
+          "settings": {
+            "eyebrow_badge": "Limited time",
+            "eyebrow_label": "DealTargets · Computer Components",
+            "heading": "Black\n<em>Friday</em>",
+            "subheading": "Up to <em>30% off</em> GPUs, CPUs, SSDs &amp; more",
+            "button_label": "Shop the deals",
+            "button_link": "shopify://collections/on-sale",
+            "category_list": "Graphics Cards, Processors, Memory, Storage",
+            "shipping_note": "Free shipping on orders over $99",
+            "accent_color": "#8FB7FF"
+          }
+        }
+      },
+      "block_order": ["slide_bf"],
       "settings": {
-        "eyebrow_badge": "Limited time",
-        "eyebrow_label": "DealTargets · Computer Components",
-        "heading": "Black\n<em>Friday</em>",
-        "subheading": "Up to <em>30% off</em> GPUs, CPUs, SSDs &amp; more",
-        "button_label": "Shop the deals",
-        "button_link": "shopify://collections/on-sale",
-        "category_list": "Graphics Cards, Processors, Memory, Storage",
-        "shipping_note": "Free shipping on orders over $99",
-        "accent_color": "#8FB7FF"
+        "autoplay": true,
+        "autoplay_speed": 6
       }
     },
     "hero": {
