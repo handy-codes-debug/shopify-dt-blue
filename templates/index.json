@@ -65,17 +65,19 @@
           "settings": {
             "eyebrow_badge": "Limited time",
             "eyebrow_label": "DealTargets · Computer Components",
-            "heading": "Black\n<em>Friday</em>",
-            "subheading": "Up to <em>30% off</em> GPUs, CPUs, SSDs &amp; more",
+            "heading": "Black <em>Friday</em>",
+            "subheading": "Up to <em>30% off</em> GPUs, CPUs, SSDs & more",
             "button_label": "Shop the deals",
             "button_link": "shopify://collections/on-sale",
             "category_list": "Graphics Cards, Processors, Memory, Storage",
             "shipping_note": "Free shipping on orders over $99",
-            "accent_color": "#8FB7FF"
+            "accent_color": "#8fb7ff"
           }
         }
       },
-      "block_order": ["slide_bf"],
+      "block_order": [
+        "slide_bf"
+      ],
       "settings": {
         "autoplay": true,
         "autoplay_speed": 6
@@ -83,6 +85,7 @@
     },
     "hero": {
       "type": "hero",
+      "disabled": true,
       "settings": {
         "eyebrow": "Limited-time GPU deal",
         "heading": "Own the frame rate with the <em>MSI Gaming RTX 5060 T1</em>.",
