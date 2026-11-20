@@ -70,7 +70,7 @@
             "button_label": "Shop the deals",
             "button_link": "shopify://collections/on-sale",
             "category_list": "Graphics Cards, Processors, Memory, Storage",
-            "shipping_note": "Free shipping on orders over $99",
+            "shipping_note": "",
             "accent_color": "#8fb7ff"
           }
         }
